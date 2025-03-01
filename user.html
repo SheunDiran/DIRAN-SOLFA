@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIRAN SOLFA</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fascinate+Inline&family=Pacifico&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="index.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body class="bg-color:red " style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode',
+ 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;min-height:200px ;" >
+    <nav class="navbar navbar-expand-lg bg-primary nav ">
+        <div class="container-fluid"> 
+          <a class="navbar-brand pacifico-regular " href="index.html" id="logo">DIRAN SOLFA</a>
+          <form class="d-flex " role="search" action="search.html" >
+            <input class="form-control  ms-auto " id="user" type="search" placeholder="Songs titles or artist"  aria-label="Search">
+            <button class="btn btn-primary  ms-auto " id="sub" type="submit">Search</button>
+          </form>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="about.html">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="dash.html">Dashboard</a>
+              </li>
+             
+            </ul>
+          
+           
+          </div>
+        </div>
+      </nav>
+      <div  class="animate__animated animate__fade m-3">
+                <form action="">
+                    <label for="">Please pick one</label><br>
+                <input type="radio" name="join" id="newuser">New user? <br>
+                <input type="radio" name="join" id="existinguser">Existing user? <br>
+                <input type="radio" name="join" id="professional">Professional music scorer?</div>
+            </form> 
+         </div>   
+         <div id="new" style="display:none">
+<form action="#" class="m-5 users" >
+    <h1>WELCOME!:)PLEASE SIGN-UP</h1>
+<input type="text" placeholder="enter your name/nickname" class="form-control"> <br>
+<input type="email" placeholder="enter your email" class="form-control"><br>
+<input type="password" placeholder="enter your password" class="form-control">
+<button class="btn btn-primary mt-3 user" type="button">Sign-up</button>
+</form> </div> 
+
+<div id="existing" style="display:none">
+<form action="#" class="m-5 users">
+    <h1>WELCOME AGAIN :) PLEASE LOGIN</h1>
+<input type="text" placeholder="enter your name/nickname" class="form-control"> <br>
+<input type="email" placeholder="enter your email" class="form-control"><br>
+<input type="password" placeholder="enter your password" class="form-control">
+<button class="btn btn-success mt-3 user" type="button">Login</button>
+</form>
+</div>
+
+    <form action="#" class="m-5 users" style="display:none" id="scorers">
+        <h1>WELCOME :)</h1>
+        <h3>Please enter your details:</h3>
+    <input type="text" placeholder="enter your name" class="form-control"> <br>
+    <input type="email" placeholder="enter your email" class="form-control"><br>
+    <input type="number" placeholder="enter your phone number" class="form-control"><br>
+   <label for="">Select your expertise:</label>
+   <input type="checkbox">Saxophone
+   <input type="checkbox">Piano
+   <input type="checkbox">Violin
+   <input type="checkbox">Guitar
+  <br>
+  <label for="">Upload Your CV/Work:</label>
+  <input type="file">
+    <button class="btn btn-primary mt-3 user" type="button">Register</button>
+    </form>
+    
+         
+          
+      <!-- footer -->
+      <div class=" row  pt-5 ps-3 py-3">
+        <div class="col-md-6 ">
+          <h1>CONTACT US</h1>
+          <p>oluwaseunoyediran@gmail.com | +234 737 544 96</p></div>
+          <div class="col-md-6">
+            <h1>DIRAN SOLFA</h1>
+         <h3>No2,Forthright Gardens<br> Ogun state,Nigeria</h3>
+        </div>
+        <h4 class="text-center mt-2 pacifico-regular">DIRAN  SOLFA &copy 2025</h4>
+      </div>
+      </div>
+
+</body>
+<script src="jquery-3.7.1.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $('#sub').click(function(){
+      var user=$('#user').val()
+      if(user==''){
+alert('Please enter a song or an artist')
+event.preventDefault()
+    }else if(user=$('#user').val())
+   alert(user +' not found')
+    })
+    $('.user').click(function(){
+      var user=$('.users').val()
+      if(user==''){
+alert('Please fill all fields')
+event.preventDefault()
+    }
+    })
+    $('#existinguser').click(function(){
+        $('#new').hide()
+        $('#scorers').hide()
+        $('#existing').fadeToggle()
+    })
+    $('#newuser').click(function(){
+        $('#existing').hide()
+        $('#scorers').hide()
+        $('#new').fadeToggle()
+    })
+    $('#professional').click(function(){
+        $('#new').hide()
+        $('#existing').hide()
+        $('#scorers').fadeToggle()
+    })
+    
+  })
+    
+  
+</script>
+</html>

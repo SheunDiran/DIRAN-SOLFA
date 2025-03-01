@@ -14,10 +14,10 @@
 <body class="bg-color:red " style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" >
     <nav class="navbar navbar-expand-lg bg-primary nav ">
         <div class="container-fluid"> 
-          <a class="navbar-brand pacifico-regular " href="#" id="logo">DIRAN SOLFA</a>
+          <a class="navbar-brand pacifico-regular text-light " href="index.html" id="logo">DIRAN SOLFA</a>
           <form class="d-flex " role="search" action="search.html" >
             <input class="form-control  ms-auto " id="user" type="search" placeholder="Songs titles or artist"  aria-label="Search">
-            <button class="btn btn-primary  ms-auto " id="sub" type="submit">Search</button>
+            <button class="btn btn-primary  ms-auto " type="submit" id="sub">Search</button>
           </form>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -40,35 +40,51 @@
           </div>
         </div>
       </nav>  
-      <!-- background image -->
-      <div id="bgimage">
-       <div class="overlay">
-        
-        <h1 class="text pt-5 px-5">Search and discover <br>
-          <span class="text-primary ">SOLFA </span>notation <br>  for your favorite songs </h1>
-        <form action="user.html">
-          <button  id="join"
-        class="btn btn-primary mx-5 mt-3 animate__animated animate__bounceIn animate__repeat-3 ">
-          Join the DIRAN SOLFA <br>community today!</button>
-        </form>
-       </div>
-       
-      </div>
-      <div class="row bg-tertiary m-3">
-        <h1 style="text-align:center;" class="text-primary ">SONGS SECTION</h1>
-      </div>
-      <div class="row">
-        <div class="col animate__animated animate__backInLeft ">
-           <h2 class="pacifico-regular ps-2">Omemma</h2>
-          <img src="images/omemma.jpeg" height="350px" alt=""> <br>
-          <button class="btn btn-primary m-3">GET SOLFA</button>
+      <div class="row mt-2">
+        <div class="col text-center  mt-1">
+            <h1 class="text-primary animate__animated animate__fadeIn">ABOUT US!</h1>
+            <h3>DIRAN SOLFA,is a digital platform dedicated <br> to sharing SOLFA notations  and 
+                promoting music. <br>We believe that accurate SOLFA <br> notations  should be  easily accesible to all, <br>
+                and we are dedicated to making that a reality.
+        </h3>
         </div>
-        <div class="col-md-6 animate__animated animate__backInRight ">
-          <h2 class="pacifico-regular ps-2">Worthy of my praise</h2>
-          <img src="images/worthy.jpeg" height="350px" alt=""> <br>
-          <button class="btn btn-primary m-3">GET SOLFA</button>
-          </div>
       </div>
+      <div class="row animate__animated animate__backInLeft">
+        <div class="col text-center bg-light mt-3">
+            <h1 class="text-primary">OUR MISSION!</h1>
+            <h3>AT DIRAN SOLFA,Our mission is to provide a platform <br> for music
+            enthusiasts expecially instrumentalists to access and share <br> SOLFA notations,
+       promoting a musical community.
+        </h3>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col text-center  mt-3">
+            <h1 class="text-primary">OUR VISION!</h1>
+            <h3>Our vision is to become the leading digital platform for Solfa notations. <br>
+ Providing unparalleled access to SOLFA notations to music enthusiasts, <br>
+ and access to music educators.
+        </h3>
+        </div>
+      </div>
+      <div class="row m-5">
+        <h1 class="text-center bg-primary text-light">DIRAN SOLFA</h1>
+        <div class="col-md-8 text-center mt-3">
+     <h3>I am the CEO of <span class="text-primary">DIRAN SOLFA.</span>
+    As i delved deeper into musical instruments,i discovered the beauty of solfa notations.
+<h3 class="mt-3">However,I soon realised that accessing these notations was a challenge. </h3>
+<h3 class="mt-3"> This inspired me to
+create <span class="text-primary">DIRAN SOLFA </span>, 
+<br>a platform that would make Solfa notations accessible to everyone
+    </h3>
+    <a href="index.html"><button class="btn btn-primary pacifico-regular">DIRAN SOLFA</button></a>
+        </div>
+        <div class="col-md-4 animate__animated animate__backInRight">
+         <img src="images/myface.png" height="400px" >
+        </div>
+        
+      </div>
+
       <div class="row bg-light  ms-2 " style="min-height:200px">
         <div class="col-md-6 mt-5">
           <h1>Can't find the <span class="text-primary">SOLFA </span><br>
@@ -104,8 +120,8 @@ alert('Please enter a song or an artist')
 event.preventDefault()
     }else if(user=$('#user').val())
    alert(user +' not found')
-    })
-    
+    })  
+  
   })
     
   
