@@ -34,7 +34,7 @@
                 <a class="nav-link" href="about.html">About</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="dash.html">Dashboard</a>
+                <button class='btn btn-primary'id="dash"><a class="nav-link" href="dash.html">Dashboard</a></button>
               </li>
              
             </ul>
@@ -114,6 +114,7 @@
 
  <!--Script -->
 <script src="jquery-3.7.1.min.js"></script>
+<script src="bootstrap/js/bootstrap.bundle.js"></script>
 <script>
   $(document).ready(function(){
     $('#sub').click(function(){
@@ -146,7 +147,12 @@ event.preventDefault()
         $('#existing').hide()
         $('#scorers').fadeToggle()
     })
-    
+    $('#dash').click(function(){
+      alert('Login,sign up or register')
+        event.preventDefault()
+      
+      
+    })
   })
     
   

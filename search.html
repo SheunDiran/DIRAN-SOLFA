@@ -39,7 +39,18 @@
           </div>
         </div>
       </nav>  
-      
+
+      <!-- select your instrument -->
+       <div class="row">
+        <div class="col-md-6 border m-4 p-5">
+          <h2>Please select an instrument:</h2>
+          <input type="radio" name="music" val="sax"> Saxophone
+          <input type="radio" name="music" val="piano"> Piano
+          <input type="radio" name="music" val="guitar"> Guitar
+          <input type="radio" name="music" val="trumpet"> Trumpet
+          <input type="radio" name="music" val="voice"> Voice
+        </div>
+       </div>
 
       <!-- prof. music scorers -->
       <div class="row bg-light  ms-2 " style="min-height:200px">
@@ -70,6 +81,7 @@
 
 </body>
 <script src="jquery-3.7.1.min.js"></script>
+<script src="bootstrap/js/bootstrap.bundle.js"></script>
 <script>
     $(document).ready(function(){
       $('#sub').click(function(){
