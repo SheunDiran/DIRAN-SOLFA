@@ -9,15 +9,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fascinate+Inline&family=Pacifico&display=swap" rel="stylesheet">
      <link rel="stylesheet" href="index.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
-<body class="bg-color:red " style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode',
- 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;min-height:200px ;" >
-
- <!-- navigation  bar -->
-    <nav class="navbar navbar-expand-lg bg-primary nav ">
+<body class="bg-color:red " style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" >
+    
+  <!-- navigation bar -->
+  <nav class="navbar navbar-expand-lg bg-primary nav ">
         <div class="container-fluid"> 
-          <a class="navbar-brand pacifico-regular " href="index.html" id="logo">DIRAN SOLFA</a>
+          
+          <a class="navbar-brand pacifico-regular " href="#" id="logo">
+            <i class="fa fa-music" aria-hidden="true"></i> DIRAN SOLFA</a>
           <form class="d-flex " role="search" action="search.html" >
             <input class="form-control  ms-auto " id="user" type="search" placeholder="Songs titles or artist"  aria-label="Search">
             <button class="btn btn-primary  ms-auto " id="sub" type="submit">Search</button>
@@ -26,77 +28,40 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0  menu">
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="index.html">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="about.html">About</a>
+                <a class="nav-link " href="about.html">About</a>
               </li>
               <li class="nav-item">
-                <button class='btn btn-primary'id="dash"><a class="nav-link" href="dash.html">Dashboard</a></button>
+                <a class="nav-link active" aria-current="page" href="artists.html">Artists</a>
               </li>
-             
-            </ul>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="scorers.html">Scorers</a>
+              </li>
+            
           
-           
-          </div>
-        </div>
-      </nav>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dashboard
+              </a>
+              
+              <ul class="dropdown-menu ">
+                <li><a class="dropdown-item text-primary" href="scorerdash.html">Scorer</a></li>
+                <li><a class="dropdown-item text-danger" href="userdash.html">User</a></li>
+                <li><a class="dropdown-item text-dark" href="atristdash.html">Artist</a></li>
+                 <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-success" href="admindash.html">Admin</a></li>
+              </ul>
+            </li>
+          </ul>
+      </nav>  
 
-      <!-- form -->
-      <div  class="animate__animated animate__fade m-3">
-                <form action="">
-                    <label for="">Please pick one</label><br>
-                <input type="radio" name="join" id="newuser">New user? <br>
-                <input type="radio" name="join" id="existinguser">Existing user? <br>
-                <input type="radio" name="join" id="professional">Professional music scorer?</div>
-            </form> 
-         </div>
-         
-         <!--Sign-up form for new users  -->
-         <div id="new" style="display:none">
-<form action="#" class="m-5 users" >
-    <h1>WELCOME!:)PLEASE SIGN-UP</h1>
-<input type="text" placeholder="enter your name/nickname" class="form-control"> <br>
-<input type="email" placeholder="enter your email" class="form-control"><br>
-<input type="password" placeholder="enter your password" class="form-control">
-<button class="btn btn-primary mt-3 user" type="button">Sign-up</button>
-</form> </div> 
+      
 
-
- <!--Login form for existing users  -->
-<div id="existing" style="display:none">
-<form action="#" class="m-5 users">
-    <h1>WELCOME AGAIN :) PLEASE LOGIN</h1>
-<input type="text" placeholder="enter your name/nickname" class="form-control"> <br>
-<input type="email" placeholder="enter your email" class="form-control"><br>
-<input type="password" placeholder="enter your password" class="form-control">
-<button class="btn btn-success mt-3 user" type="button">Login</button>
-</form>
-</div>
-
-
-<!-- Registation form for prof. music scorers -->
-    <form action="#" class="m-5 users" style="display:none" id="scorers">
-        <h1>WELCOME :)</h1>
-        <h3>Please enter your details:</h3>
-    <input type="text" placeholder="enter your name" class="form-control"> <br>
-    <input type="email" placeholder="enter your email" class="form-control"><br>
-    <input type="number" placeholder="enter your phone number" class="form-control"><br>
-   <label for="">Select your expertise:</label>
-   <input type="checkbox">Saxophone
-   <input type="checkbox">Piano
-   <input type="checkbox">Violin
-   <input type="checkbox">Guitar
-  <br>
-  <label for="">Upload Your CV/Work:</label>
-  <input type="file">
-    <button class="btn btn-primary mt-3 user" type="button">Register</button>
-    </form>
-    
-         
-          
+      
       <!-- footer -->
       <div class=" row  pt-5 ps-3 py-3">
         <div class="col-md-6 ">
@@ -111,10 +76,9 @@
       </div>
 
 </body>
-
- <!--Script -->
 <script src="jquery-3.7.1.min.js"></script>
 <script src="bootstrap/js/bootstrap.bundle.js"></script>
+
 <script>
   $(document).ready(function(){
     $('#sub').click(function(){
@@ -154,7 +118,9 @@ event.preventDefault()
       
     })
   })
+
+</script>
     
   
-</script>
+
 </html>

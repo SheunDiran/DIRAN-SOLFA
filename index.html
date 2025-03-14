@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fascinate+Inline&family=Pacifico&display=swap" rel="stylesheet">
      <link rel="stylesheet" href="index.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body class="bg-color:red " style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" >
@@ -16,7 +17,9 @@
   <!-- navigation bar -->
   <nav class="navbar navbar-expand-lg bg-primary nav ">
         <div class="container-fluid"> 
-          <a class="navbar-brand pacifico-regular " href="#" id="logo">DIRAN SOLFA</a>
+          
+          <a class="navbar-brand pacifico-regular " href="#" id="logo">
+            <i class="fa fa-music" aria-hidden="true"></i> DIRAN SOLFA</a>
           <form class="d-flex " role="search" action="search.html" >
             <input class="form-control  ms-auto " id="user" type="search" placeholder="Songs titles or artist"  aria-label="Search">
             <button class="btn btn-primary  ms-auto " id="sub" type="submit">Search</button>
@@ -25,58 +28,138 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0  menu">
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="index.html">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="about.html">About</a>
+                <a class="nav-link " href="about.html">About</a>
               </li>
-             
-            </ul>
-          
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="artists.html">Artists</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="scorers.html">Scorers</a>
+              </li>
+            
+          <form action="user_login.html">
+            <button class="btn btn-success">Log in</button>
+          </form>
            
-          </div>
-        </div>
+          <form action="user_reg.html">
+            <button class="btn btn-danger ms-2 ">Register</button>
+          </form>
       </nav>  
 
       <!-- background image -->
-       <div class="row">
-        <div class="col-md-12">
-          <div id="bgimage">
-            <div class="overlay">
-             
-             <h1 class="text pt-md-5 px-md-5">Search and discover <br>
-               <span class="text-primary ">SOLFA </span>notation <br>  for your favorite songs </h1>
-             <form action="user.html">
-               <button  id="join"
-             class="btn btn-primary mx-md-5 mt-md--3 animate__animated animate__bounceIn animate__repeat-3 ">
-               Join the DIRAN SOLFA <br>community today!</button>
-             </form>
+       
+       <div class="row over">
+        <div class="overlay">
+        <div class="col-md-12 ">
+            <h1 class="text pt-md-5 px-md-5 text-center text-info ">Search and discover <br>
+            SOLFA notation <br>  for your favorite songs </h1>
+            
             </div>
-             </div>
+          </div>
         </div>
-       </div>
+            
+             
+        
+     
       
 
+ <!-- a user/an instrumentalists? get solfa notations -->
+
+ <div class="row artist mt-5 ">
+
+  <div class="col-md-6 bg-primary text-light p-5 ms-auto">
+    <h1>Are you an instrumentalist <br> or a music scorer <br> and you need the <br>
+       tonic solfa of songs?</h1> <br>
+    <h2 >LOGIN OR REGISTER TO GET ACCESS </h2>
+    <form action="user_reg.html">
+    <button class="btn btn-danger">JOIN OUR COMMUNITY</button>
+      </form>
+      
+  </div>
+  <div class="col-md-6 ">
+    <img src="images/instru.jpg" alt="instrumentalists" width="100%" height="400px">
+  </div>
+
+    
+   </div>
+ 
+ 
+  
+
+  <!-- are you an artist(add music) -->
+  <div class="row artist mt-5 m-2">
+    <div class="col-md-6">
+      <img src="images/artists.jpeg" alt="artists" width="80%">
+    </div>
+    <div class="col-md-6 bg-primary text-light p-5">
+        <h1>Are you a music artist <br> and you want to upload your songs?</h1>
+        <form action="user_reg.html">
+          <button class="btn btn-success">JOIN OUR COMMUNITY</button>
+        </form>
+        
+    </div>
+   
+   </div>
+  
 <!--Songs sections -->
-      <div class="row bg-tertiary m-md-3">
-        <h1 style="text-align:center;" class="text-primary ">SONGS SECTION</h1>
+      <div class="row bg-tertiary m-md-3 mt-5">
+        <img src="images/image.png" alt="music icon" height="200px">
+        <h1 style="text-align:center;" class="text-danger ">SONGS SECTION</h1>
       </div>
       <div class="row">
-        <div class="col-md-6 animate__animated animate__backInLeft ">
+        
+        <div class="col md-3 card bg-primary m-4 text-light" style="height:300px;">
+          <h1>TRENDING</h1>
+         <h2>Songs</h2> <br>
+           <h2>Top Artists</h2> <br>
+           <h2> Top Scorers</h2>
+        </div>
+        <div class="col-md-5 animate__animated animate__backInLeft ">
            <h2 class="pacifico-regular ps-2">Omemma</h2>
           <img src="images/omemma.jpeg" height="350px" alt=""> <br>
           <button class="btn btn-primary m-3">GET SOLFA</button>
         </div>
 
-        <div class="col-md-6 animate__animated animate__backInRight ">
+        <div class="col-md-4 animate__animated animate__backInRight ">
           <h2 class="pacifico-regular ps-2">Worthy of my praise</h2>
           <img src="images/worthy.jpeg" height="350px" alt=""> <br>
           <button class="btn btn-primary m-3">GET SOLFA</button>
           </div>
       </div>
 
+      <!-- various instruments and tonic solfa(carousel) -->
+       
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="images/violin.jpg" style="width:100%;height:400px" alt="violin">
+          </div>
+          <div class="carousel-item">
+            <img src="images/guitar.jpg" style="width:100%;height:400px" alt="guitar">
+          </div>
+          <div class="carousel-item">
+            <img src="images/solfa.png" style="width:100%;height:400px" alt="solfanote">
+          </div>
+          <div class="carousel-item">
+            <img src="images/piano.jpg" style="width:100%;height:400px;" alt="piano">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+       
+         
        <!--Introduction of professional music scorers -->
       <div class="row bg-light  ms-md-2 " style="min-height:200px">
         <div class="col-md-6 mt-md-5">
@@ -118,9 +201,38 @@ event.preventDefault()
     }else if(user=$('#user').val())
    alert(user +' not found')
     })
-    
+    $('.user').click(function(){
+      var user=$('.users').val()
+      if(user==''){
+alert('Please fill all fields')
+event.preventDefault()
+    }
+    })
+    $('#existinguser').click(function(){
+        $('#new').hide()
+        $('#scorers').hide()
+        $('#existing').fadeToggle()
+    })
+    $('#newuser').click(function(){
+        $('#existing').hide()
+        $('#scorers').hide()
+        $('#new').fadeToggle()
+    })
+    $('#professional').click(function(){
+        $('#new').hide()
+        $('#existing').hide()
+        $('#scorers').fadeToggle()
+    })
+    $('#dash').click(function(){
+      alert('Login,sign up or register')
+        event.preventDefault()
+      
+      
+    })
   })
+
+</script>
     
   
-</script>
+
 </html>

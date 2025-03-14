@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIRAN SOLFA</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fascinate+Inline&family=Pacifico&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="index.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body class="bg-color:red " style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode',
+ 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;min-height:200px ;" >
+
+ <!-- navigation  bar -->
+    <nav class="navbar navbar-expand-lg bg-primary nav ">
+        <div class="container-fluid"> 
+          <a class="navbar-brand pacifico-regular " href="index.html" id="logo">DIRAN SOLFA</a>
+          <form class="d-flex " role="search" action="search.html" >
+            <input class="form-control  ms-auto " id="user" type="search" placeholder="Songs titles or artist"  aria-label="Search">
+            <button class="btn btn-primary  ms-auto " id="sub" type="submit">Search</button>
+          </form>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="about.html">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="artists.html">Artist</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="scorers.html">Scorers</a>
+              </li>
+             
+              <form action="user_login.html">
+                <button class="btn btn-success">Log in</button>
+              </form>
+             
+            </ul>
+          
+           
+          </div>
+        </div>
+      </nav>
+<!-- MAKE THIS PLACE MORE BEAUTIFUL -->
+<div  class="animate__animated animate__fade m-3">
+  <form action="">
+      <label for="">Please pick one</label><br>
+  <input type="radio" name="join" id="newuser">New user? <br>
+  <input type="radio" name="join" class="existinguser">Music Artist? <br>
+  <input type="radio" name="join" class="existinguser">Admin?</div>
+  
+</form> 
+</div>
+ <div class="background">
+      <!-- form -->
+      
+         
+         <!--Reg in for  users  -->
+         <div id="new" style="display:none">
+<form action="dashboard.html" class="m-5 users text-light">
+  
+    <h1>WELCOME! :) PLEASE Register</h1>
+<input type="text" placeholder="enter your first name" class="form-control"> <br>
+<input type="text" placeholder="enter your last name" class="form-control"> <br>
+<input type="email" placeholder="enter your email" class="form-control"><br>
+<input type="password" placeholder="enter your password" class="form-control"><br>
+<input type="number" placeholder="enter your phone number" class="form-control"> <br>
+<input type="date"><br>
+Upload your picture <input type="file"><br>
+<select name="users" id="">
+  <option value="users">Users</option>
+  <option value="scorers">Scorers</option>
+</select> <br>
+<label for="">Upload Your CV/Work:</label>
+  <input type="file">
+<button class="btn btn-primary mt-3 user" type="button">Register</button>
+</form> </div> 
+
+ <!--reg form for artists  -->
+<div id="existing" style="display:none">
+<form action="admin_dashboard.html" class="m-5 users text-light">
+    <h1 class="pt-5">WELCOME :) PLEASE Register</h1>
+<input type="text" placeholder="enter your first name" class="form-control"> <br> <br> <br>
+<input type="text" placeholder="enter your last name" class="form-control"> <br> <br> <br>
+<input type="password"  placeholder="enter a password" class="form-control">
+Upload your picture <input type="file">
+<button class="btn btn-success mt-3 user" type="button">Register</button>
+</form>
+</div>
+</div>
+
+ 
+
+  
+ 
+
+<!-- Registation form for prof. music scorers
+    <form action="#" class="m-5 users" style="display:none" id="scorers">
+        <h1>WELCOME :)</h1>
+        <h3>Please enter your details:</h3>
+    <input type="text" placeholder="enter your name" class="form-control"> <br>
+    <input type="email" placeholder="enter your email" class="form-control"><br>
+    <input type="number" placeholder="enter your phone number" class="form-control"><br>
+   <label for="">Select your expertise:</label>
+   <input type="checkbox">Saxophone
+   <input type="checkbox">Piano
+   <input type="checkbox">Violin
+   <input type="checkbox">Guitar
+  <br>
+  <label for="">Upload Your CV/Work:</label>
+  <input type="file">
+    <button class="btn btn-primary mt-3 user" type="button">Register</button>
+    </form> -->
+    
+         
+          
+      <!-- footer -->
+      <div class=" row  pt-5 ps-3 py-3">
+        <div class="col-md-6 ">
+          <h1>CONTACT US</h1>
+          <p>oluwaseunoyediran@gmail.com | +234 737 544 96</p></div>
+          <div class="col-md-6">
+            <h1>DIRAN SOLFA</h1>
+         <h3>No2,Forthright Gardens<br> Ogun state,Nigeria</h3>
+        </div>
+        <h4 class="text-center mt-2 pacifico-regular">DIRAN  SOLFA &copy 2025</h4>
+      </div>
+      </div>
+
+</body>
+
+ <!--Script -->
+<script src="jquery-3.7.1.min.js"></script>
+<script src="bootstrap/js/bootstrap.bundle.js"></script>
+<script>
+ $(document).ready(function(){
+
+$('.existinguser').click(function(){
+    $('#new').hide()
+    $('#existing').show()
+})
+$('#newuser').click(function(){
+    $('#existing').hide()
+    $('#new').show()
+})
+})
+    
+  
+</script>
+</html>
