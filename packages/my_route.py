@@ -47,3 +47,11 @@ def userdash():
 @app.route('/songs/')
 def songs():
     return render_template('songs.html')
+
+@app.route('/omemma/')
+def omemma():
+    return render_template('omemma.html')
+
+@app.route('/worthy/')
+def worthy():
+    return render_template('worthy.html')
