@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIRAN SOLFA</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fascinate+Inline&family=Pacifico&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="/static/index.css">
+     <link rel="stylesheet" href="/static/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <link rel="stylesheet" href="/static/https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body class="bg-color:red " style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" >
+    
+  <!-- navigation bar -->
+  <nav class="navbar navbar-expand-lg bg-primary nav ">
+        <div class="container-fluid"> 
+          
+          <a class="navbar-brand pacifico-regular " href="{{url_for('index')}}" id="logo">
+            <i class="fa fa-music" aria-hidden="true"></i> DIRAN SOLFA</a>
+          <form class="d-flex " role="search" action="{{url_for('search')}}" >
+            <input class="form-control  ms-auto " id="user" type="search" placeholder="Songs titles or artist"  aria-label="Search">
+            <button class="btn btn-primary  ms-auto " id="sub" type="submit">Search</button>
+          </form>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0  menu">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{url_for('index')}}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " href="{{url_for('about')}}">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{url_for('artists')}}">Artists</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{url_for('scorers')}}">Scorers</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{url_for('logout')}}">Logout</a>
+              </li>
+            
+          
+           
+              
+             
+      </nav>  
+
+      <div>
+        <h1>{%with message=get_flashed_messages(with_categories=True)%}
+            {%if message%}
+             {%for cart,a in message%}
+             {%if cart =='error'%}
+            <p style='border:5px solid red;'class="alert alert-primary">{{a}} </p>
+             {%else%}
+              <p style='border:5px solid green;'class="alert alert-succes">{{a}} {{email}}</p>
+            {%endif%}
+            {%endfor%}    
+            {%endif%}
+            {%endwith%}
+          </h1>
+        <h1>Welcome {{username}}</h1>
+      </div>
+
+      
+      <!-- footer -->
+      <div class=" row  pt-5 ps-3 py-3">
+        <div class="col-md-6 ">
+          <h1>CONTACT US</h1>
+          <p>oluwaseunoyediran@gmail.com | +234 737 544 96</p></div>
+          <div class="col-md-6">
+            <h1>DIRAN SOLFA</h1>
+         <h3>No2,Forthright Gardens<br> Ogun state,Nigeria</h3>
+        </div>
+        <h4 class="text-center mt-2 pacifico-regular">DIRAN  SOLFA &copy 2025</h4>
+      </div>
+      </div>
+
+</body>
+<script src="/static/jquery-3.7.1.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+
+<script>
+  $(document).ready(function(){
+    $('#sub').click(function(){
+      var user=$('#user').val()
+      if(user==''){
+alert('Please enter a song or an artist')
+event.preventDefault()
+    }else if(user=$('#user').val())
+   alert(user +' not found')
+    })
+    $('.user').click(function(){
+      var user=$('.users').val()
+      if(user==''){
+alert('Please fill all fields')
+event.preventDefault()
+    }
+    })
+    $('#existinguser').click(function(){
+        $('#new').hide()
+        $('#scorers').hide()
+        $('#existing').fadeToggle()
+    })
+    $('#newuser').click(function(){
+        $('#existing').hide()
+        $('#scorers').hide()
+        $('#new').fadeToggle()
+    })
+    $('#professional').click(function(){
+        $('#new').hide()
+        $('#existing').hide()
+        $('#scorers').fadeToggle()
+    })
+    $('#dash').click(function(){
+      alert('Login,sign up or register')
+        event.preventDefault()
+      
+      
+    })
+  })
+
+</script>
+    
+  
+
+</html>

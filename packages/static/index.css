@@ -58,7 +58,7 @@ text-decoration: none;
   }
   .login{
     background-image: url('images/login.jpg');
-    height:500px;
+    min-height:700px;
     background-size: cover;
     
   }

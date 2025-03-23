@@ -40,7 +40,7 @@
                 <a class="nav-link active" aria-current="page" href="{{url_for('scorers')}}">Scorers</a>
               </li>
              
-              <form action="{{url_for('user_login')}}">
+              <form action="{{url_for('login')}}">
                 <button class="btn btn-success">Log in</button>
               </form>
              
@@ -60,56 +60,190 @@
   
 </form> 
 </div>
+
+<h1>{%with message=get_flashed_messages(with_categories=True)%}
+  {%if message%}
+   {%for cart,a in message%}
+   {%if cart =='error'%}
+  <p style='border:5px solid red;'class="alert alert-primary">{{a}}</p>
+   {%else%}
+    <p style='border:5px solid green;'class="alert alert-succes">{{a}}</p>
+  {%endif%}
+  {%endfor%}    
+  {%endif%}
+  {%endwith%}
+</h1>
  <div class="background">
       <!-- form -->
       
          
          <!--Reg in for  users  -->
          <div id="new" style="display:none">
-<form action="{{url_for('userdash')}}" class="m-5 users text-light">
-  
-    <h1>WELCOME! :) PLEASE Register</h1>
-<input type="text" placeholder="enter your first name" class="form-control"> <br>
-<input type="text" placeholder="enter your last name" class="form-control"> <br>
-<input type="email" placeholder="enter your email" class="form-control"><br>
-<input type="password" placeholder="enter your password" class="form-control"><br>
-<input type="number" placeholder="enter your phone number" class="form-control"> <br>
-<input type="date"><br>
-Upload your picture <input type="file"><br>
-<select name="users" >
-  <option value="users">Users</option>
-  <option value="scorers">Scorers</option>
-</select> <br>
-<label for="">Upload Your CV/Work:</label>
-  <input type="file">
-<button class="btn btn-primary mt-3 user" type="button">Register</button>
-</form> </div> 
+          <form action="" class="m-5 users text-light"  method='post' novalidate>
+          {{user.csrf_token}}
+          {{user.fname.label()}}
+        {{user.fname(placeholder='enter your first name',class='form-control')}}
+        {%if user.fname.errors%}
+                {%for error in user.fname.errors%} 
+                <span class="text-danger">{{error}}</span><br>
+                {%endfor%}
+                {%endif%}
+<br>
+    {{user.lname.label()}}
+    {{user.lname(placeholder='enter your last name',class='form-control')}}
+    {%if user.lname.errors%}
+          {%for error in user.lname.errors%} 
+          <span class="text-danger">{{error}}</span><br>
+          {%endfor%}
+          {%endif%}
 
- <!--reg form for artists  -->
-<div id="existing" style="display:none">
-<form action="{{url_for('artistdash')}}" class="m-5 users text-light">
-    <h1 class="pt-5">WELCOME :) PLEASE Register</h1>
-<input type="text" placeholder="enter your first name" class="form-control"> <br> <br> <br>
-<input type="text" placeholder="enter your last name" class="form-control"> <br> <br> <br>
-<input type="password"  placeholder="enter a password" class="form-control">
-Upload your picture <input type="file">
-<button class="btn btn-success mt-3 user" type="button">Register</button>
-</form>
-</div>
+        {{user.email.label()}}
+        {{user.email(placeholder='enter your email',class='form-control')}}
+        {%if user.email.errors%}
+                {%for error in user.email.errors%} 
+                <span class="text-danger">{{error}}</span><br>
+                {%endfor%}
+                {%endif%}
+      
+        {{user.pwd.label()}}
+        {{user.pwd(placeholder='enter your password',class='form-control')}}
+        {%if user.pwd.errors%}
+                {%for error in user.pwd.errors%} 
+                <span class="text-danger">{{error}}</span><br>
+                {%endfor%}
+                {%endif%}
+        
+ 
+{{user.phone.label()}}
+{{user.phone(placeholder='enter your phone number',class='form-control')}}
+{%if user.phone.errors%}
+      {%for error in user.phone.errors%} 
+      <span class="text-danger">{{error}}</span><br>
+      {%endfor%}
+      {%endif%}  
+
+        <br>  
+        {{user.date.label()}}     
+        {{user.date()}}
+        {%if user.date.errors%}
+                {%for error in user.date.errors%} 
+                <span class="text-danger">{{error}}</span>
+                {%endfor%}
+                {%endif%}
+<br> <br>
+{{user.file.label()}}
+{{user.file()}}
+{%if user.file.errors%}
+      {%for error in user.file.errors%} 
+      <span class="text-danger">{{error}}</span><br>
+      {%endfor%}
+      {%endif%}
+ <br> <br>
+ {{user.file2.label()}}
+{{user.file2()}}
+{%if user.file2.errors%}
+       {%for error in user.file2.errors%} 
+       <span class="text-danger">{{error}}</span><br>
+       {%endfor%}
+       {%endif%}     
+        <br> <br>
+        {{user.submit(class='btn btn-primary')}}
+        </form>
+      </div>
+
+      <div id="existing" style="display:none">
+        <form action="" class="m-5 users text-light" novalidate>
+      {{artist.csrf_token}}
+      {{artist.fname.label()}}
+      {{artist.fname(placeholder='enter your firstname',class='form-control')}}
+      {%if artist.fname.errors%}
+              {%for error in artist.fname.errors%} 
+              <span class="text-danger">{{error}}</span> <br>
+              {%endfor%}
+              {%endif%}
+        <br>
+        {{artist.lname.label()}}
+        {{artist.lname(placeholder='enter your lastname',class='form-control')}}
+        {%if artist.lname.errors%}
+                {%for error in artist.lname.errors%} 
+                <span class="text-danger">{{error}}</span> <br>
+                {%endfor%}
+                {%endif%}      
+       <br>
+        {{artist.lname.label()}}
+        {{artist.lname(placeholder='enter your lastname',class='form-control')}}
+        {%if artist.lname.errors%}
+                {%for error in artist.lname.errors%} 
+                <span class="text-danger">{{error}}</span> <br>
+                {%endfor%}
+                {%endif%} 
+       
+              <br>
+                {{artist.file.label()}}
+                {{artist.file()}}
+                {%if artist.file.errors%}
+                        {%for error in artist.file.errors%} 
+                        <span class="text-danger">{{error}}</span> <br>
+                        {%endfor%}
+                        {%endif%} 
+                        <br>
+                        {{artist.pwd.label()}}
+                        {{artist.pwd(placeholder='enter your password',class='form-control')}}
+                        {%if artist.pwd.errors%}
+                                {%for error in artist.pwd.errors%} 
+                                <span class="text-danger">{{error}}</span> <br>
+                                {%endfor%}
+                                {%endif%} 
+      <br> <br>
+      {{artist.submit(class='btn btn-primary')}}
+      </form>
+      </div>
+    
+      <!--reg form for admin  -->
+      <div class="ad" style="display:none">
+        <form action="" class="m-5 users text-light" novalidate>     
+
+          {{admin.csrf_token}}
+          {{admin.username.label()}}
+          {{admin.username(placeholder='enter your username',class='form-control')}}
+          {%if admin.username.errors%}
+                  {%for error in admin.username.errors%} 
+                  <span class="text-danger">{{error}}</span> <br>
+                  {%endfor%}
+                  {%endif%}
+          
+          {{admin.pwd.label()}}
+          {{admin.pwd(placeholder='enter your password',class='form-control')}}
+          {%if admin.pwd.errors%}
+                  {%for error in admin.pwd.errors%} 
+                  <span class="text-danger">{{error}}</span><br>
+                  {%endfor%}
+                  {%endif%}
+
+                  <br>
+                  {{admin.file.label()}}
+                  {{admin.file()}}
+                  {%if admin.file.errors%}
+                          {%for error in admin.file.errors%} 
+                          <span class="text-danger">{{error}}</span>
+                          {%endfor%}
+                          {%endif%}        
+          <br> <br>
+          {{admin.date.label()}}
+          {{admin.date()}}
+          {%if admin.date.errors%}
+                  {%for error in admin.date.errors%} 
+                  <span class="text-danger">{{error}}</span>
+                  {%endfor%}
+                  {%endif%}
+          
+          <br> <br>
+          {{admin.submit(class='btn btn-primary')}}
+        </form>
+      </div>
+    </div>
 
 
-<!--reg form for admin  -->
-<div class="ad" style="display:none">
-  <form action="{{url_for('admindash')}}" class="m-5 users text-light">
-      <h1 class="pt-5">Admin Registration</h1>
-  <input type="text" placeholder="enter your first name" class="form-control"> <br> <br> <br>
-  <input type="text" placeholder="enter your last name" class="form-control"> <br> <br> <br>
-  <input type="password"  placeholder="enter a password" class="form-control">
-  Upload your picture <input type="file">
-  <button class="btn btn-success mt-3 user" type="button">Register</button>
-  </form>
-  </div>
-  </div>
      <!-- footer -->
       <div class=" row  pt-5 ps-3 py-3">
         <div class="col-md-6 ">
