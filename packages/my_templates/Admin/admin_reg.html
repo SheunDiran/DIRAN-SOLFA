@@ -1,0 +1,69 @@
+{%include 'Admin/nav.html'%}
+
+<h1>{%with message=get_flashed_messages(with_categories=True)%}
+  {%if message%}
+   {%for cart,a in message%}
+   {%if cart =='error'%}
+  <p style='border:5px solid red;'class="alert alert-primary">{{a}}</p>
+   {%else%}
+    <p style='border:5px solid green;'class="alert alert-succes">{{a}}</p>
+  {%endif%}
+  {%endfor%}    
+  {%endif%}
+  {%endwith%}
+</h1>
+ <div class="background">
+      <!-- form -->
+    
+      <!--reg form for admin  -->
+      <div class="container">
+        <form action="" class="mt-0 m-3 pt-5 users text-light" method="post" novalidate>     
+
+          {{admin.csrf_token}}
+          {{admin.username.label()}}
+          {{admin.username(placeholder='enter your username',class='form-control')}}
+          {%if admin.username.errors%}
+                  {%for error in admin.username.errors%} 
+                  <span class="text-danger">{{error}}</span> <br>
+                  {%endfor%}
+                  {%endif%}
+          
+          {{admin.pwd.label()}}
+          {{admin.pwd(placeholder='enter your password',class='form-control')}}
+          {%if admin.pwd.errors%}
+                  {%for error in admin.pwd.errors%} 
+                  <span class="text-danger">{{error}}</span><br>
+                  {%endfor%}
+                  {%endif%}
+
+                  <br>
+                  {{admin.file.label()}}
+                  {{admin.file()}}
+                  {%if admin.file.errors%}
+                          {%for error in admin.file.errors%} 
+                          <span class="text-danger">{{error}}</span>
+                          {%endfor%}
+                          {%endif%}        
+          <br> <br>
+          {{admin.date.label()}}
+          {{admin.date()}}
+          {%if admin.date.errors%}
+                  {%for error in admin.date.errors%} 
+                  <span class="text-danger">{{error}}</span>
+                  {%endfor%}
+                  {%endif%}
+          
+          <br> <br>
+          {{admin.submit(class='btn btn-primary')}}
+        </form>
+      </div>
+    </div>
+  
+    {%include 'Admin/footer.html'%}
+
+</body>
+
+ <!--Script -->
+ <script src="/static/jquery-3.7.1.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.js"></script> 
+</html>

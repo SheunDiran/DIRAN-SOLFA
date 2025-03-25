@@ -1,0 +1,22 @@
+{%extends 'User/base_layout.html'%}  
+{%block content%}
+      <div>
+        <h1>{%with message=get_flashed_messages(with_categories=True)%}
+            {%if message%}
+             {%for cart,a in message%}
+             {%if cart =='error'%}
+            <p style='border:5px solid red;'class="alert alert-primary">{{a}} </p>
+             {%else%}
+              <p style='border:5px solid green;'class="alert alert-succes">{{a}} {{email}}</p>
+            {%endif%}
+            {%endfor%}    
+            {%endif%}
+            {%endwith%}
+          </h1>
+        <h1>Welcome {{session.get('fullname')}}</h1>
+      </div>
+
+      {%endblock content%}
+    
+  
+

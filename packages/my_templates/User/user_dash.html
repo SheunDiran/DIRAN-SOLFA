@@ -1,0 +1,62 @@
+{%extends 'User/base_layout.html'%} 
+{%block content%}
+      <div>
+        <h1>{%with message=get_flashed_messages(with_categories=True)%}
+            {%if message%}
+             {%for cart,a in message%}
+             {%if cart =='error'%}
+            <p style='border:5px solid red;'class="alert alert-primary">{{a}} </p>
+             {%else%}
+              <p style='border:5px solid green;'class="alert alert-succes">{{a}} {{email}}</p>
+            {%endif%}
+            {%endfor%}    
+            {%endif%}
+            {%endwith%}
+          </h1>
+        <h1>Welcome {{session.get('fullname')}}</h1>
+      </div>
+
+   
+
+<script>
+  $(document).ready(function(){
+    $('#sub').click(function(){
+      var user=$('#user').val()
+      if(user==''){
+alert('Please enter a song or an artist')
+event.preventDefault()
+    }else if(user=$('#user').val())
+   alert(user +' not found')
+    })
+    $('.user').click(function(){
+      var user=$('.users').val()
+      if(user==''){
+alert('Please fill all fields')
+event.preventDefault()
+    }
+    })
+    $('#existinguser').click(function(){
+        $('#new').hide()
+        $('#scorers').hide()
+        $('#existing').fadeToggle()
+    })
+    $('#newuser').click(function(){
+        $('#existing').hide()
+        $('#scorers').hide()
+        $('#new').fadeToggle()
+    })
+    $('#professional').click(function(){
+        $('#new').hide()
+        $('#existing').hide()
+        $('#scorers').fadeToggle()
+    })
+    $('#dash').click(function(){
+      alert('Login,sign up or register')
+        event.preventDefault()
+      
+      
+    })
+  })
+
+</script>
+{%endblock content%}

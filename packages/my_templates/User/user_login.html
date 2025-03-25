@@ -1,0 +1,105 @@
+{%extends 'User/base_layout.html'%} 
+{%block content%}
+<!-- MAKE THIS PLACE MORE BEAUTIFUL -->
+<div  class="animate__animated animate__fade m-3 ">
+  <form action="">
+      <label for="">Please pick one</label><br>
+  <input type="radio" name="join" id="newuser" checked>Users? <br>
+  <input type="radio" name="join" class="existinguser"> Music Artist? <br>
+
+  
+ 
+</form> 
+<h1>{%with message=get_flashed_messages(with_categories=True)%}
+  {%if message%}
+   {%for cart,a in message%}
+   {%if cart =='error'%}
+  <p style='border:5px solid red;'class="alert alert-primary">{{a}}</p>
+   {%else%}
+    <p style='border:5px solid green;'class="alert alert-succes">{{a}}</p>
+  {%endif%}
+  {%endfor%}    
+  {%endif%}
+  {%endwith%}
+</h1>
+</div>
+        
+
+<div class="overlay login"> 
+<form action="" class="m-3 users text-light p-3" method="post" novalidate > 
+  <div id="new">
+  {{user.csrf_token}}
+{{user.email.label()}}
+{{user.email(placeholder='enter your email',class='form-control')}}
+{%if user.email.errors%}
+        {%for error in user.email.errors%} 
+        <span class="text-danger">{{error}}</span><br>
+        {%endfor%}
+        {%endif%}
+
+{{user.pwd.label()}}
+{{user.pwd(placeholder='enter your password',class='form-control')}}
+{%if user.pwd.errors%}
+        {%for error in user.pwd.errors%} 
+        <span class="text-danger">{{error}}</span><br>
+        {%endfor%}
+        {%endif%}
+
+<br>   
+{{user.date.label()}}     
+{{user.date()}}
+{%if user.date.errors%}
+        {%for error in user.date.errors%} 
+        <span class="text-danger">{{error}}</span>
+        {%endfor%}
+        {%endif%}
+<br> <br>
+{{user.submit(class='btn btn-success')}}
+</div>
+</form>
+
+<!-- log in for music artist -->
+<div  id="existing" style="display:none">
+<form action="" class="m-3 users text-light p-3" method="post" novalidate > 
+ 
+  {{artist.csrf_token}}
+{{artist.fname.label()}}
+{{artist.fname(placeholder='enter your firstname',class='form-control')}}
+{%if artist.fname.errors%}
+        {%for error in artist.fname.errors%} 
+        <span class="text-danger">{{error}}</span> <br>
+        {%endfor%}
+        {%endif%}
+  <br>
+  {{artist.csrf_token}}
+  {{artist.lname.label()}}
+  {{artist.lname(placeholder='enter your lastname',class='form-control')}}
+  {%if artist.lname.errors%}
+          {%for error in artist.lname.errors%} 
+          <span class="text-danger">{{error}}</span> <br>
+          {%endfor%}
+          {%endif%}      
+
+
+<br> <br>
+{{artist.submit(class='btn btn-success')}}
+
+</form>
+</div>
+</div>
+
+
+<script src="/static/jquery-3.7.1.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+<script>
+ $('.existinguser').click(function(){
+  $('#new').hide()
+  $('#existing').show()
+})
+
+$('#newuser').click(function(){
+  $('#existing').hide()
+  $('#new').show()
+})
+</script>
+{%endblock content%}
