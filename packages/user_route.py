@@ -1,6 +1,7 @@
 from flask import render_template,flash,request,redirect,session
 from packages import app
 from packages.user_forms import UserForm,ArtistForm,User_reg,Artist_Reg
+from packages.models import db,User
 
 
 
@@ -22,23 +23,29 @@ def about():
 def search():
     return render_template('User/search.html')
 
-@app.route('/login/', methods=['GET', 'POST'])
-def login():
-    user=UserForm()
-    artist=ArtistForm()
-    if user.validate_on_submit():
-        if request.method == 'POST':
-            email = request.form.get('email')
-            pwd = request.form.get('pwd')
 
-            if email == ''  and pwd == '':
-                flash('Please fill in all required fields', category='error')
-            else:
-                session['fullname'] =  email.split('@')[0]
-                flash('You are now logged in ', category='success')
-                return redirect('/userdash/')
+@app.route('/user/login/', methods=['GET', 'POST'])
+def user_login():
+    user = UserForm()
+    if user.validate_on_submit():
+        email = user.email.data
+        pwd = user.pwd.data
+        session['email'] = email
+        session['fullname'] = email.split('@')[0]
+        session['password'] = pwd
+        flash('You are now logged in ', category='success')
+        cust = User(users_email=email,users_password=pwd)
+        db.session.add(cust)
+        db.session.commit()
+        return redirect('/userdash/')
+    return render_template('User/user_login.html', user=user)
+
+
+@app.route('/artist/login/', methods=['GET', 'POST'])
+def artist_login():
+    artist=ArtistForm()
     if artist.validate_on_submit():
-        if request.method=='POST':
+        if request.method == 'POST':
             fname=request.form.get('fname')
             lname=request.form.get('lname')
             if fname =='' and lname=='':
@@ -47,70 +54,62 @@ def login():
                 session['fullname'] = f'{fname} {lname}'
                 flash('You are now logged in ', category='success')
                 return redirect('/artistdash/')
+       
+   
+    return render_template('User/artist_login.html',artist=artist)
+ 
+           
 
-    return render_template('User/user_login.html',user=user,artist=artist)
 
-@app.route('/register/', methods=['GET', 'POST'])
-def register():
-    user=User_reg()
-    artist=Artist_Reg()
-    if request.method == 'POST':
-         if user.validate_on_submit():
-            fname = request.form.get('fname')
-            lname = request.form.get('lname')
-            email = request.form.get('email')
-            pwd = request.form.get('pwd')
-            phone=request.form.get('phone')
-            file=request.form.get('file')
-            file2=request.form.get('file2')
 
-            if email == ''  and pwd == '' and fname == '' and lname == '' and phone=='' and file=='' and file2=='':
-                flash('Please fill in all required fields', category='error')
-            else:
-                session['fullname'] =  f'{fname} {lname}'
-                flash('You are now logged in ', category='success')
-                return redirect('/userdash/')
-    elif artist.validate_on_submit():
-            fname=request.form.get('fname')
-            lname=request.form.get('lname')
-            file=request.form.get('file')
-            pwd=request.form.get('pwd')
-            if fname =='' and lname=='' and file=='' and pwd=='':
-                flash('Please fill in all required fields', category='error')  
-            else:
-                session['fullname'] = f'{fname} {lname}'
-                flash('You are now logged in ', category='success')
-                return redirect('/artistdash/')
-    
-    return render_template('User/user_reg.html',user=user,artist=artist)
+@app.route('/user/register/', methods=['GET', 'POST'])
+def user_register():
+    user= User_reg()
+    if request.method=='POST':
+        if user.validate_on_submit():
+            session['fullname'] = f"{user.fname.data} {user.lname.data}"
+            session['email'] = user.email.data
+            session['password'] = user.pwd.data
+            session['phone'] = user.phone.data
+            flash('You are now logged in ', category='success')
+            return redirect('/userdash/')
+    return render_template('User/user_reg.html',user=user)
 
+
+
+@app.route('/artist/register/', methods=['GET', 'POST'])
+def artist_register():
+    artist = Artist_Reg()
+    if request.method=='POST':
+        if artist.validate_on_submit():
+            session['fullname'] = f"{artist.fname.data} {artist.lname.data}"
+            session['pwd'] = artist.pwd.data
+            flash('You are now logged in ', category='success')
+            return redirect('/artistdash/')
+    return render_template('User/artist_reg.html', artist=artist)
 
 @app.route('/artists/')
 def artists():
     return render_template('User/artists.html')
 
-   
-@app.route('/user_reg/')
-def user_reg():
-    return render_template('User/user_reg.html')
 
 @app.route('/scorers/')
 def scorers():
     return render_template('User/scorers.html')
 
-@app.route('/artistdash/')
-def artistdash():
-        if session.get('fullname')==None:
-          return redirect('/login/')
-        else:
-          return render_template('User/artist_dash.html')
-
 @app.route('/userdash/')
 def userdash():
     if session.get('fullname')==None:
-        return redirect('/login/')
+        return redirect('/user/login/')
     else:
         return render_template('User/user_dash.html')
+    
+@app.route('/artistdash/')
+def artistdash():
+    if session.get('fullname')==None:
+        return redirect('/artist/login/')
+    else:
+        return render_template('User/artist_dash.html')    
 
 @app.route('/songs/')
 def songs():
@@ -134,3 +133,6 @@ def logout():
     session.pop('fullname', None)
     flash('You have been logged out.', category='success')
     return redirect('/index')
+
+
+

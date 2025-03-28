@@ -13,7 +13,14 @@
             {%endif%}
             {%endwith%}
           </h1>
-        <h1>Welcome {{session.get('fullname')}}</h1>
+          <h1>Welcome {{session.get('fullname')}}</h1>
+        <div class="col-md-6 mx-auto border">
+          <h1>Profile:</h1>
+          <h3>Full Name: {{session.get('fullname')}}</h3>
+          <form action="{{url_for('logout')}}">
+            <button class="btn btn-success mx-auto ">Log-out</button>
+          </form>
+        </div>
       </div>
 
       {%endblock content%}

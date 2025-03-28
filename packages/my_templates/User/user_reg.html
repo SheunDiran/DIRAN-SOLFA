@@ -1,14 +1,8 @@
 {%extends 'User/base_layout.html'%} 
 {%block content%}
-<!-- MAKE THIS PLACE MORE BEAUTIFUL -->
+
 <div  class="animate__animated animate__fade m-3">
-  <form action="">
-      <label for="">Please pick one</label><br>
-  <input type="radio" name="join" id="newuser">New user? <br>
-  <input type="radio" name="join" class="existinguser">Music Artist? 
-  
-</form> 
-</div>
+
 
 <h1>{%with message=get_flashed_messages(with_categories=True)%}
   {%if message%}
@@ -27,7 +21,7 @@
       
          
          <!--Reg in for  users  -->
-         <div id="new" style="display:none">
+         <div id="new">
           <form action="" class="m-5 users text-light"  method='post' novalidate>
            {{user.csrf_token}}
           {{user.fname.label()}}
@@ -70,15 +64,14 @@
       <span class="text-danger">{{error}}</span><br>
       {%endfor%}
       {%endif%}  
-
-        <br>  
-        {{user.date.label()}}     
-        {{user.date()}}
-        {%if user.date.errors%}
-                {%for error in user.date.errors%} 
-                <span class="text-danger">{{error}}</span>
-                {%endfor%}
-                {%endif%}
+ <br> <br>
+      {{user.users.label()}}
+      {{user.users()}}
+      {%if user.users.errors%}
+            {%for error in user.users.errors%} 
+            <span class="text-danger">{{error}}</span><br>
+            {%endfor%}
+            {%endif%}
 <br> <br>
 {{user.file.label()}}
 {{user.file()}}
@@ -88,89 +81,18 @@
       {%endfor%}
       {%endif%}
  <br> <br>
- {{user.file2.label()}}
-{{user.file2()}}
-{%if user.file2.errors%}
-       {%for error in user.file2.errors%} 
-       <span class="text-danger">{{error}}</span><br>
-       {%endfor%}
-       {%endif%}     
-        <br> <br>
         {{user.submit(class='btn btn-primary')}}
         </form>
       </div>
 
-      <div id="existing" style="display:none">
-        <form action="" class="m-5 users text-light" novalidate>
-      {{artist.csrf_token}}
-      {{artist.fname.label()}}
-      {{artist.fname(placeholder='enter your firstname',class='form-control')}}
-      {%if artist.fname.errors%}
-              {%for error in artist.fname.errors%} 
-              <span class="text-danger">{{error}}</span> <br>
-              {%endfor%}
-              {%endif%}
-        <br>
-        {{artist.lname.label()}}
-        {{artist.lname(placeholder='enter your lastname',class='form-control')}}
-        {%if artist.lname.errors%}
-                {%for error in artist.lname.errors%} 
-                <span class="text-danger">{{error}}</span> <br>
-                {%endfor%}
-                {%endif%}      
-       <br>
-        {{artist.lname.label()}}
-        {{artist.lname(placeholder='enter your lastname',class='form-control')}}
-        {%if artist.lname.errors%}
-                {%for error in artist.lname.errors%} 
-                <span class="text-danger">{{error}}</span> <br>
-                {%endfor%}
-                {%endif%} 
-       
-              <br>
-                {{artist.file.label()}}
-                {{artist.file()}}
-                {%if artist.file.errors%}
-                        {%for error in artist.file.errors%} 
-                        <span class="text-danger">{{error}}</span> <br>
-                        {%endfor%}
-                        {%endif%} 
-                        <br>
-                        {{artist.pwd.label()}}
-                        {{artist.pwd(placeholder='enter your password',class='form-control')}}
-                        {%if artist.pwd.errors%}
-                                {%for error in artist.pwd.errors%} 
-                                <span class="text-danger">{{error}}</span> <br>
-                                {%endfor%}
-                                {%endif%} 
-      <br> <br>
-      {{artist.submit(class='btn btn-primary')}}
-      </form>
-      </div>
-    
+      
+    </div>
+  </div>
      
 
 
  <!--Script -->
  <script src="/static/jquery-3.7.1.min.js"></script>
  <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
-<script>
- $(document).ready(function(){
-
-$('.existinguser').click(function(){
-    $('#new').hide()
-    $('#existing').show()
-    
-})
-$('#newuser').click(function(){
-    $('#existing').hide()
-    $('#new').show()
-    
-})
-
-})
-    
-  
-</script>
 
 {%endblock content%}

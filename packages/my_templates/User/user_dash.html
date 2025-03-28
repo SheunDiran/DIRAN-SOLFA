@@ -1,5 +1,6 @@
 {%extends 'User/base_layout.html'%} 
 {%block content%}
+
       <div>
         <h1>{%with message=get_flashed_messages(with_categories=True)%}
             {%if message%}
@@ -13,7 +14,19 @@
             {%endif%}
             {%endwith%}
           </h1>
-        <h1>Welcome {{session.get('fullname')}}</h1>
+          <div class="col-md-6 mx-auto border">
+            <h1>Profile:</h1>
+            <h1>Welcome {{session.get('fullname')}}</h1>
+            <h3>Email: {{session.get('email')}}</h3>
+            <h3>Password: {{session.get('password')}}</h3>
+            <hr>
+            <h3>fullname: {{session.get('email')}}</h3>
+            <h3>Phone: {{session.get('phone')}}</h3>
+            <form action="{{url_for('logout')}}">
+              <button class="btn btn-success mx-auto ">Log-out</button>
+            </form>
+          </div>
+      
       </div>
 
    

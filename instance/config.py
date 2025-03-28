@@ -1,1 +1,3 @@
 SECRET_KEY='JjOxdZhqeSeded0zFoyBrdGgWBdnkxCho1s5_5L9pvY'
+SQLALCHEMY_DATABASE_URI='mysql+mysqlconnector://root@localhost/diran_solfa'
+SQLALCHEMY_TRACK_MODIFICATIONS=True

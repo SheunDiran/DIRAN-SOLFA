@@ -7,7 +7,6 @@ from wtforms.validators import DataRequired,Email
 class UserForm(FlaskForm):
     email = EmailField('Email', validators=[DataRequired('Email is required'), Email('Please enter a valid email')])
     pwd = PasswordField('Password', validators=[DataRequired('Password is required')])
-    date = DateTimeLocalField(' Login Date',validators=[DataRequired('Enter your login date')])
     submit = SubmitField('Login')
 
     class Meta:
@@ -33,10 +32,7 @@ class User_reg(FlaskForm):
     email = EmailField('Email', validators=[DataRequired('Email is required'), Email('Please enter a valid email')])
     pwd = PasswordField('Password', validators=[DataRequired('Password is required')])
     phone = TelField('Phone Number', validators=[DataRequired('Phone number is required')])
-    date = DateField('Date', validators=[DataRequired('Enter your login date')])
-    time = TimeField('Time', validators=[DataRequired('Enter your login time')])
     file = FileField('Upload your picture')
-    file2 = FileField('Upload your CV/Work')
     users = SelectField('Users', choices=[('Users'), ('Scorers')])
     submit = SubmitField('Register')
 

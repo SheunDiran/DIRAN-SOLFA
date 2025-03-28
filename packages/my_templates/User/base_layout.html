@@ -31,10 +31,6 @@
                 <a class="nav-link active" aria-current="page" href="{{url_for('about')}}">About</a>
               </li>
               <li class="nav-item">
-                
-                <a class="nav-link" href="{{url_for('userdash')}}">Dashboard</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="{{url_for('songs')}}">Songs</a>
               </li>
               <li class="nav-item">
@@ -44,16 +40,26 @@
                 <a class="nav-link active" aria-current="page" href="{{url_for('scorers')}}">Scorers</a>
               </li>
             
-          <form action="{{url_for('login')}}">
-            <button class="btn btn-success">Log in</button>
-          </form>
-           
-          <form action="{{url_for('user_reg')}}">
-            <button class="btn btn-danger ms-2 ">Register</button>
-          </form>
-          <form action="{{url_for('logout')}}">
-            <button class="btn btn-success ms-2 ">Log-out</button>
-          </form>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Login
+                </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item text-danger" href="{{url_for('user_login')}}">Users</a></li>
+                <li><a class="dropdown-item text-success" href="/artist/login">Artists</a></li>
+              </ul>
+         </li>
+         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Register
+          </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item text-danger" href="{{url_for('user_register')}}">Users</a></li>
+          <li><a class="dropdown-item text-success" href="{{url_for('artist_register')}}">Artists</a></li>
+        </ul>
+   </li>
+          
+          
           
       </nav>  
 {%block content%}

@@ -1,0 +1,66 @@
+{%extends 'User/base_layout.html'%} 
+{%block content%}
+
+
+<h1>{%with message=get_flashed_messages(with_categories=True)%}
+  {%if message%}
+   {%for cart,a in message%}
+   {%if cart =='error'%}
+  <p style='border:5px solid red;'class="alert alert-primary">{{a}}</p>
+   {%else%}
+    <p style='border:5px solid green;'class="alert alert-succes">{{a}}</p>
+  {%endif%}
+  {%endfor%}    
+  {%endif%}
+  {%endwith%}
+</h1>
+ <div class="background">
+      <!-- form -->
+
+      <div id="existing" >
+        <form action="" method="post" class="m-5 users text-light" novalidate>
+            {{artist.csrf_token}}
+            {{artist.fname.label()}}
+            {{artist.fname(placeholder='enter your firstname',class='form-control')}}
+            {%if artist.fname.errors%}
+                {%for error in artist.fname.errors%} 
+                <span class="text-danger">{{error}}</span><br>
+                {%endfor%}
+            {%endif%}
+            <br>
+            {{artist.lname.label()}}
+            {{artist.lname(placeholder='enter your lastname',class='form-control')}}
+            {%if artist.lname.errors%}
+                {%for error in artist.lname.errors%} 
+                <span class="text-danger">{{error}}</span><br>
+                {%endfor%}
+            {%endif%}
+            <br>
+            {{artist.file.label()}}
+            {{artist.file()}}
+            {%if artist.file.errors%}
+                {%for error in artist.file.errors%} 
+                <span class="text-danger">{{error}}</span><br>
+                {%endfor%}
+            {%endif%}
+            <br>
+            {{artist.pwd.label()}}
+            {{artist.pwd(placeholder='enter your password',class='form-control')}}
+            {%if artist.pwd.errors%}
+                {%for error in artist.pwd.errors%} 
+                <span class="text-danger">{{error}}</span><br>
+                {%endfor%}
+            {%endif%}
+            <br><br>
+            {{artist.submit(class='btn btn-primary')}}
+        </form>
+    </div>
+    
+     
+
+
+ <!--Script -->
+ <script src="/static/jquery-3.7.1.min.js"></script>
+ <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+
+{%endblock content%}
