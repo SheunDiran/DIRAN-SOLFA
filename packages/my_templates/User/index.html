@@ -32,7 +32,8 @@
       
 
  <!-- a user/an instrumentalists? get solfa notations -->
-
+ {%if session.get('fullname')==None  %}
+ {%if session.get('username')==None  %}
  <div class="row artist mt-5 ">
 
   <div class="col-md-6 bg-primary text-light p-5 ms-auto">
@@ -61,14 +62,15 @@
     </div>
     <div class="col-md-6 bg-primary text-light p-5">
         <h1>Are you a music artist <br> and you want to upload your songs?</h1>
-        <form action="{{url_for('artist_register')}}">
+        <form action="{{url_for('register')}}">
           <button class="btn btn-success">JOIN OUR COMMUNITY</button>
         </form>
         
     </div>
    
    </div>
-  
+   {%endif%}
+        {%endif%}
 <!--Songs sections -->
       <div class="row bg-tertiary m-md-3 mt-5">
         <img src="/static/images/image.png" alt="music icon" height="200px">

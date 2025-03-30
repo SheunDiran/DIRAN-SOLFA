@@ -1,0 +1,19 @@
+{%extends 'User/base_layout.html'%} 
+{%block content%}
+
+<h1 class="ms-2">{{ scorer.users_firstname }}'s Details</h1>
+<div class="ms-2 ps-2">
+    <p class="alert alert-primary">Name:{{ scorer.users_firstname }} {{ scorer.users_lastname }}</p>
+    <p class="alert alert-primary">Email:{{ scorer.users_email }}</p>
+    <p class="alert alert-primary">Phone Number:{{ scorer.users_phonenumber }}</p>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+
+</div>
+</div>
+</div>
+
+
+{%endblock content%}

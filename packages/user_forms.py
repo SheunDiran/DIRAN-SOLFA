@@ -44,7 +44,6 @@ class Artist_Reg(FlaskForm):
     fname = StringField('First Name', validators=[DataRequired('Please enter your first name')])
     lname = StringField('Last Name', validators=[DataRequired('Please enter your last name')])
     file = FileField('Upload your picture')
-    pwd = PasswordField('Password', validators=[DataRequired('Password is required')])
     submit = SubmitField('Register')
 
     class Meta:

@@ -58,7 +58,7 @@ class Songs(db.Model):
      songs_id=db.Column(db.Integer,primary_key=True,autoincrement=True)     
      songs_title=db.Column(db.String(200),nullable=False)
      song_lyrics=db.Column(db.TEXT,nullable=False)
-     date_added=date_requested=db.Column(db.DateTime(),default=datetime.utcnow) 
+     date_added=db.Column(db.DateTime(),default=datetime.utcnow) 
 
      def __repr__(self):
                  return {self.songs_title}
@@ -68,12 +68,12 @@ class User(db.Model):
      users_lastname=db.Column(db.String(100),nullable=False)  
      users_email=db.Column(db.String(150),nullable=False,unique=True)  
      users_phonenumber=db.Column(db.String(100),nullable=False,unique=True) 
-     users_password=db.Column(db.String(45),nullable=False,unique=True)  
-     users_profilepicture=db.Column(db.BLOB,nullable=False)
-     user_verified=db.Column(db.BLOB,nullable=False)
-     users_role=db.Column(db.Enum('user', 'scorers'))
-     date_registered=date_requested=db.Column(db.DateTime(),default=datetime.utcnow)  
-     date_loggedin=db.Column(db.DateTime(),default=datetime.utcnow,onupdate=datetime.utcnow) 
+     users_password=db.Column(db.String(200),nullable=False,unique=True) 
+     users_profilepicture=db.Column(db.BLOB)
+     user_verified=db.Column(db.BLOB)
+     users_role=db.Column(db.String(150),nullable=False,unique=True)
+     date_registered = db.Column(db.DateTime, default=datetime.utcnow)
+     date_loggedin = db.Column(db.DateTime,default=datetime.utcnow, onupdate=datetime.utcnow)
      
      def __repr__(self):
                  return {self.users_firstname}

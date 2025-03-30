@@ -14,35 +14,35 @@
   {%endwith%}
 </h1>
 </div>
-        
 
-<div class="overlay login"> 
+<div  id="existing" class="overlay login">
 <form action="" class="m-3 users text-light p-3" method="post" novalidate > 
-  <div id="new">
+ 
   {{user.csrf_token}}
 {{user.email.label()}}
 {{user.email(placeholder='enter your email',class='form-control')}}
 {%if user.email.errors%}
         {%for error in user.email.errors%} 
-        <span class="text-danger">{{error}}</span><br>
+        <span class="text-danger">{{error}}</span> <br>
         {%endfor%}
         {%endif%}
+  <br>
 
-{{user.pwd.label()}}
-{{user.pwd(placeholder='enter your password',class='form-control')}}
-{%if user.pwd.errors%}
-        {%for error in user.pwd.errors%} 
-        <span class="text-danger">{{error}}</span><br>
-        {%endfor%}
-        {%endif%}
+  {{user.pwd.label()}}
+  {{user.pwd(placeholder='enter your password',class='form-control')}}
+  {%if user.pwd.errors%}
+          {%for error in user.pwd.errors%} 
+          <span class="text-danger">{{error}}</span> <br>
+          {%endfor%}
+          {%endif%}      
+  
+<br> 
+{{user.submit(class='btn btn-success')}} 
+<hr class="pt-2">
+<h3 class="text-warning text-center">Music artist? Register as a  
+        <a href="{{url_for('artist_login')}}" class="text-warning">Artist</a></h3>
 
-<br> <br>
-{{user.submit(class='btn btn-success')}}
-</div>
-</form>
-</div>
-
-
+  
 <script src="/static/jquery-3.7.1.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
 

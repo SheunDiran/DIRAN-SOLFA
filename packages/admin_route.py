@@ -72,7 +72,7 @@ def admindash():
      if session.get('fullname')==None:
         return redirect('/admin/login/')
      else:
-      return render_template('Admin/admin_dash.html')
+      return render_template('Admin/dashboard.html')
 
 @app.route('/admin/songs/')
 def admin_songs():

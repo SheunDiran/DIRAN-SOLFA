@@ -1,0 +1,98 @@
+{%extends 'User/base_layout.html'%} 
+{%block content%}
+
+<div  class="animate__animated animate__fade m-3">
+
+
+<h1>{%with message=get_flashed_messages(with_categories=True)%}
+  {%if message%}
+   {%for cart,a in message%}
+   {%if cart =='error'%}
+  <p style='border:5px solid red;'class="alert alert-primary">{{a}}</p>
+   {%else%}
+    <p style='border:5px solid green;'class="alert alert-succes">{{a}}</p>
+  {%endif%}
+  {%endfor%}    
+  {%endif%}
+  {%endwith%}
+</h1>
+ <div class="background">
+      <!-- form -->
+      <form action="" class="m-5 mt-0 p-3  text-light"  method='post' novalidate>
+        <h1 class="pb-3">USERS'S UPDATE DETAILS FORM </h1>
+       {{user.csrf_token}}
+      {{user.fname.label()}}
+    {{user.fname(placeholder='enter your first name',class='form-control')}}
+    {%if user.fname.errors%}
+            {%for error in user.fname.errors%} 
+            <span class="text-danger">{{error}}</span><br>
+            {%endfor%}
+            {%endif%}
+<br>
+{{user.lname.label()}}
+{{user.lname(placeholder='enter your last name',class='form-control')}}
+{%if user.lname.errors%}
+      {%for error in user.lname.errors%} 
+      <span class="text-danger">{{error}}</span><br>
+      {%endfor%}
+      {%endif%}
+
+    {{user.email.label()}}
+    {{user.email(placeholder='enter your email',class='form-control')}}
+    {%if user.email.errors%}
+            {%for error in user.email.errors%} 
+            <span class="text-danger">{{error}}</span><br>
+            {%endfor%}
+            {%endif%}
+  
+    {{user.pwd.label()}}
+    {{user.pwd(placeholder='enter your password',class='form-control')}}
+    {%if user.pwd.errors%}
+            {%for error in user.pwd.errors%} 
+            <span class="text-danger">{{error}}</span><br>
+            {%endfor%}
+            {%endif%}
+    
+
+{{user.phone.label()}}
+{{user.phone(placeholder='enter your phone number',class='form-control')}}
+{%if user.phone.errors%}
+  {%for error in user.phone.errors%} 
+  <span class="text-danger">{{error}}</span><br>
+  {%endfor%}
+  {%endif%}  
+<br> 
+  {{user.users.label()}}
+  {{user.users()}}
+  {%if user.users.errors%}
+        {%for error in user.users.errors%} 
+        <span class="text-danger">{{error}}</span><br>
+        {%endfor%}
+        {%endif%}
+<br> 
+{{user.file.label()}}
+{{user.file()}}
+{%if user.file.errors%}
+  {%for error in user.file.errors%} 
+  <span class="text-danger">{{error}}</span><br>
+  {%endfor%}
+  {%endif%}
+<br> <br>
+    {{user.submit(class='btn btn-primary')}} 
+    <hr class="pt-2">
+    <h3>Music artist? Register as a  <a href="{{url_for('register')}}" class="text-success">Artist</a></h3>
+  
+
+    
+    
+   
+    </form>
+         
+      </div>
+
+
+ <!--Script -->
+ <script src="/static/jquery-3.7.1.min.js"></script>
+ <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+
+{%endblock content%}

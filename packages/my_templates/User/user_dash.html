@@ -1,75 +1,59 @@
 {%extends 'User/base_layout.html'%} 
 {%block content%}
 
-      <div>
-        <h1>{%with message=get_flashed_messages(with_categories=True)%}
-            {%if message%}
-             {%for cart,a in message%}
-             {%if cart =='error'%}
-            <p style='border:5px solid red;'class="alert alert-primary">{{a}} </p>
-             {%else%}
-              <p style='border:5px solid green;'class="alert alert-succes">{{a}} {{email}}</p>
-            {%endif%}
-            {%endfor%}    
-            {%endif%}
-            {%endwith%}
-          </h1>
-          <div class="col-md-6 mx-auto border">
-            <h1>Profile:</h1>
-            <h1>Welcome {{session.get('fullname')}}</h1>
-            <h3>Email: {{session.get('email')}}</h3>
-            <h3>Password: {{session.get('password')}}</h3>
-            <hr>
-            <h3>fullname: {{session.get('email')}}</h3>
-            <h3>Phone: {{session.get('phone')}}</h3>
-            <form action="{{url_for('logout')}}">
-              <button class="btn btn-success mx-auto ">Log-out</button>
-            </form>
+<!-- For the Dashboard-->
+<div class="background">
+  <h1>{%with message=get_flashed_messages(with_categories=True)%}
+      {%if message%}
+       {%for cart,a in message%}
+       {%if cart =='error'%}
+      <p style='border:5px solid red;'class="alert alert-primary">{{a}} </p>
+       {%else%}
+        <p style='border:5px solid green;'class="alert alert-succes">{{a}} {{email}}</p>
+      {%endif%}
+      {%endfor%}    
+      {%endif%}
+      {%endwith%}
+    </h1>
+
+
+<div class="row py-5 my-3 text-light">
+  <div class="col-md-8 offset-md-2">
+    <h3 style="margin-bottom:30px;" class="text-center heading-title"> USER Dashboard</h3> 
+      <h5 class="my-3">Welcome {{user.users_firstname}} </h5>
+     
+     
+      <div class="row">
+          <div class="col-md-4">
+                  <div class="card text-bg-success mb-3" style="width:500px;">
+                    <div class="card-header text-center">Profile:</div>
+                    <div class="card-body">
+                      <h3>FirstName: {{user.users_firstname}} </h3>
+                      <h3>LastName:{{user.users_lastname}}</h3>
+                      <h3>Email: {{user.users_email}}</h3>
+                      <h3>Phone Number: {{user.users_phonenumber}}</h3>
+                      <h3>Date Registered: {{user.date_registered}}</h3>
+                      <a href="/user/{{user.users_id}}/update" class="text-light">
+                        <button class="btn btn-success mx-auto ">Edit Details</button></a>
+                      
+                      
+                        <a href="{{url_for('logout')}}"class="text-light">
+                          <button class="btn btn-success mx-auto ">Log-out</button></a>
+                                    
+                    </div>
+                </div>
+                  
+              </div>
           </div>
-      
+         
+         
       </div>
+  </div>
+</div>
+</div>
+<!-- End the Dashboard-->
 
-   
+    
 
-<script>
-  $(document).ready(function(){
-    $('#sub').click(function(){
-      var user=$('#user').val()
-      if(user==''){
-alert('Please enter a song or an artist')
-event.preventDefault()
-    }else if(user=$('#user').val())
-   alert(user +' not found')
-    })
-    $('.user').click(function(){
-      var user=$('.users').val()
-      if(user==''){
-alert('Please fill all fields')
-event.preventDefault()
-    }
-    })
-    $('#existinguser').click(function(){
-        $('#new').hide()
-        $('#scorers').hide()
-        $('#existing').fadeToggle()
-    })
-    $('#newuser').click(function(){
-        $('#existing').hide()
-        $('#scorers').hide()
-        $('#new').fadeToggle()
-    })
-    $('#professional').click(function(){
-        $('#new').hide()
-        $('#existing').hide()
-        $('#scorers').fadeToggle()
-    })
-    $('#dash').click(function(){
-      alert('Login,sign up or register')
-        event.preventDefault()
-      
-      
-    })
-  })
 
-</script>
 {%endblock content%}

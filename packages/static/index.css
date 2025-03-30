@@ -16,7 +16,7 @@ body{
     min-height: 200px;
     width:100%
   }
-   .over{background-image: url('images/music_background.avif');
+   .over{background-image: url('/static/images/music_background.avif');
     height:500px;
     background-size:cover;
   }
@@ -49,10 +49,11 @@ body{
   }
   .background{
     background-image: url('images/register.avif');
-    height:600px;
+    height: 700px;
     background-size: cover;
     
   }
+  
   .trend a{
 color:white;
 text-decoration: none;
@@ -61,6 +62,7 @@ text-decoration: none;
     background-image: url('images/login.jpg');
     min-height:700px;
     background-size: cover;
+    
     
   }
   .overlay{
