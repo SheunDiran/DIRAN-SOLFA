@@ -25,6 +25,7 @@ body{
    text-shadow:4px 5px 3px blue;font-size:30px;
    color: white;
    }
+   
   
   a#logo:hover{
     color:red 
@@ -69,3 +70,6 @@ text-decoration: none;
     background-color:rgba(0,0,0,0.7) ;
     height:100%;
   }
+
+
+  

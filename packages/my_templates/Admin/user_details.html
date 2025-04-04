@@ -1,0 +1,21 @@
+{%include 'Admin/nav.html'%}
+<h1 class="ms-2">{{ user.users_firstname }}'s Details</h1>
+<div class="ms-2 ps-2">
+    <p class="alert alert-primary">Name:{{ user.users_firstname }} {{ user.users_lastname }}</p>
+    <p class="alert alert-primary">Email:{{ user.users_email }}</p>
+    <p class="alert alert-primary">Phone Number:{{ user.users_phonenumber }}</p>
+    <p class="alert alert-primary">User Role:{{ user.users_role }}</p>
+    <p class="alert alert-primary">Date Registered:{{ user.date_registered }}</p>
+</div>
+      
+{%include 'Admin/footer.html'%}  
+
+</body>
+<script src="/static/jquery-3.7.1.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+
+
+    
+  
+
+</html>

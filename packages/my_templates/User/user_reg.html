@@ -42,7 +42,8 @@
           {%endif%}
 
         {{user.email.label()}}
-        {{user.email(placeholder='enter your email',class='form-control')}}
+        {{user.email(placeholder='enter your email',class='form-control',id='email')}}
+        <h3></h3>
         {%if user.email.errors%}
                 {%for error in user.email.errors%} 
                 <span class="text-danger">{{error}}</span><br>
@@ -50,7 +51,8 @@
                 {%endif%}
       
         {{user.pwd.label()}}
-        {{user.pwd(placeholder='enter your password',class='form-control')}}
+        {{user.pwd(placeholder='enter your password',class='form-control',id='pwd')}}
+        <h3></h3>
         {%if user.pwd.errors%}
                 {%for error in user.pwd.errors%} 
                 <span class="text-danger">{{error}}</span><br>
@@ -59,7 +61,8 @@
         
  
 {{user.phone.label()}}
-{{user.phone(placeholder='enter your phone number',class='form-control')}}
+{{user.phone(placeholder='enter your phone number',class='form-control',id='phone')}}
+<h3></h3>
 {%if user.phone.errors%}
       {%for error in user.phone.errors%} 
       <span class="text-danger">{{error}}</span><br>
@@ -102,5 +105,18 @@
  <!--Script -->
  <script src="/static/jquery-3.7.1.min.js"></script>
  <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+ <script>
+  $(document).ready(function(){
+    $('button').click(function(){
+      var email=$('#email').val()
+      var password=$('#pwd').val()
+      var phone=$('#phone').val()
+      var data={'email':email,'password':password,'phone':phone,csrf_token:'{{csrf_token()}}'}
+      $.post('/ajax/process/',data,function(resp){
+                $('h3').html(resp)
+       })
+    })
+  })
+</script>
 
 {%endblock content%}

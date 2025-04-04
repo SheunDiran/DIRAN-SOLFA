@@ -7,9 +7,11 @@
       {%if message%}
        {%for cart,a in message%}
        {%if cart =='error'%}
-      <p style='border:5px solid red;'class="alert alert-primary">{{a}} </p>
+       <p style='border:5px solid red;background-color:red;color:white;'
+       class="alert alert-danger">{{a}}</p>
        {%else%}
-        <p style='border:5px solid green;'class="alert alert-succes">{{a}} {{email}}</p>
+       <p style='border:5px solid green;background-color:green;color:white;'
+       class="alert alert-success">{{a}}</p>
       {%endif%}
       {%endfor%}    
       {%endif%}

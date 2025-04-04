@@ -9,15 +9,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fascinate+Inline&family=Pacifico&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="/static/index.css">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <link rel="stylesheet" href="/static/index.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      <link rel="stylesheet" href="/static/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
      <link rel="stylesheet" href="/static/https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body class="bg-color:red " style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" >
     
   <!-- navigation bar -->
-  <nav class="navbar navbar-expand-lg bg-primary nav ">
+  <nav class="navbar navbar-expand-lg bg-success nav ">
         <div class="container-fluid"> 
           
           <a class="navbar-brand pacifico-regular " href="{{url_for('admin_index')}}" id="logo">
@@ -33,12 +32,12 @@
       </nav> 
 <style>
   body {
-    background-color: green;
+    background-color:blue;
   }
-  .login-card{
+  .register-card{
     width: 400px;
     min-height: 200px;
-    margin-left:300px;
+    margin-left:400px;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -56,39 +55,53 @@
       {% endfor %}
     {% endif %}
   {% endwith %}</h1>
-  <div class="container">
-        <h1 class="text-success text-center pt-2">ADMIN FORM</h1>
-    <div class="login-card">
-      <div class="p-3  ">
-        <h2 class="mb-3 text-center">Admin Login</h2>
-     
-        <form method="post" action="" novalidate>
-          {{ form.hidden_tag() }}
-          <div>
-              {{ form.username.label() }}
-              {{ form.username(placeholder='enter your username') }}
-              {% if form.username.errors and request.method == 'POST' %}
-                  {% for error in form.username.errors %}
-                      <span style="color: red;">[{{ error }}]</span>
-                  {% endfor %}
-              {% endif %}
-          </div>
-          <br>
-          <div>
-              {{ form.password.label() }}
-              {{ form.password(placeholder='enter your password') }}
-              {% if form.password.errors and request.method == 'POST' %}
-                  {% for error in form.password.errors %}
-                      <span style="color: red;">[{{ error }}]</span>
-                  {% endfor %}
-              {% endif %}
-          </div>
-          <br>
-          {{ form.submit(class='btn btn-success col-md-12') }} Don't have an account yet? <a href="/admin/register/">Register</a>  
-      </form>
-      </div>
-    </div>
   
+   <!-- admin registration form -->
+   <h1 class="text-primary text-center">ADMIN FORM</h1>
+  <div class="register-card">
+    
+    <div class="p-3 ">
+      <h2 class="mb-3 text-center">Admin Register</h2>
+   
+      <form method="post" action="" novalidate>
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.username.label() }}
+            {{ form.username(placeholder='enter your username') }}
+            {% if form.username.errors and request.method == 'POST' %}
+                {% for error in form.username.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            {% endif %}
+        </div> <br>
+        <div>
+          {{ form.email.label() }}
+          {{ form.email(placeholder='enter your email address') }}
+          {% if form.email.errors and request.method == 'POST' %}
+              {% for error in form.email.errors %}
+                  <span style="color: red;">[{{ error }}]</span>
+              {% endfor %}
+          {% endif %}
+      </div>
+        <br>
+        <div>
+            {{ form.password.label() }}
+            {{ form.password(placeholder='enter your password') }}
+            {% if form.password.errors and request.method == 'POST' %}
+                {% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <br>
+        {{ form.submit(class='btn btn-primary col-md-12') }}  Already have an account?<a href="/admin/login/">Login</a> 
+    </form>
+    </div>
+  </div> 
+    
+    
+
+       
   {%include 'Admin/footer.html'%} 
 </body>
 </html>

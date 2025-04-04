@@ -1,24 +1,30 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField,TimeField,DateField,DateTimeLocalField,FileField
-from wtforms.validators import DataRequired
+from wtforms import StringField, PasswordField, SubmitField,EmailField
+from wtforms.validators import DataRequired,Email
 
-class AdminForm(FlaskForm):
-   username=StringField('Username',validators=[DataRequired('Enter your username')])
-   pwd = PasswordField('Password', validators=[DataRequired('Enter your password')])
-   date = DateTimeLocalField(' Login Date',validators=[DataRequired('Enter your login date and time')])
-   submit = SubmitField('Login')        
 
-class Meta:
+class AdminLogin(FlaskForm):
+    username = EmailField('Username', validators=[DataRequired('Username is required')])
+    password = PasswordField('Password', validators=[DataRequired('Password is required')])
+    submit = SubmitField('Login')
+
+    class Meta:
         csrf = True
 csrf_time_limit = 360
 
-class Admin_Reg(FlaskForm):
-    username = StringField('Username', validators=[DataRequired('Enter your username')])
-    pwd = PasswordField('Password', validators=[DataRequired('Enter your password')])
-    file = FileField('Upload your picture')
-    date = DateField('Registration Date', validators=[DataRequired('Enter the date')])
+
+
+
+class AdminRegister(FlaskForm):
+    username = StringField('User Name', validators=[DataRequired('Please enter your username')])
+    email = EmailField('Email', validators=[DataRequired('Email is required'), Email('Please enter a valid email')])
+    password = PasswordField('Password', validators=[DataRequired('Password is required')])
     submit = SubmitField('Register')
 
     class Meta:
         csrf = True
         csrf_time_limit = 360
+
+
+      
+

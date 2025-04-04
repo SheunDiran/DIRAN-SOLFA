@@ -1,38 +1,34 @@
-{%extends 'User/base_layout.html'%} 
-{%block content%}
+{% extends 'User/base_layout.html' %}
 
-
-<h1 class="text-center text-primary">These are the list of Artists ...</h1>
-    <h1 class="ms-3">Total Artists: {{ artist_count }}</h1>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table table-striped table-hover m-3 p-3">
-                    <thead>
-                        <tr>
-                            <th>S/N</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for a in artist %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>{{ a.artist_firstname }} </td>
-                                <td>{{ a.artist_lastname }}</td>
-                                <td>
-                                    
-                                    
-                            <a href="/artist/{{ a.artist_id }}/details" class="btn btn-primary btn-sm">View</a>                            
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+{% block content %}
+  <h1 class="text-center text-primary">These are the list of Artists ...</h1>
+  <h1 class="ms-3">Total Artists: {{ artist_count }}</h1>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-striped table-hover m-3 p-3">
+          <thead>
+            <tr>
+              <th>S/N</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in artists %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ a.artist_firstname }}</td>
+                <td>{{ a.artist_lastname }}</td>
+                <td>
+                  <a href="/artist/{{ a.artist_id }}/details" class="btn btn-primary btn-sm">View</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 {% endblock content %}

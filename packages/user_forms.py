@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField,EmailField,SelectField
-from wtforms import DateTimeLocalField,FileField,TelField,TimeField,DateField
+from wtforms import TextAreaField,FileField,TelField
 from wtforms.validators import DataRequired,Email
 
 
@@ -49,4 +49,13 @@ class Artist_Reg(FlaskForm):
     class Meta:
         csrf = True
         csrf_time_limit = 360
+
+class Add_Songs(FlaskForm):
+    title = StringField('Song Title', validators=[DataRequired()])
+    songs = TextAreaField('Song Lyrics', validators=[DataRequired()])
+    solfa = StringField('Solfa Notation', validators=[DataRequired()])
+
+    class Meta:
+        csrf = True
+        csrf_time_limit = 360        
 

@@ -1,63 +1,48 @@
+{% extends 'User/base_layout.html' %}
 
-      {%extends 'User/base_layout.html'%} 
-{%block content%}
-
-<!-- For the Dashboard-->
-<div class="background">
-  <h1>{%with message=get_flashed_messages(with_categories=True)%}
-      {%if message%}
-       {%for cart,a in message%}
-       {%if cart =='error'%}
-      <p style='border:5px solid red;'class="alert alert-primary">{{a}} </p>
-       {%else%}
-        <p style='border:5px solid green;'class="alert alert-succes">{{a}} {{email}}</p>
-      {%endif%}
-      {%endfor%}    
-      {%endif%}
-      {%endwith%}
-    </h1>
-
-
-<div class="row py-5 my-3 text-light">
-  <div class="col-md-8 offset-md-2">
-    <h3 style="margin-bottom:30px;" class="text-center heading-title">ARTIST Dashboard</h3> 
-      <h5 class="my-3">Welcome {{artist.artist_firstname}} {{artist.artist_lastname}}</h5>
-     
-     
-      <div class="row ">
-          
-            <div class="col-md-6">
-              <div class="card text-bg-success mb-3" style="width:300px;">
-                  <div class="card-header text-center">Profile:</div>
-                  <div class="card-body">
-                    <h5 class="card-title text-center">Full Name: 
-                      {{artist.artist_firstname}} {{artist.artist_lastname}}</h5>  
-                    <a href="/artist/{{artist.artist_id}}/update/" class="text-light">
-                      <button class="btn btn-success mx-auto ">Edit Details</button></a>
-                      <a href="{{url_for('logout')}}"class="text-light"><button class="btn btn-success mx-auto ">Log-out</button></a>
-                                                              
-                  </div>
+{% block content %}
+  <!-- For the Dashboard-->
+  <div class="background">
+    <h1>{% with message = get_flashed_messages(with_categories=true) %} 
+      {% if message %} 
+        {% for category, message in message %} 
+          {% if category == 'error' %} 
+            <p style='border:5px solid red;' class="alert alert-primary">{{ message }} </p> 
+          {% else %} 
+            <p style='border:5px solid green;' class="alert alert-success">{{ message }}</p> 
+          {% endif %} 
+        {% endfor %} 
+      {% endif %} 
+    {% endwith %}</h1>
+    <div class="row py-5 my-3 text-light">
+      <div class="col-md-8 offset-md-2">
+        <h3 style="margin-bottom:30px;" class="text-center heading-title">ARTIST Dashboard</h3>
+        <h5 class="my-3">Welcome {{ artist.artist_firstname }} {{ artist.artist_lastname }}</h5>
+        <div class="row ">
+          <div class="col-md-6">
+            <div class="card text-bg-success mb-3" style="width:300px;">
+              <div class="card-header text-center">Profile:</div>
+              <div class="card-body">
+                <h5 class="card-title text-center">Full Name: {{ artist.artist_firstname }} {{ artist.artist_lastname }}</h5>
+                <a href="/artist/{{ artist.artist_id }}/update/" class="text-light">
+                  <button class="btn btn-success mx-auto ">Edit Details</button></a>
+                <a href="{{ url_for('logout') }}" class="text-light"><button class="btn btn-success mx-auto ">Log-out</button></a>
               </div>
+            </div>
           </div>
           <div class="col-md-6">
-              <div class="card text-bg-success mb-3" style="width:300px;">
-                  <div class="card-header text-center">My Songs</div>
-                  <div class="card-body">
-                    <h5 class="card-title text-center">My Songs</h5> 
-                    <a href="{{url_for('register')}}" class="text-light">
-                      <button class="btn btn-success ms-5 ">Add Songs</button></a>      
-                    </div>
-                </div> 
+            <div class="card text-bg-success mb-3" style="width:300px;">
+              <div class="card-header text-center">My Songs</div>
+              <div class="card-body">
+                <h5 class="card-title text-center">My Songs</h5>
+                <a href="/artist/{{ artist.artist_id }}/add-song/" class="text-light">
+                  <button class="btn btn-success ms-5 ">Add Songs</button></a>
               </div>
+            </div>
           </div>
-         
-         
+        </div>
       </div>
+    </div>
   </div>
-</div>
-</div>
-<!-- End the Dashboard-->
-{%endblock content%}
-    
-  
-
+  <!-- End the Dashboard-->
+{% endblock content %}
