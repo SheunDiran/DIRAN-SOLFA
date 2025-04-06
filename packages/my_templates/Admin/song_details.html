@@ -1,0 +1,25 @@
+{%include 'Admin/nav.html'%}
+<div class="container ">
+    <div class="card mt-4">
+        <div class="card-body">
+            <h1 class="card-title">Song Title:{{ song.songs_title }}</h1> <br>
+            <h1 class="card-title">Artist:{{ song.artist }}</h1> <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 class="card-text">Lyrics: </h2>
+                      <p class="text-primary">{{ song.song_lyrics | replace('\n', '<br> <br>') | safe }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h2 class="card-text">Solfa:</h2>
+                       <p class="text-success"> {% for solfa in song.song_solfa %}
+                            {{ solfa.solfa_notation | replace('\n', '<br> <br>') | safe }}
+                        {% else %}
+                            None
+                        {% endfor %}</p>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%include 'Admin/footer.html'%}

@@ -1,0 +1,40 @@
+{%extends 'User/base_layout.html'%} 
+{%block content%}
+
+<div class="row py-5 my-3">
+    <div class="col-md-8 offset-md-2">
+      <h3 style="margin-bottom:30px;" class="text-center heading-title">Upload DP</h3> 
+    
+{% if user %}
+<h5 class="my-3">Welcome {{ user.users_firstname }}</h5>
+{% elif artist %}
+<h5 class="my-3">Welcome {{ artist.artist_firstname }}</h5>
+{% else %}
+<h5 class="my-3">Welcome</h5>
+{% endif %}
+      
+      
+
+        <form action="" method="post" enctype="multipart/form-data">
+            
+            <div class= "mb-3">
+                {{dp.picture.label}}
+                {%for error in dp.picture.errors%}
+                <span class="text-danger">{{error}}</span>
+                {%endfor%}
+                {{dp.picture(class_='form-control noround border_dark')}}
+            </div>
+            <div class="mb-3">
+                {{dp.csrf_token}}
+                <button type="button" onclick="document.location.href='/dashboard/'" class="btn btn-dark noround">Cancel</button>
+                {{dp.upload(class_=' btn btn-danger noround')}}
+            
+            </div>
+           
+        </form>
+       
+    </div>
+  </div>
+
+
+{%endblock%}

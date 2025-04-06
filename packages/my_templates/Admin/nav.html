@@ -39,23 +39,33 @@
               {%if session.get('username')!=None %}
               <li class="nav-item">
                 
-                <a class="nav-link" href="/Admin/admindash/">Dashboard</a>
+                <a class="nav-link" href="/admin/admindash/">Dashboard</a>
               </li>
             
           
           <div class="dropdown user-menu">
             <a class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="/static/images/admin.png" width="30" style="border-radius: 50%;"> Hi 
-              {%if admin%}
-              {{ admin.username }} 
-          {%endif%}
+              <img src="/static/images/admin.jpg" alt="scorer" width="40" style="border-radius: 50%;">
+              {% if admin.dp %}
+              <img src="/static/uploads/{{admin.dp }}" width="30" style="border-radius: 50%;">
+              Hi {{ admin.username }}
+
+              
+          {% endif %}
+             
+             
             </a>
+
+              <!-- dropdown menu items here -->
+              <ul class="dropdown-menu user-profile" style="border-radius: 0px;background-color: rgb(39, 59, 9);">
+               
+                <li><a class="dropdown-item" href="{{url_for('adminupload_db')}}">Upload Photo</a> </li>
+                <li><a class="dropdown-item" href="{{url_for('edit_profile')}}">Edit Details</a> </li>
+            <li><a class="dropdown-item" href="{{url_for('admin_logout')}}">Logout</a> </li>
+           
+              
+              </ul>
+              {%endif%}
           
-            <ul class="dropdown-menu user-profile" style="border-radius: 0px;background-color: rgb(39, 59, 9);">
-              <li><a class="dropdown-item" href="/Admin/admindash/">Profile</a></li>
-              <li><a class="dropdown-item" href="#">Change Password</a></li>
-              <li><a class="dropdown-item" href="{{url_for('admin_logout')}}">Logout</a></li>
-            </ul>
-          </div>
-          {%endif%}
+            
       </nav> 

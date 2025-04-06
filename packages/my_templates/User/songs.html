@@ -1,4 +1,13 @@
 {%extends 'User/base_layout.html'%} 
 {%block content%}
-
+<h1>Songs</h1>
+<ul>
+  {% for song in songs %}
+    <li>{{ song.title }}</li>
+  {% endfor %}
+</ul>
+{%if session.get('fullname')%}
+<a href="/add_song/" class="text-light">
+  <button class="btn btn-success ms-5 ">Add Songs</button></a>
+{%endif%}
 {%endblock content%}

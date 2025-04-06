@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Fascinate+Inline&family=Pacifico&display=swap" rel="stylesheet">
      <link rel="stylesheet" href="/static/index.css">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-     <link rel="stylesheet" href="/static/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-     <link rel="stylesheet" href="/static/https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body class="bg-color:red " style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" >
  
@@ -24,14 +24,26 @@
          
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0  menu">
-              <li class="nav-item">
+              {%if session.get('username')!=None or session.get('fullname')!=None %}
+              <div>
+                <form class="d-flex" role="search">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form> 
+              </div>
+              {%endif%} 
+
+              <li class="nav-item ms-3">
                 <a class="nav-link active" aria-current="page" href="{{url_for('index')}}">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{{url_for('about')}}">About</a>
               </li>
+
               {%if session.get('username')!=None or session.get('fullname')!=None %}
+             
               <li class="nav-item">
                 <a class="nav-link" href="{{url_for('songs')}}">Songs</a>
               </li>
@@ -59,39 +71,43 @@
         </li>
         {%endif%}
         {%endif%}
+
         {%if session.get('username')!=None or session.get('fullname')!=None %}
         
         <div class="dropdown user-menu">
           <a class="btn dropdown-toggle btn-outline-success text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {% if user %}
-              {% if "scorer" in user.users_role|lower %}
-              <img src="/static/images/scorers.png" width="38" style="border-radius: 50%;"> 
+            {% if user %}
+            {% if "scorer" in user.users_role|lower %}
+            <img src="/static/images/logo.png" alt="scorer" width="30" style="border-radius: 50%;">
+              <img src="/static/uploads/{{ user.users_profilepicture }}" width="30" style="border-radius: 50%;">
               Hi {{ user.users_firstname }} (Scorer)
-          {% else %}
-              <img src="/static/images/users.png" width="30" style="border-radius: 50%;"> 
+            {% else %}
+              <img src="/static/uploads/{{ user.users_profilepicture }}" width="30" style="border-radius: 50%;">
               Hi {{ user.users_firstname }}
+            {% endif %}
+          {% elif artist %}
+          <img src="/static/images/artist.jpg" alt="scorer" width="30" style="border-radius: 50%;">
+            <img src="/static/uploads/{{ artist.artist_dp }}" width="30" style="border-radius: 50%;">
+            Hi {{ artist.artist_firstname }}
+          {% else %}
+            Hi
           {% endif %}
-              {% elif artist %}
-                  <img src="/static/images/artist.jpg" width="30" style="border-radius: 50%;"> 
-                  Hi {{ artist.artist_firstname }}
-              {% endif %}
           </a>
           <!-- dropdown menu items here -->
+          <ul class="dropdown-menu user-profile" style="border-radius: 0px;background-color: rgb(39, 59, 9);">
+           
+            <li><a class="dropdown-item" href="{{url_for('upload_dp')}}">Upload Photo</a> </li>
+            <li><a class="dropdown-item" href="{{url_for('register')}}">Change Password</a> </li>
+        <li><a class="dropdown-item" href="{{url_for('logout')}}">Logout</a> </li>
+       
+          
+          </ul>
+          {%endif%}
+        </div>
       </div>
   
   
-    <ul class="dropdown-menu user-profile" style="border-radius: 0px;background-color: rgb(39, 59, 9);">
-      <li><a class="dropdown-item" href="{{url_for('dashboard')}}">Profile</a></li>
-     
-      <li><a class="dropdown-item" href="{{url_for('register')}}">Change Password</a> </li>
-  
    
-  <li><a class="dropdown-item" href="{{url_for('logout')}}">Logout</a> </li>
- 
-    
-    </ul>
-    {%endif%}
-  </div>
           
           
           
@@ -113,7 +129,32 @@
       </div>
       </div>
 
+
+</body>
+<!-- footer -->
+</div>
 </body>
 <script src="/static/jquery-3.7.1.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+<script>
+
+    console.log("JavaScript code is being executed");
+    $(document).ready(function() {
+        console.log("Document ready");
+        $('input[name="selection"]').on('change', function() {
+            console.log("Radio button changed");
+            var value = $(this).val();
+            if (value == 'artist') {
+                console.log("Artist selected");
+                $('#artist-select-group').show();
+                $('#scorer-select-group').hide();
+            } else if (value == 'scorer') {
+                console.log("Scorer selected");
+                $('#scorer-select-group').show();
+                $('#artist-select-group').hide();
+            }
+        });
+    });
+</script>
 </html>
+

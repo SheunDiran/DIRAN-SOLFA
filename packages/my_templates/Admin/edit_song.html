@@ -1,0 +1,64 @@
+
+{%include 'Admin/nav.html'%}
+<h1>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p style='border:5px solid' class="alert alert-{{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</h1>
+
+<form action="" method="post" class="m-3 p-3 mt-1 pt-1 background">
+    <h1 class="text-info text-center">Update/Edit Song</h1>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="text-light">Song Title:</h1>
+            <input type="text"  name="songs_title" value="{{ song.songs_title }}"> 
+
+        <br>
+        <h1 class="text-light">Artist:</h1>
+            <input type="text"  name="artist" value="{{ song.artist }}"> 
+        </div>
+        <div class="col-md-6">
+            <h3 class="text-primary">Song Lyrics:</h3>
+            <textarea name="song_lyrics" rows="10" cols="60">{{ song.song_lyrics }}</textarea>
+        </div>
+    </div>
+   
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-6">
+                <h3 class="text-success">Solfa Notation:Alto</h3>
+                <textarea name="solfa_notation" rows="8" cols="64">
+                    {% for solfa in song.song_solfa %}
+                        {{ solfa.solfa_notation }}
+                    {% else %}
+                        None
+                    {% endfor %}
+                </textarea>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3 class="text-danger">Solfa Notation:Soprano</h3>
+            <textarea name="solfa_notation" rows="8" cols="64">
+                {% for solfa in song.song_solfa %}
+                    {{ solfa.solfa_notation }}
+                {% else %}
+                    None
+                {% endfor %}
+            </textarea>
+        </div>
+        
+    </div>
+    <br>
+    <div class="text-center"> <button class="btn btn-primary col-md-12" value="Save Changes">Save Changes</button></div>
+   
+</form>
+{%include 'Admin/footer.html'%}
+</body>
+<script src="/static/jquery-3.7.1.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.js"></script>

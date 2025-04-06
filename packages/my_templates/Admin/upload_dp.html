@@ -1,0 +1,97 @@
+{%include 'Admin/nav.html'%} 
+<style> 
+  .drop-zone { 
+    width: 100%; 
+    height: 200px; 
+    border: 2px dashed #ccc; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    cursor: pointer; 
+  } 
+  .drop-zone__prompt { 
+    font-size: 18px; 
+    color: #666; 
+  } 
+  .drop-zone__input { 
+    display: none; 
+  } 
+  .error-message { 
+    color: red; 
+  } 
+  button:disabled { 
+    opacity: 0.5; 
+    cursor: not-allowed; 
+  } 
+</style> 
+<div class="row py-5 my-3"> 
+  <div class="col-md-8 offset-md-2"> 
+    <h3 style="margin-bottom:30px;" class="text-center heading-title">Upload DP</h3> 
+    <h5 class="my-3">Welcome {{admin.username}}</h5> 
+    <form action="" method="post" enctype="multipart/form-data" id="dp-form"> 
+      <div class="drop-zone mb-3"> 
+        <span class="drop-zone__prompt">Drag and drop an image or click to upload</span> 
+        {{dpform.photo.label}} 
+        {%for error in dpform.photo.errors%} 
+          <span class="text-danger">{{error}}</span> 
+        {%endfor%} 
+        {{dpform.photo(class_='form-control noround border_dark drop-zone__input', id='dp-input')}} 
+      </div> 
+      <div class="mb-3"> 
+        {{dpform.csrf_token}} 
+        <button type="button" onclick="document.location.href='/Admin/admindash/'" class="btn btn-dark noround">Cancel</button> 
+        {{dpform.uploadbtn(class_=' btn btn-danger noround', id='upload-button')}} 
+        <span class="error-message" id="error-message"></span> 
+      </div> 
+    </form> 
+  </div> 
+</div> 
+{%include 'Admin/footer.html'%} 
+<script> 
+  const dropZone = document.querySelector('.drop-zone'); 
+  const input = document.querySelector('#dp-input'); 
+  const prompt = document.querySelector('.drop-zone__prompt'); 
+  const errorMessage = document.querySelector('#error-message'); 
+  const uploadButton = document.querySelector('#upload-button'); 
+  
+  uploadButton.disabled = true; 
+  
+  dropZone.addEventListener('click', () => { 
+    input.click(); 
+  }); 
+  
+  dropZone.addEventListener('dragover', (e) => { 
+    e.preventDefault(); 
+    dropZone.style.border = '2px solid #333'; 
+  }); 
+  
+  dropZone.addEventListener('dragleave', () => { 
+    dropZone.style.border = '2px dashed #ccc'; 
+  }); 
+  
+  dropZone.addEventListener('drop', (e) => { 
+    e.preventDefault(); 
+    const file = e.dataTransfer.files[0]; 
+    input.files = e.dataTransfer.files; 
+    prompt.textContent = file.name; 
+    dropZone.style.border = '2px dashed #ccc'; 
+    uploadButton.disabled = false; 
+  }); 
+  
+  input.addEventListener('change', (e) => { 
+    const file = input.files[0]; 
+    prompt.textContent = file.name; 
+    uploadButton.disabled = false; 
+  }); 
+  
+  uploadButton.addEventListener('click', (e) => { 
+    if (input.files.length === 0) { 
+      e.preventDefault(); 
+      errorMessage.textContent = 'Please select a picture'; 
+      errorMessage.style.display = 'block'; 
+    } else { 
+      errorMessage.textContent = ''; 
+      errorMessage.style.display = 'none'; 
+    } 
+  }); 
+</script>

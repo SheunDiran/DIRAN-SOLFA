@@ -1,0 +1,52 @@
+{%include 'Admin/nav.html'%}
+<h1>
+  {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <p style='border:5px solid' class="alert alert-{{ category }}">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</h1>
+
+
+  <form action="" method="post" class="m-3 p-5 login text-light">
+    
+  <h1 class="text-center text-success">Add Song</h1>
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.artist.label(class='text-warning') }}<br>
+      {{ form.artist() }}
+    </p>
+    <p>
+      {{ form.song_title.label(class='text-danger') }}<br>
+      {{ form.song_title(size=64) }}
+    </p>
+    <div class="row">
+      <div class="col-md-6">
+        <p>
+          {{ form.song_lyrics.label(class='text-danger') }}<br>
+          {{ form.song_lyrics(rows=10, cols=64) }}
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p>
+         <h3>{{ form.solfa_notation.label(class='text-dark') }}</h3> <br>
+          {{ form.solfa_notation(rows=10, cols=64) }}
+        </p>
+      </div>
+    </div>
+   
+    
+    <p>{{ form.submit(class='btn btn-success') }}</p>
+  </form>
+
+      
+{%include 'Admin/footer.html'%}  
+
+</body>
+<script src="/static/jquery-3.7.1.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+
+
+  

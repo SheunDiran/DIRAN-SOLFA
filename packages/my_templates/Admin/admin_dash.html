@@ -1,17 +1,15 @@
 {%include 'Admin/nav.html'%}  
 
       <div>
-        <h1>{%with message=get_flashed_messages(with_categories=True)%}
-            {%if message%}
-             {%for cart,a in message%}
-             {%if cart =='error'%}
-            <p style='border:5px solid red;'class="alert alert-primary">{{a}} </p>
-             {%else%}
-              <p style='border:5px solid green;'class="alert alert-succes">{{a}} {{email}}</p>
-            {%endif%}
-            {%endfor%}    
-            {%endif%}
-            {%endwith%}
+        <h1>
+            {% with messages = get_flashed_messages(with_categories=True) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <p style='border:5px solid' class="alert alert-{{ category }}">{{ message }}</p>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+          </h1>
           </h1>
          
       </div>
@@ -22,19 +20,31 @@
                       <div id="layoutSidenav_content">
                           <main>
                               <div class="container-fluid px-4">
-                                  <h1 class="mt-4"> Admin Dashboard</h1>
+                                  <h1 class="mt-4"> Admin Dashboard - {{admin.username}}</h1>
                                   <div class="row">
                                     <div class="col-xl-3 col-md-3">
                                         <div class="card bg-danger text-white mb-4">
                                             <div class="card-body">ADMIN Songs</div>
                                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                                <a class="small text-white stretched-link" href="{{url_for('admin_songs')}}">Add Songs</a>
+                                                <a class="small text-white stretched-link" href="{{url_for('add_songs')}}">Add Songs</a>
                                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                             </div>
                                         </div>
                                     </div>
-                                    </div>
+                                    
                                   </ol>
+                                  
+                                    <div class="col-xl-3 col-md-3">
+                                        <div class="card bg-info text-white mb-4">
+                                            <div class="card-body">MY ADDED SONGS</div>
+                                            <div class="card-footer d-flex align-items-center justify-content-between">
+                            <a class="small text-white stretched-link" href="{{url_for('my_songs')}}">View my songs </a>
+                                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  
                      <div class="row">
                   <div class="col-xl-3 col-md-3">
                                           <div class="card bg-primary text-white mb-4">
@@ -45,6 +55,7 @@
                                               </div>
                                           </div>
                                       </div>
+                                     
                                       <div class="col-xl-3 col-md-3">
                                           <div class="card bg-warning text-white mb-4">
                                               <div class="card-body">Scorers</div>

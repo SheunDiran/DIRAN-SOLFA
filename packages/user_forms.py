@@ -1,8 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField,EmailField,SelectField
-from wtforms import TextAreaField,FileField,TelField
-from wtforms.validators import DataRequired,Email
+from wtforms import TextAreaField,FileField,RadioField
+from wtforms.validators import DataRequired,Email,Optional
+from flask_wtf.file import FileField,FileRequired,FileAllowed
 
+class UploadDpForm(FlaskForm):
+    picture=FileField(validators=[FileRequired(),FileAllowed(['jpg','png','jpeg'],'ONLY IMAGES ARE ALLOWED')])
+    upload=SubmitField('Upload Picture')
 
 class UserForm(FlaskForm):
     email = EmailField('Email', validators=[DataRequired('Email is required'), Email('Please enter a valid email')])
@@ -31,9 +35,7 @@ class User_reg(FlaskForm):
     lname = StringField('Last Name', validators=[DataRequired('Please enter your last name')])
     email = EmailField('Email', validators=[DataRequired('Email is required'), Email('Please enter a valid email')])
     pwd = PasswordField('Password', validators=[DataRequired('Password is required')])
-    phone = TelField('Phone Number', validators=[DataRequired('Phone number is required')])
-    file = FileField('Upload your picture')
-    users = SelectField('Users', choices=[('Users'), ('Scorers')])
+    users = SelectField('Role(User/Scorer)', choices=[('Users'), ('Scorers')])
     submit = SubmitField('Register')
 
     class Meta:
@@ -50,12 +52,26 @@ class Artist_Reg(FlaskForm):
         csrf = True
         csrf_time_limit = 360
 
-class Add_Songs(FlaskForm):
-    title = StringField('Song Title', validators=[DataRequired()])
-    songs = TextAreaField('Song Lyrics', validators=[DataRequired()])
-    solfa = StringField('Solfa Notation', validators=[DataRequired()])
+class AddSongForm(FlaskForm):
+    song_title = StringField('Song Title', validators=[DataRequired()])
+    song_lyrics = TextAreaField('Song Lyrics', validators=[DataRequired()])
+    selection = RadioField('Select', choices=[('artist', 'Artist'), ('scorer', 'Scorer')])
+    artist_id = SelectField('Artist', coerce=int, validators=[Optional()])
+    scorer_id = SelectField('Scorer', coerce=int, validators=[Optional()])
+    solfa_notation = TextAreaField('Solfa Notation', validators=[DataRequired()])
+
+
+
+    
+
+class Edit_User(FlaskForm):
+    fname = StringField('First Name', validators=[DataRequired('Please enter your first name')])
+    lname = StringField('Last Name', validators=[DataRequired('Please enter your last name')])
+    email = EmailField('Email', validators=[DataRequired('Email is required'), Email('Please enter a valid email')])
+    phone = StringField('Phone Number')
+    users = SelectField('Role(User/Scorer)', choices=[('Users'), ('Scorers')])
+    submit = SubmitField('Register')
 
     class Meta:
         csrf = True
-        csrf_time_limit = 360        
-
+        csrf_time_limit = 360

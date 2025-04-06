@@ -3,20 +3,13 @@
 
 <!-- For the Dashboard-->
 <div class="background">
-  <h1>{%with message=get_flashed_messages(with_categories=True)%}
-      {%if message%}
-       {%for cart,a in message%}
-       {%if cart =='error'%}
-       <p style='border:5px solid red;background-color:red;color:white;'
-       class="alert alert-danger">{{a}}</p>
-       {%else%}
-       <p style='border:5px solid green;background-color:green;color:white;'
-       class="alert alert-success">{{a}}</p>
-      {%endif%}
-      {%endfor%}    
-      {%endif%}
-      {%endwith%}
-    </h1>
+  <h1>{% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <p style='border:5px solid' class="alert alert-{{ category }}">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}</h1>
 
 
 <div class="row py-5 my-3 text-light">
@@ -37,18 +30,17 @@
                       <h3>Date Registered: {{user.date_registered}}</h3>
                       <a href="/user/{{user.users_id}}/update" class="text-light">
                         <button class="btn btn-success mx-auto ">Edit Details</button></a>
-                      
-                      
+                        {% if "scorer" in user.users_role|lower %}
+                        <a href="#"class="text-light">
+                          <button class="btn btn-success mx-auto ">Add Songs</button></a>
+                      {%endif%}
                         <a href="{{url_for('logout')}}"class="text-light">
                           <button class="btn btn-success mx-auto ">Log-out</button></a>
                                     
                     </div>
+                   
+                    
                 </div>
-                  
-              </div>
-          </div>
-         
-         
       </div>
   </div>
 </div>

@@ -46,13 +46,6 @@
             {%endfor%}
             {%endif%}
   
-    {{user.pwd.label()}}
-    {{user.pwd(placeholder='enter your password',class='form-control')}}
-    {%if user.pwd.errors%}
-            {%for error in user.pwd.errors%} 
-            <span class="text-danger">{{error}}</span><br>
-            {%endfor%}
-            {%endif%}
     
 
 {{user.phone.label()}}
@@ -70,14 +63,7 @@
         <span class="text-danger">{{error}}</span><br>
         {%endfor%}
         {%endif%}
-<br> 
-{{user.file.label()}}
-{{user.file()}}
-{%if user.file.errors%}
-  {%for error in user.file.errors%} 
-  <span class="text-danger">{{error}}</span><br>
-  {%endfor%}
-  {%endif%}
+
 <br> <br>
     {{user.submit(class='btn btn-primary')}} 
     <hr class="pt-2">

@@ -1,24 +1,80 @@
-{% extends 'User/base_layout.html' %}
 
-{% block content %}
-  <h1 class="text-center text-primary">Add a New Song</h1>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <form method="POST">
-          {{ form.hidden_tag() }}
-          <div class="form-group">
-            {{ form.title.label }} {{ form.title() }}
-          </div>
-          <div class="form-group">
-            {{ form.songs.label }} {{ form.songs() }}
-          </div>
-          <div class="form-group">
-            {{ form.solfa.label }} {{ form.solfa() }}
-          </div>
-          <button type="submit" class="btn btn-primary">Add Song</button>
-        </form>
-      </div>
+{%extends 'User/base_layout.html'%}
+{%block content%}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-light">
+                    <h4 class="mb-0">Add New Song</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST"> {{ form.hidden_tag() }} 
+                        <div class="form-group mb-3">
+                            <label for="song_title" class="form-label">Song Title:</label>
+                            <input type="text" class="form-control" id="song_title" name="song_title" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="song_lyrics" class="form-label">Song Lyrics:</label>
+                            <textarea class="form-control" id="song_lyrics" name="song_lyrics" rows="5" required></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Select:</label>
+                            <div class="d-flex justify-content-around">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="selection" value="artist" id="artist-radio">
+                                    <label class="form-check-label" for="artist-radio">Artist</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="selection" value="scorer" id="scorer-radio">
+                                    <label class="form-check-label" for="scorer-radio">Scorer</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3" id="artist-select-group" style="display: none;">
+                            <label for="artist-select" class="form-label">Artist:</label>
+                            <select class="form-control" id="artist-select" name="artist_id">
+                                <option value="">Select Artist</option>
+                                {% for artist in artists %} 
+                                    <option value="{{ artist.artist_id }}">{{ artist.artist_firstname }} {{ artist.artist_lastname }}</option> 
+                                {% endfor %} 
+                            </select>
+                        </div>
+                        <div class="form-group mb-3" id="scorer-select-group" style="display: none;">
+                            <label for="scorer-select" class="form-label">Scorer:</label>
+                            <select class="form-control" id="scorer-select" name="scorer_id">
+                                <option value="">Select Scorer</option>
+                                {% for scorer in scorers %} 
+                                    <option value="{{ scorer.users_id }}">{{ scorer.users_email }}</option> 
+                                {% endfor %} 
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="solfa_notation" class="form-label">Solfa Notation:</label>
+                            <textarea class="form-control" id="solfa_notation" name="solfa_notation" rows="10"></textarea>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Add Song</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-{% endblock content %}
+</div>
+{%endblock content%}
+<script>
+
+$('form').submit(function(event) {
+    event.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: '/add_song',
+        data: $(this).serialize(),
+        success: function(response) {
+            alert('Song added successfully!');
+            window.location.href = '/songs';
+        }
+    });
+});
+</script>

@@ -1,54 +1,46 @@
 {%include 'Admin/nav.html'%}
-
-      
-{%include 'Admin/footer.html'%}  
-
-</body>
-<script src="/static/jquery-3.7.1.min.js"></script>
-<script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
-
-<script>
-  $(document).ready(function(){
-    $('#sub').click(function(){
-      var user=$('#user').val()
-      if(user==''){
-alert('Please enter a song or an artist')
-event.preventDefault()
-    }else if(user=$('#user').val())
-   alert(user +' not found')
-    })
-    $('.user').click(function(){
-      var user=$('.users').val()
-      if(user==''){
-alert('Please fill all fields')
-event.preventDefault()
-    }
-    })
-    $('#existinguser').click(function(){
-        $('#new').hide()
-        $('#scorers').hide()
-        $('#existing').fadeToggle()
-    })
-    $('#newuser').click(function(){
-        $('#existing').hide()
-        $('#scorers').hide()
-        $('#new').fadeToggle()
-    })
-    $('#professional').click(function(){
-        $('#new').hide()
-        $('#existing').hide()
-        $('#scorers').fadeToggle()
-    })
-    $('#dash').click(function(){
-      alert('Login,sign up or register')
-        event.preventDefault()
-      
-      
-    })
-  })
-
-</script>
-    
-  
-
-</html>
+<div style="padding: 20px;">
+    <h1>{% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p style='border:5px solid' class="alert alert-{{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}</h1>
+    <table class="table table-bordered ">
+        <thead class="thead-dark ">
+            <tr>
+                <th>S/N</th>
+                <th>Song Title</th>
+                <th>Lyrics</th>
+                <th>Solfa</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody >
+            {% for song in songs %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ song.songs_title | truncate(50) }}</td>
+                    <td>{{ song.song_lyrics | truncate(50) }}</td>
+                    <td>
+                        {% for solfa in song.song_solfa %}
+                            {{ solfa.solfa_notation| truncate(50) }}
+                        {% else %}
+                            None
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('edit_song', id=song.songs_id) }}">Edit</a>
+                        <a href="{{ url_for('delete_song', id=song.songs_id) }}"
+                         class="btn btn-danger btn-sm">Delete</a>
+                        <a href="{{ url_for('song_details', id=song.songs_id) }}" 
+                        class="btn btn-success btn-sm">View</a>
+                        
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{%include 'Admin/footer.html'%}

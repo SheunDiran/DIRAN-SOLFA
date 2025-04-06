@@ -1,0 +1,82 @@
+{% include 'Admin/nav.html' %}
+<style>
+  .card {
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.form-control {
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.btn {
+  border-radius: 10px;
+  padding: 10px;
+}
+</style>
+<!-- Profile-->
+<div class="row" style="min-height:400px; background-image: url('/static/img/background.jpg'); background-size: cover; background-position: center;">
+  <div class="col-md-8 offset-md-2 my-3">
+    <div class="card shadow-lg">
+      <div class="card-body">
+        <h3 class="text-center my-3 heading-title"> ADMIN Profile Update</h3>
+        <p class="lead">You can update your profile here.</p>
+        <form id="form" method="post">
+          <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+          <div class="row mb-3">
+            <label for="person" class="col-sm-2 col-form-label">Username </label>
+            <div class="col-sm-4">
+              <input type="text" name="username" class="form-control noround border-dark" id="person" value="{{admin.username}}">
+            </div>
+            <label for="email" class="col-sm-2 col-form-label">Email Address</label>
+            <div class="col-sm-4">
+              <input type="text" name="email" class="form-control noround border-dark" id="email" value="{{admin.email}}">
+            </div>
+          </div>
+          <div class="row my-5">
+            <div class="col-sm-12 text-center">
+              <button type="submit" class="btn btn-danger col-6 noround"><i class="fas fa-save"></i> Update Account</button>
+            </div>
+          </div>
+          <p></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End profile-->
+
+{% include 'Admin/footer.html' %}
+
+<script>
+  $(document).ready(function(){
+    $('button').click(function(event){
+      event.preventDefault()
+      var data2send=$('#form').serialize()
+      var csrf={csrf_token:'{{csrf_token()}}'}
+      $.ajax({
+        url:'/admin/edit/',
+        type:'POST',
+        data:data2send,
+        cache:false,
+        success:function(resp){
+          $('p').html(resp)
+        },
+        error:function(err){
+          console.log(err.statusText)
+        },
+        beforeSend:function(){
+          $('button').html('Please wait....')
+        },
+        complete:function(){
+          $('button').html('Update Account')
+        }
+      })
+    })
+  })
+</script>

@@ -1,0 +1,50 @@
+{%include 'Admin/nav.html'%}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-light">
+                    <h4 class="mb-0">Song Requests</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Song Title</th>
+                                <th>Song Lyrics</th>
+                                <th>Artist/Scorer</th>
+                                <th>Solfa Notation</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for request in requests %}
+                            <tr>
+                                <td>{{ request.song_title }}</td>
+                                <td>{{ request.song_lyrics }}</td>
+                                <td>
+                                    {% if request.user_id %}
+                                    {{ request.user.users_email }}
+                                    {% elif request.artist_id %}
+                                    {{ request.artist.artist_firstname }} {{ request.artist.artist_lastname }}
+                                    {%else%}
+                                    No artist or scorer assigned
+                                    {% endif %}
+                                </td>
+                                <td>{{ request.solfa_notation }}</td>
+                                <td>
+                                    <a href="#" class="btn btn-sm btn-primary">View</a>
+                                    <a href="#" class="btn btn-sm btn-success">Approve</a>
+                                    <a href="#" class="btn btn-sm btn-danger">Reject</a>
+                                    <a href="#" class="btn btn-sm btn-danger">Edit</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%include 'Admin/footer.html'%}
