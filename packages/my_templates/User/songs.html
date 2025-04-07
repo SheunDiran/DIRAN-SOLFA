@@ -1,13 +1,70 @@
-{%extends 'User/base_layout.html'%} 
+{%extends 'User/base_layout.html'%}
+
 {%block content%}
-<h1>Songs</h1>
-<ul>
-  {% for song in songs %}
-    <li>{{ song.title }}</li>
-  {% endfor %}
-</ul>
-{%if session.get('fullname')%}
-<a href="/add_song/" class="text-light">
-  <button class="btn btn-success ms-5 ">Add Songs</button></a>
-{%endif%}
+<h1 class="text-center">All Songs</h1>
+<div style="padding: 20px;">
+    <h1>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p style='border:5px solid' class="alert alert-{{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </h1>
+    {%if session.get('fullname')%}
+    <div class="sticky-top bg-light py-2">
+        <h2 class="text-center text-primary ">Want to add your songs? 
+            <a href="/add_song/" class="text-light"> 
+                <button class="btn btn-success ms-5 mb-3">Add Songs</button>
+            </a>
+        </h2>
+    </div>
+    {%endif%}
+    <div class="row">
+        {% for song in songs %}
+            {% if loop.index % 2 == 0 %}
+                <div class="col-md-4 mb-4">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                          <h1>NO {{loop.index}}</h1>
+                            <h5 class="card-title">{{ song.songs_title | truncate(50) }}</h5>
+                            <p class="card-text">Lyrics: {{ song.song_lyrics | truncate(50) }}</p>
+                            <p class="card-text">Solfa: 
+                                {% for solfa in song.song_solfa %}
+                                    {{ solfa.solfa_notation| truncate(50) }}
+                                {% else %}
+                                    None
+                                {% endfor %}
+                            </p>
+                            <a href="{{ url_for('songdetails', id=song.songs_id) }}" class="btn btn-light btn-sm">View</a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+            {% else %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                          <h1>NO {{loop.index}}</h1>
+                            <h5 class="card-title">{{ song.songs_title | truncate(50) }}</h5>
+                            <p class="card-text">Lyrics: {{ song.song_lyrics | truncate(50) }}</p>
+                            <p class="card-text">Solfa: 
+                                {% for solfa in song.song_solfa %}
+                                    {{ solfa.solfa_notation| truncate(50) }}
+                                {% else %}
+                                    None
+                                {% endfor %}
+                            </p>
+                            <a href="{{ url_for('songdetails', id=song.songs_id) }}" class="btn btn-primary btn-sm">View</a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
 {%endblock content%}

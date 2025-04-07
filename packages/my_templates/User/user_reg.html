@@ -1,108 +1,95 @@
-{%extends 'User/base_layout.html'%} 
+{%extends 'User/base_layout.html'%}
 {%block content%}
-
-<div  class="animate__animated animate__fade m-3">
-
-
-<h1>{%with message=get_flashed_messages(with_categories=True)%}
-  {%if message%}
-   {%for cart,a in message%}
-   {%if cart =='error'%}
-  <p style='border:5px solid red;'class="alert alert-primary">{{a}}</p>
-   {%else%}
-    <p style='border:5px solid green;'class="alert alert-succes">{{a}}</p>
-  {%endif%}
-  {%endfor%}    
-  {%endif%}
-  {%endwith%}
-</h1>
- <div class="background">
-      <!-- form -->
-      
-         
-         <!--Reg in for  users  -->
-         <div id="new">
-          <form action="" class="m-5 mt-0 p-3  text-light"  method='post' novalidate>
-            <h1 class="pb-3">ACCOUNT CREATION FOR USERS</h1>
-           {{user.csrf_token}}
-          {{user.fname.label()}}
-        {{user.fname(placeholder='enter your first name',class='form-control')}}
-        {%if user.fname.errors%}
-                {%for error in user.fname.errors%} 
+<div class="animate__animated animate__fade m-3">
+    <h1>
+        {%with message=get_flashed_messages(with_categories=True)%}
+        {%if message%}
+        {%for cart,a in message%}
+        {%if cart =='error'%}
+        <p style='border:5px solid red;'class="alert alert-primary">{{a}}</p>
+        {%else%}
+        <p style='border:5px solid green;'class="alert alert-succes">{{a}}</p>
+        {%endif%}
+        {%endfor%}
+        {%endif%}
+        {%endwith%}
+    </h1>
+    <div class="background">
+        <!-- form -->
+        <!--Reg in for users -->
+        <div id="new">
+            <form action="" class="m-5 mt-0 p-3 text-light" method='post' novalidate>
+                <h1 class="pb-3">ACCOUNT CREATION FOR USERS</h1>
+                {{user.csrf_token}}
+                {{user.fname.label()}}
+                {{user.fname(placeholder='enter your first name',class='form-control')}}
+                {%if user.fname.errors%}
+                {%for error in user.fname.errors%}
                 <span class="text-danger">{{error}}</span><br>
                 {%endfor%}
                 {%endif%}
-<br>
-    {{user.lname.label()}}
-    {{user.lname(placeholder='enter your last name',class='form-control')}}
-    {%if user.lname.errors%}
-          {%for error in user.lname.errors%} 
-          <span class="text-danger">{{error}}</span><br>
-          {%endfor%}
-          {%endif%}
-
-        {{user.email.label()}}
-        {{user.email(placeholder='enter your email',class='form-control',id='email')}}
-        <h3></h3>
-        {%if user.email.errors%}
-                {%for error in user.email.errors%} 
+                <br>
+                {{user.lname.label()}}
+                {{user.lname(placeholder='enter your last name',class='form-control')}}
+                {%if user.lname.errors%}
+                {%for error in user.lname.errors%}
                 <span class="text-danger">{{error}}</span><br>
                 {%endfor%}
                 {%endif%}
-      
-        {{user.pwd.label()}}
-        {{user.pwd(placeholder='enter your password',class='form-control',id='pwd')}}
-        <h3></h3>
-        {%if user.pwd.errors%}
-                {%for error in user.pwd.errors%} 
+                {{user.email.label()}}
+                {{user.email(placeholder='enter your email',class='form-control',id='email')}}
+                <h3></h3>
+                {%if user.email.errors%}
+                {%for error in user.email.errors%}
                 <span class="text-danger">{{error}}</span><br>
                 {%endfor%}
                 {%endif%}
-        
-
- <br> 
- 
-      {{user.users.label()}}
-      {{user.users()}}
-      {%if user.users.errors%}
-            {%for error in user.users.errors%} 
-            <span class="text-danger">{{error}}</span><br>
-            {%endfor%}
-            {%endif%}
-<br> 
-
-        {{user.submit(class='btn btn-primary')}} 
-        <hr class="pt-2">
-        <h3>Music artist? Register as a  <a href="{{url_for('register')}}" class="text-success">Artist</a></h3>
-      
-
-        
-        
-       
-        </form>
-      </div>
-
-      
+                {{user.pwd.label()}}
+                {{user.pwd(placeholder='enter your password',class='form-control',id='pwd')}}
+                <h3></h3>
+                {%if user.pwd.errors%}
+                {%for error in user.pwd.errors%}
+                <span class="text-danger">{{error}}</span><br>
+                {%endfor%}
+                {%endif%}
+                <br>
+                {{user.users.label()}}
+                {{user.users()}}
+                {%if user.users.errors%}
+                {%for error in user.users.errors%}
+                <span class="text-danger">{{error}}</span><br>
+                {%endfor%}
+                {%endif%}
+                <br>
+                {{user.instrument.label()}}
+                {{user.instrument()}}
+                {%if user.instrument.errors%}
+                {%for error in user.instrument.errors%}
+                <span class="text-danger">{{error}}</span><br>
+                {%endfor%}
+                {%endif%}
+                <br>
+                {{user.submit(class='btn btn-primary')}}
+                <hr class="pt-2">
+                <h3>Music artist? Register as a <a href="{{url_for('register')}}" class="text-success">Artist</a></h3>
+            </form>
+        </div>
     </div>
-  </div>
-     
-
-
- <!--Script -->
- <script src="/static/jquery-3.7.1.min.js"></script>
- <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
- <script>
-  $(document).ready(function(){
-    $('button').click(function(){
-      var email=$('#email').val()
-      var password=$('#pwd').val()
-      var phone=$('#phone').val()
-      var data={'email':email,'password':password,'phone':phone,csrf_token:'{{csrf_token()}}'}
-      $.post('/ajax/process/',data,function(resp){
+</div>
+<!--Script -->
+<script src="/static/jquery-3.7.1.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+<script>
+    $(document).ready(function(){
+        $('button').click(function(){
+            var email=$('#email').val()
+            var password=$('#pwd').val()
+            var phone=$('#phone').val()
+            var data={'email':email,'password':password,'phone':phone,csrf_token:'{{csrf_token()}}'}
+            $.post('/ajax/process/',data,function(resp){
                 $('h3').html(resp)
-       })
+            })
+        })
     })
-  })
 </script>
-
 {%endblock content%}

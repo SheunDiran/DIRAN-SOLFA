@@ -4,28 +4,28 @@ from functools import wraps
 from flask import render_template,flash,request,redirect,session,url_for
 from packages import app
 from packages.user_forms import UserForm,ArtistForm,User_reg,Artist_Reg,AddSongForm,UploadDpForm,Edit_User
-from packages.models import db,User,Artists,Songs,Song_solfa,SongsRequest
+from packages.models import db,User,Artists,Songs,Song_solfa,SongsRequest,SearchHistory,Admin,User__Instrument,Instruments
 from werkzeug.security import generate_password_hash,check_password_hash
 
 
 
-def login_reguired(f):
-   @wraps(f)
-   def login_decorator(*args,**kwargs):
-      user_id=session.get('username')
-      if user_id:
-         f(*args,**kwargs)
-      else:
-          flash('You must be logged in to view this page',category='failed')
-          return redirect('/user/login/')
-      artist_id=session.get('artist_id') 
-      if artist_id:
-         f(*args,**kwargs)
-      else:  
-         flash('You must be logged in to view this page',category='failed')
-         return redirect('/artist/login/')
 
-   return login_decorator
+def login_reguired(f):
+    @wraps(f)
+    def login_decorator(*args, **kwargs):
+        user_id = session.get('username')
+        artist_id = session.get('fullname')
+        if user_id or artist_id:
+            return f(*args, **kwargs)
+        else:
+            flash('You must be logged in to view this page', category='failed')
+            if user_id is None and artist_id is None:
+                return redirect('/user/login/')
+            elif user_id is None:
+                return redirect('/artist/login/')
+            else:
+                return redirect('/user/login/')
+    return login_decorator
 
 
 @app.errorhandler(404)
@@ -57,9 +57,48 @@ def about():
 
 @app.route('/search/')
 def search():
-    return render_template('User/search.html')
+    search_term = request.args.get('search_term')
+    instrument = Instruments.query.all()
+    songs = Songs.query.join(Admin).filter(
+        (Songs.songs_title.like('%' + search_term + '%')) |
+        (Admin.username.like('%' + search_term + '%'))
+    ).all()
+    instrument_songs = Songs.query.join(Song_solfa).join(Instruments).filter(
+        (Instruments.name.like('%' + search_term + '%')) |
+        (Instruments.type.like('%' + search_term + '%'))
+    ).all()
+    if search_term.lower()=='omemma':
+        return redirect('/omemma/')
+    elif 'worthy' in search_term:
+        return redirect('/worthy/')
+    if songs or instrument_songs:
+        user_id = session.get('username')
+        artist_id = session.get('fullname')
+        search_history = SearchHistory(user_id=user_id,artist_id=artist_id ,search_term=search_term)
+        db.session.add(search_history)
+        db.session.commit()
+        return render_template('User/search_results.html', songs=songs + instrument_songs, instrument=instrument)
+    else:
+        flash(f'No songs found for "{search_term}". Please try searching for another song.', 'error')
+        return redirect('/songs/')
 
+@app.route('/search_history/')
+def search_history():
+    user_id = session.get('username')
+    artist_id=session.get('fullname')
+    search_history = SearchHistory.query.filter_by(user_id=user_id,artist_id=artist_id).all()
+    return render_template('User/search_history.html', search_history=search_history)
 
+@app.route('/delete_search_history/<int:id>')
+def delete_search_history(id):
+    user_id = session.get('username')
+    artist_id=session.get('fullname')
+    search_history = SearchHistory.query.get(id)
+    if search_history.user_id == user_id or search_history.artist_id == artist_id :
+        db.session.delete(search_history)
+        db.session.commit()
+
+    return redirect('/search_history/')
 
 @app.route('/user/login/', methods=['GET', 'POST'])
 def user_login():
@@ -80,7 +119,7 @@ def user_login():
                     flash('Invalid password', category='failed')
             else:
                 flash('Invalid email', category='failed')
-    return render_template('User/user_login.html', user=user_login)
+    return redirect('/songs/')
 
 
 
@@ -101,10 +140,10 @@ def artist_login():
             return render_template('User/artist_login.html', artist=artist)
     return render_template('User/artist_login.html', artist=artist)
  
-           
 @app.route('/user/register/', methods=['GET', 'POST'])
 def user_register():
     user = User_reg()
+    user.instrument.choices = [(i.instru_id, i.name) for i in Instruments.query.all()]
     if request.method == 'POST':
         if user.validate_on_submit():
             fname = user.fname.data
@@ -112,10 +151,9 @@ def user_register():
             email = user.email.data
             pwd = user.pwd.data
             users = user.users.data
+            instrument = user.instrument.data
             hashed_password = generate_password_hash(pwd)
-
             existing_email = User.query.filter_by(users_email=email).first()
-
             if existing_email:
                 flash('Email address already exists. Please try another one.', 'error')
                 return render_template('User/user_reg.html', user=user)
@@ -128,6 +166,12 @@ def user_register():
                     users_role=users
                 )
                 db.session.add(new_user)
+                db.session.commit()
+                user_instrument = User__Instrument(
+                    user_id=new_user.users_id,
+                    instrument_id=instrument
+                )
+                db.session.add(user_instrument)
                 db.session.commit()
                 session['username'] = f"{user.fname.data} {user.lname.data}"
                 session['email'] = user.email.data
@@ -167,6 +211,7 @@ def artists():
 
 
 @app.route('/scorers/')
+@login_reguired
 def scorers():
     scorers = db.session.query(User).filter(User.users_role == 'Scorers').all()
     user_count = len(scorers)
@@ -174,6 +219,7 @@ def scorers():
 
 
 @app.route('/userdash/')
+@login_reguired
 def userdash():
         user_id = session.get('username')
         user = db.session.query(User).filter(User.users_id == user_id).first()
@@ -182,12 +228,14 @@ def userdash():
 
 
 @app.route('/artistdash/')
+@login_reguired
 def artistdash():
         artist_id = session['fullname']
         artist = db.session.query(Artists).filter(Artists.artist_id == artist_id).first()
         return render_template('User/artist_dash.html', artist=artist)
        
 @app.route('/dashboard/')
+@login_reguired
 def dashboard():
     if session.get('username'):
         user_id = session['username']
@@ -199,10 +247,22 @@ def dashboard():
          return render_template('User/artist_dash.html',artist=artist)
     return redirect('/user/register')
 
+
 @app.route('/songs/')
+@login_reguired
 def songs():
-    songs = db.session.query(Songs).filter(Songs.approved==True).all()
-    return render_template('User/songs.html', songs=songs)
+    try:
+        songs = Songs.query.order_by(Songs.songs_id.desc()).all()
+        return render_template('User/songs.html', songs=songs)
+    except Exception as e:
+        return str(e)
+
+
+@app.route('/user/song_details/<int:id>')
+@login_reguired
+def songdetails(id):
+    song = Songs.query.get(id)
+    return render_template('User/song_details.html', song=song) 
 
 @app.route('/omemma/')
 def omemma():
@@ -220,45 +280,73 @@ def logout():
     flash('You have been logged out.', category='success')
     return redirect('/index/')
 
-
 @app.route('/user/<int:user_id>/update/', methods=['GET', 'POST'])
+@login_reguired
 def user_edit_details(user_id):
     user = Edit_User()
+    instruments = Instruments.query.all()
+    instrument_choices = [('0', 'Select an instrument')] + [(i.instru_id, i.name) for i in instruments]
+    instrument_type_choices = [('0', 'Select an instrument type')] + [(i.instru_id, i.type) for i in instruments]
+    user.instrument.choices = instrument_choices
+    user.instrument_type.choices = instrument_type_choices
+    
+    # Get the user's current information
+    user_info = User.query.filter_by(users_id=user_id).first()
+    user_instrument = User__Instrument.query.filter_by(user_id=user_id).first()
+    
+    if request.method == 'GET':
+        # Populate the form with the user's current information
+        user.fname.data = user_info.users_firstname
+        user.lname.data = user_info.users_lastname
+        user.email.data = user_info.users_email
+        user.phone.data = user_info.users_phonenumber
+        if user_instrument:
+            user.instrument.data = user_instrument.instrument_id
+    
     if request.method == 'POST':
+        user.instrument.choices = instrument_choices
+        user.instrument_type.choices = instrument_type_choices
         if user.validate_on_submit():
             fname = user.fname.data
             lname = user.lname.data
             email = user.email.data
             phonenumber = user.phone.data
-            roles = user.users.data
+            instrument = user.instrument.data
+            instrument_type = user.instrument_type.data
+            
             existing_email = User.query.filter_by(users_email=email).first()
             existing_phone = User.query.filter_by(users_phonenumber=phonenumber).first()
-
-        if existing_email and existing_email.users_id != user_id:
-            flash('Email address already exists. Please try another one.', 'error')
-            return render_template('User/user_edit_details.html', user=user)
-        elif existing_phone and existing_phone.users_phonenumber == phonenumber:
-            flash('Phone number already exists. Please try another one.', 'error')
-            return render_template('User/user_edit_details.html', user=user)
-        else:
+            
+            if existing_email and existing_email.users_id != user_id:
+                flash('Email address already exists. Please try another one.', 'error')
+                return render_template('User/user_edit_details.html', user=user)
+            elif existing_phone== phonenumber:
+                flash('Phone number already exists. Please try another one.', 'error')
+                return render_template('User/user_edit_details.html', user=user)
+            else:
                 user_to_update = db.session.query(User).filter(User.users_id == user_id).first()
                 user_to_update.users_firstname = fname
                 user_to_update.users_lastname = lname
                 user_to_update.users_email = email
                 user_to_update.users_phonenumber = phonenumber
-                user_to_update.users_role = roles
+                
                 db.session.commit()
+                
+                if instrument != '0':
+                    user_instrument = User__Instrument.query.filter_by(user_id=user_id).first()
+                    if user_instrument:
+                        user_instrument.instrument_id = instrument
+                    else:
+                        user_instrument = User__Instrument(user_id=user_id, instrument_id=instrument)
+                        db.session.add(user_instrument)
+                    db.session.commit()
+                
                 flash('User details updated successfully!', 'success')
                 return redirect('/userdash/')
-    user_data = db.session.query(User).filter(User.users_id == user_id).first()
-    user.fname.data = user_data.users_firstname
-    user.lname.data = user_data.users_lastname
-    user.email.data = user_data.users_email
-    user.users.data = user_data.users_role
     return render_template('User/user_edit_details.html', user=user)
-    
 
 @app.route('/artist/<int:artist_id>/update/', methods=['GET', 'POST'])
+@login_reguired
 def artist_edit_details(artist_id):
     artist = Artist_Reg()
     if artist.validate_on_submit():
@@ -276,16 +364,19 @@ def artist_edit_details(artist_id):
 
 
 @app.route('/scorers/<int:users_id>/details/')
+@login_reguired
 def scorers_details(users_id):
     scorer = User.query.get_or_404(users_id)
     return render_template('User/details.html', scorer=scorer)
 
 @app.route('/artist/<int:artist_id>/details/')
+@login_reguired
 def artist_details(artist_id):
     artist = Artists.query.get_or_404(artist_id)
     return render_template('User/artist_details.html', artist=artist)
 
 @app.route('/upload_dp/', methods=['GET', 'POST'])
+@login_reguired
 def upload_dp():
     dp = UploadDpForm()
     user = User.query.filter_by(users_id=session.get('username')).first()
@@ -316,6 +407,7 @@ def upload_dp():
 
 
 @app.route('/add_song/', methods=['GET', 'POST'])
+@login_reguired
 def add_song():
     form = AddSongForm()
     artists = Artists.query.all()

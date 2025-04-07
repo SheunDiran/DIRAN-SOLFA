@@ -22,21 +22,22 @@
                             <tr>
                                 <td>{{ request.song_title }}</td>
                                 <td>{{ request.song_lyrics }}</td>
-                                <td>
-                                    {% if request.user_id %}
-                                    {{ request.user.users_email }}
-                                    {% elif request.artist_id %}
-                                    {{ request.artist.artist_firstname }} {{ request.artist.artist_lastname }}
-                                    {%else%}
-                                    No artist or scorer assigned
-                                    {% endif %}
-                                </td>
+                               <td>
+    {% if request.user_id %}
+    {{ request.user.users_email }}
+    {% elif request.artist_id %}
+    {{ request.artist.artist_firstname }} {{ request.artist.artist_lastname }}
+    {%else%}
+    No artist or scorer assigned
+    {% endif %}
+</td>
                                 <td>{{ request.solfa_notation }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-primary">View</a>
-                                    <a href="#" class="btn btn-sm btn-success">Approve</a>
-                                    <a href="#" class="btn btn-sm btn-danger">Reject</a>
+                                  
+                                    <a href="#" class="btn btn-sm btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Approve</a>
+                                    <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>Reject</a>
                                     <a href="#" class="btn btn-sm btn-danger">Edit</a>
+                                    <a href="#" class="btn btn-sm btn-primary">View</a>
                                 </td>
                             </tr>
                             {% endfor %}

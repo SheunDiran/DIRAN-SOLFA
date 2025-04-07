@@ -36,11 +36,13 @@ class User_reg(FlaskForm):
     email = EmailField('Email', validators=[DataRequired('Email is required'), Email('Please enter a valid email')])
     pwd = PasswordField('Password', validators=[DataRequired('Password is required')])
     users = SelectField('Role(User/Scorer)', choices=[('Users'), ('Scorers')])
+    instrument = SelectField('Instrument', coerce=int, validators=[DataRequired('Please select an instrument')])
     submit = SubmitField('Register')
 
     class Meta:
         csrf = True
-        csrf_time_limit = 360
+        csrf_time_limit = 3600
+
 
 class Artist_Reg(FlaskForm):
     fname = StringField('First Name', validators=[DataRequired('Please enter your first name')])
@@ -59,6 +61,7 @@ class AddSongForm(FlaskForm):
     artist_id = SelectField('Artist', coerce=int, validators=[Optional()])
     scorer_id = SelectField('Scorer', coerce=int, validators=[Optional()])
     solfa_notation = TextAreaField('Solfa Notation', validators=[DataRequired()])
+    
 
 
 
@@ -69,9 +72,10 @@ class Edit_User(FlaskForm):
     lname = StringField('Last Name', validators=[DataRequired('Please enter your last name')])
     email = EmailField('Email', validators=[DataRequired('Email is required'), Email('Please enter a valid email')])
     phone = StringField('Phone Number')
-    users = SelectField('Role(User/Scorer)', choices=[('Users'), ('Scorers')])
-    submit = SubmitField('Register')
+    instrument = SelectField('Instrument', coerce=int)
+    instrument_type = SelectField('Instrument Type', coerce=int)
+    submit = SubmitField('Update')
 
     class Meta:
         csrf = True
-        csrf_time_limit = 360
+        csrf_time_limit = 3600

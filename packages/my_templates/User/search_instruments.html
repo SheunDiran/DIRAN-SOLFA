@@ -1,0 +1,7 @@
+{%extends 'User/base_layout.html'%} 
+{%block content%}
+{% for instrument in instruments %}
+    <a href="{{ url_for('search_songs', instrument_id=instrument.instru_id) }}">{{ instrument.name }} ({{ instrument.type }})</a>
+{% endfor %}
+
+{%endblock content%}

@@ -28,8 +28,10 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0  menu">
               {%if session.get('username')!=None or session.get('fullname')!=None %}
               <div>
-                <form class="d-flex" role="search">
-                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+               
+                <form class="d-flex search-form" role="search"  method="get"  action="{{ url_for('search') }}">
+                  <input class="form-control me-2" name="search_term" type="search" 
+                  placeholder="Search...." aria-label="Search">
                   <button class="btn btn-outline-success" type="submit">Search</button>
                 </form> 
               </div>
@@ -97,7 +99,7 @@
           <ul class="dropdown-menu user-profile" style="border-radius: 0px;background-color: rgb(39, 59, 9);">
            
             <li><a class="dropdown-item" href="{{url_for('upload_dp')}}">Upload Photo</a> </li>
-            <li><a class="dropdown-item" href="{{url_for('register')}}">Change Password</a> </li>
+           
         <li><a class="dropdown-item" href="{{url_for('logout')}}">Logout</a> </li>
        
           
@@ -155,6 +157,8 @@
             }
         });
     });
+    
 </script>
+
 </html>
 

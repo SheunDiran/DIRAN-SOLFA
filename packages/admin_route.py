@@ -4,7 +4,7 @@ from flask import render_template,flash,request,redirect,session,url_for
 from packages import app
 from flask_bcrypt import Bcrypt
 from packages.admin_forms import AdminLogin,DpForm,SongForm
-from packages.models import Admin,db,User,Artists,Songs,Song_solfa,SongsRequest
+from packages.models import Admin,db,User,Artists,Songs,Song_solfa,SongsRequest,Instruments
 csrf = CSRFProtect()
 csrf.init_app(app)
 bcrypt = Bcrypt(app)
@@ -40,12 +40,6 @@ def admin_index():
     return render_template('Admin/index.html',admin=admin)
 
 
-@app.route('/admin/songs/')
-def admin_songs():
-    adminid = session.get('username')
-    admin = db.session.query(Admin).get(adminid)
-    songs=Songs.query.order_by(Songs.songs_id.desc()).all()
-    return render_template('Admin/songs.html',admin=admin,songs=songs)
 
 
 @app.route('/admin/login/', methods=['GET', 'POST'])
@@ -74,14 +68,17 @@ def admin_logout():
     return redirect('/admin/login/')
 
 
-
 @app.route('/admin/admindash/')
-def admindash():
+def admin_dashboard():
     adminid = session.get('username')
     admin = db.session.query(Admin).get(adminid)
     songs = Songs.query.all()
-    return render_template('Admin/admin_dash.html', admin=admin,songs=songs)
-       
+    users_count = User.query.filter(User.users_role=='Users').count()
+    artists_count = Artists.query.count()
+    songs_count = Songs.query.count()
+    scorers_count = User.query.filter(User.users_role=='Scorers').count()
+    return render_template('Admin/admin_dash.html', users_count=users_count, 
+    artists_count=artists_count, songs_count=songs_count,admin=admin,songs=songs, scorers_count=scorers_count)     
 
 @app.route('/admin/user/')
 def admin_user():
@@ -139,20 +136,6 @@ def admin_artist_delete(artist_id):
     db.session.delete(artists)
     db.session.commit()
     return redirect('/admin/artists/',admin=admin)
-
-@app.route('/admin/approve-song/<int:song_id>')
-def approve_song(song_id):
-    adminid = session.get('username')
-    admin = db.session.query(Admin).get(adminid)
-    song = db.session.query(Songs).filter(Songs.songs_id==song_id).first()
-    if song:
-        song.approved = True
-        db.session.commit()
-        flash('Song approved successfully!', 'success')
-    else:
-        flash('Song not found!', 'error')
-    return redirect(url_for('admin_dashboard'),admin=admin)
-
 
 @app.route('/admin/upload/dp/', methods=['GET', 'POST'])
 def adminupload_db():
@@ -228,14 +211,14 @@ def my_songs():
     songs = Songs.query.filter_by(admin_id=adminid).all()
     return render_template('Admin/mysongs.html', admin=admin, songs=songs)
 
-@app.route('/song_details/<int:id>')
+@app.route('/song_details/<int:id>/')
 def song_details(id):
     adminid = session.get('username')
     admin = db.session.query(Admin).get(adminid)
     song = Songs.query.get(id)
     return render_template('Admin/song_details.html', song=song,admin=admin)     
 
-@app.route('/edit_song/<int:id>', methods=['GET', 'POST'])
+@app.route('/edit_song/<int:id>/', methods=['GET', 'POST'])
 @csrf.exempt
 def edit_song(id):
     adminid = session.get('username')
@@ -267,7 +250,7 @@ def edit_song(id):
         return redirect(url_for('admin_songs'))
     return render_template('Admin/edit_song.html', song=song, admin=admin)
 
-@app.route('/delete_song/<int:id>')
+@app.route('/delete_song/<int:id>/')
 def delete_song(id):
     adminid = session.get('username')
     admin = db.session.query(Admin).get(adminid)
@@ -302,3 +285,97 @@ def admin_requests():
     admin = db.session.query(Admin).get(adminid)
     requests = SongsRequest.query.all()
     return render_template('Admin/song_request.html', requests=requests,admin=admin)
+
+
+@app.route('/admin/songs/')
+def admin_songs():
+    adminid = session.get('username')
+    admin = db.session.query(Admin).get(adminid)
+    instruments = Instruments.query.all()
+    instrument_names = Instruments.query.with_entities(Instruments.name).distinct().all()
+    instrument_types = Instruments.query.with_entities(Instruments.type).distinct().all()
+    songs=Songs.query.order_by(Songs.songs_id.desc()).all()
+    return render_template('Admin/songs.html',admin=admin,song=songs,instruments=instruments,instrument_names=
+                           instrument_names,instrument_types=instrument_types)
+
+@app.route('/instruments/')
+def instruments():
+    adminid = session.get('username')
+    admin = db.session.query(Admin).get(adminid)
+    instruments = Instruments.query.all()
+    instrument_names = Instruments.query.with_entities(Instruments.name).distinct().all()
+    instrument_types = Instruments.query.with_entities(Instruments.type).distinct().all()
+    return render_template('Admin/instruments.html',admin=admin, instruments=instruments, instrument_names=instrument_names, instrument_types=instrument_types)
+
+@app.route('/add_instrument/', methods=['POST'])
+def add_instrument():
+    print("Form submitted")
+    custom_instrument_name = request.form['customInstrumentName']
+    instrument_name_id = request.form.get('instrumentName')
+    custom_instrument_type = request.form['customInstrumentType']
+    instrument_type_id = request.form.get('instrumentType')
+
+    if custom_instrument_name:
+        instrument_name = custom_instrument_name
+    elif instrument_name_id:
+        instrument_name = instrument_name_id
+    else:
+        # Handle the case where neither 'instrumentName' nor 'customInstrumentName' is provided
+        flash('Please select an instrument name or enter a custom name', 'error')
+        return redirect(url_for('instruments'))
+
+    if custom_instrument_type:
+        instrument_type = custom_instrument_type
+    elif instrument_type_id:
+        instrument_type = instrument_type_id
+    else:
+        # Handle the case where neither 'instrumentType' nor 'customInstrumentType' is provided
+        flash('Please select an instrument type or enter a custom type', 'error')
+        return redirect(url_for('instruments'))
+
+    try:
+        new_instrument = Instruments(name=instrument_name, type=instrument_type)
+        db.session.add(new_instrument)
+        db.session.commit()
+        flash('Instrument Added', 'success')
+    except Exception as e:
+        print("Error adding instrument to database:", e)
+        flash('Error adding instrument to database', 'error')
+
+    return redirect(url_for('instruments'))
+
+
+
+@app.route('/edit_instrument/<id>/', methods=['POST'])
+def edit_instrument(id):
+    instrument = Instruments.query.get(id)
+    new_name = request.form['name']
+    new_type = request.form['type']
+
+    if new_name == instrument.name and new_type == instrument.type:
+        flash('No changes made', 'info')
+    else:
+        instrument.name = new_name
+        instrument.type = new_type
+        try:
+            db.session.commit()
+            flash('Edit successful', 'primary')
+        except Exception as e:
+            print("Error updating instrument in database:", e)
+            flash('Error updating instrument in database', 'error')
+
+    return redirect(url_for('instruments'))
+
+@app.route('/delete_instrument/<id>/', methods=['POST'])
+def delete_instrument(id):
+    instrument = Instruments.query.get(id)
+    try:
+        db.session.delete(instrument)
+        db.session.commit()
+        flash('Instrument Deleted', 'success')
+    except Exception as e:
+        print("Error deleting instrument from database:", e)
+        flash('Error deleting instrument from database', 'error')
+    return redirect(url_for('instruments'))
+
+

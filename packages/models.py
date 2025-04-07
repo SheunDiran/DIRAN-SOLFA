@@ -10,7 +10,7 @@ class Instruments(db.Model):
     def __repr__(self):
         return f"{self.name}"
 
-class User_Instrument(db.Model):
+class User__Instrument(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.users_id'))
     instrument_id = db.Column(db.Integer, db.ForeignKey('instruments.instru_id'))
@@ -92,3 +92,13 @@ class Admin(db.Model):
     dp = db.Column(db.String(100),nullable=True)
     def __repr__(self):
         return f"{self.id}"
+    
+class SearchHistory(db.Model):
+    __tablename__='search_history'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.users_id'))
+    artist_id = db.Column(db.Integer, db.ForeignKey('artists.artist_id'))
+    search_term = db.Column(db.String(100), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.songs_id'))  # Update this line
+    song = db.relationship('Songs', backref=db.backref('search_history', lazy=True), foreign_keys=[song_id])
