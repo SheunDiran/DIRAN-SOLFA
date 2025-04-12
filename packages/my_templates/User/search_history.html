@@ -1,27 +1,30 @@
-{%extends 'User/base_layout.html'%}
+{% extends 'User/base_layout.html' %}
 
-{%block content%}
-<div class="container">
+{% block content %}
     <h1 class="text-center">Search History</h1>
-    <ul class="list-group">
-        {% for search in search_history %}
-        <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h5>{{ search.search_term }}</h5>
-                    <p>Search Time: {{ search.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-                </div>
-                <a href="{{ url_for('delete_search_history', id=search.id) }}" class="btn btn-danger">Delete</a>
-            </div>
-            {% if search.song %}
-            <div class="mt-3">
-                <h6>Song Details:</h6>
-                <p>Title: {{ search.song.songs_title }}</p>
-                <p>Lyrics: {{ search.song.song_lyrics }}</p>
-            </div>
+    <div class="container">
+        <div class="row">
+            {% if search_history %}
+                {% for search in search_history %}
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Search Term: {{ search.search_term }}</h5>
+                                <p class="card-text">Time: {{ search.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                                {% if search.song_id %}
+                                    <p class="card-text">Song: {{ search.song.songs_title }}</p>
+                                {% endif %}
+                                <a href="{{ url_for('search', search_term=search.search_term) }}" class="btn btn-primary">View Search</a>
+                                <a href="{{ url_for('delete_search_history', id=search.id) }}" class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% else %}
+                    <h3 class="alert alert-danger">You haven't made any search yet....go and explore the search
+                        .</h3>
+                
             {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-{%endblock content%}
+        </div>
+    </div>
+{% endblock content %}

@@ -1,51 +1,61 @@
-{%include 'Admin/nav.html'%}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-light">
-                    <h4 class="mb-0">Song Requests</h4>
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Song Title</th>
-                                <th>Song Lyrics</th>
-                                <th>Artist/Scorer</th>
-                                <th>Solfa Notation</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {%for request in requests %}
-                            <tr>
-                                <td>{{ request.song_title }}</td>
-                                <td>{{ request.song_lyrics }}</td>
-                               <td>
-    {% if request.user_id %}
-    {{ request.user.users_email }}
-    {% elif request.artist_id %}
-    {{ request.artist.artist_firstname }} {{ request.artist.artist_lastname }}
-    {%else%}
-    No artist or scorer assigned
-    {% endif %}
-</td>
-                                <td>{{ request.solfa_notation }}</td>
-                                <td>
-                                  
-                                    <a href="#" class="btn btn-sm btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Approve</a>
-                                    <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>Reject</a>
-                                    <a href="#" class="btn btn-sm btn-danger">Edit</a>
-                                    <a href="#" class="btn btn-sm btn-primary">View</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{%include 'Admin/footer.html'%}
+{% include 'Admin/nav.html' %} 
+<style> 
+    .btn-group { 
+        display: flex; 
+        flex-wrap: wrap; 
+        gap: 5px; 
+    } 
+    .btn-group form { 
+        display: inline-block; 
+    } 
+</style> 
+<div class="container"> 
+    <div class="row"> 
+        <div class="col-md-12"> 
+            <h1 class="text-center mb-4">Song Requests</h1> 
+            <hr> 
+            {% if requests|length > 0 %}
+               
+                <table class="table table-striped table-responsive"> 
+                    <thead> 
+                        <tr> 
+                            <th>Song Title</th> 
+                            <th>Song Lyrics</th> 
+                            <th>Solfa Notation</th> 
+                            <th>Actions</th> 
+                        </tr> 
+                    </thead> 
+                    <tbody> 
+                        {% for request in requests %} 
+                            <tr> 
+                                <td>{{ request.song_title }}</td> 
+                                <td>{{ request.song_lyrics }}</td> 
+                                <td>{{ request.solfa_notation }}</td> 
+                                <td> 
+                                    <div class="btn-group" role="group"> 
+                                        <form action="{{ url_for('admin_approve_request', id=request.id) }}" method="post"> 
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> 
+                                            <button type="submit" class="btn btn-sm btn-success">Approve</button> 
+                                        </form> 
+                                        <form action="{{ url_for('admin_delete_request', id=request.id) }}" method="post"> 
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> 
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button> 
+                                        </form> 
+                                        <!-- <form action="{{ url_for('admin_edit_request', id=request.id) }}" method="post"> 
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> 
+                                            <button type="submit" class="btn btn-sm btn-primary">Edit</button> 
+                                        </form>  -->
+                                        <a href="{{ url_for('admin_view_request', id=request.id) }}" class="btn btn-sm btn-info">View</a> 
+                                    </div> 
+                                </td> 
+                            </tr> 
+                        {% endfor %} 
+                    </tbody> 
+                </table> 
+            {% else %} 
+                <h1 class="alert alert-warning">No requests sent yet!</h1> 
+            {% endif %} 
+        </div> 
+    </div> 
+</div> 
+{% include 'Admin/footer.html' %}

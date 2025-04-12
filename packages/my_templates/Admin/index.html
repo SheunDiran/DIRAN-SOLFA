@@ -5,8 +5,8 @@
          {%if cart =='error'%}
         <p style='border:5px solid red;'class="alert alert-primary">{{a}} </p>
          {%else%}
-          <p style='border:5px solid green;'class="alert alert-success">{{a}} {{email}}</p>
-          <p>Please visit your profile page</p>
+          <p style='border:5px solid green;'class="alert alert-success">{{a}} </p>
+       
         {%endif%}
         {%endfor%}    
         {%endif%}
@@ -129,8 +129,8 @@
           notation you're looking for?</h1>
           <h4>Contact any professional scorer</h4>
           <form action="{{url_for('scorers')}}">
-          <button class="btn btn-primary mb-md-3">Contact Any!</button>
-        </form>
+            <button class="btn btn-primary mb-md-3">Contact Any!</button>
+          </form>
                   </div>
         <div class="col-md-6 mt-5">
 <img src="/static/images/prof.jpg" alt="">
@@ -138,8 +138,7 @@
       </div>
 
       
-      {%include 'Admin/footer.html'%}  
-
+    
 </body>
 <script src="/static/jquery-3.7.1.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
@@ -189,3 +188,4 @@ event.preventDefault()
   
 
 </html>
+{%include 'Admin/footer.html'%}  

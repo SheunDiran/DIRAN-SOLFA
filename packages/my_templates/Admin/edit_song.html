@@ -62,3 +62,218 @@
 </body>
 <script src="/static/jquery-3.7.1.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+
+
+
+
+
+
+
+
+{% include 'Admin/nav.html' %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+    }
+
+    .container {
+        width: 80%;
+        margin: 40px auto;
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ddd;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        height: 40px;
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        height: 40px;
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #3e8e41;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #ddd;
+    }
+</style>
+
+<div class="container">
+    <h1>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p style='border:5px solid' class="alert alert-{{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </h1>
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addInstrumentModal"> Add Instrument </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Instrument Name</th>
+                        <th>Instrument Type</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for instru in instrument %}
+                        <tr>
+                            <td>{{ instru.name }}</td>
+                            <td>{{ instru.type }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editInstrumentModal{{ instrument.instru_id }}"> Edit </button>
+
+                                <!-- Modal -->
+                                <!-- Edit instrument form -->
+<div class="modal fade" id="editInstrumentModal{{ instrument.instru_id }}" tabindex="-1" aria-labelledby="editInstrumentModalLabel{{ instrument.instru_id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editInstrumentModalLabel{{ instrument.instru_id }}">Edit Instrument</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{{ url_for('edit_instrument', id=instrument.instru_id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <label for="name">Instrument Name:</label>
+                    <input type="text" id="name" name="name" value="{{ instrument.name }}" required>
+                    <label for="type">Instrument Type:</label>
+                    <select id="type" name="type" required>
+                        {% for type in instrument_types %}
+                            <option value="{{ type[0] }}" {% if type[0] == instrument.type %}selected{% endif %}>{{ type[0] }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Save Changes">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteInstrumentModal{{ instrument.instru_id }}"> Delete </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="deleteInstrumentModal{{ instrument.instru_id }}" tabindex="-1" aria-labelledby="deleteInstrumentModalLabel{{ instrument.instru_id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteInstrumentModalLabel{{ instrument.instru_id }}">Delete Instrument</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete {{ instrument.name }}?</p>
+                                                <form method="post" action="{{ url_for('delete_instrument', id=instrument.instru_id) }}">
+                                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <input type="submit" class="btn btn-danger" value="Delete">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add instrument form -->
+<div class="modal fade" id="addInstrumentModal" tabindex="-1" aria-labelledby="addInstrumentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addInstrumentModalLabel">Add Song</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addInstrumentForm" method="post" action="{{ url_for('add_instrument') }}">
+                    <label for="instrumentName">Instrument Name:</label>
+                    <select id="instrumentName" name="instrumentName" required>
+                        {% for name in instrument_names %}
+                            <option value="{{ name[0] }}">{{ name[0] }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="customInstrumentName">Or enter custom instrument name:</label>
+                    <input type="text" id="customInstrumentName" name="customInstrumentName" placeholder="Eg:Saxophone..">
+                    <label for="instrumentType">Instrument Type:</label>
+                    <select id="instrumentType" name="instrumentType" required>
+                        {% for type in instrument_types %}
+                            <option value="{{ type[0] }}">{{ type[0] }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="customInstrumentType">Or enter custom instrument type:</label>
+                    <input type="text" id="customInstrumentType" name="customInstrumentType" placeholder="Eg:Alto/Soprano..">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-primary">Add Instrument</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+{% include 'Admin/footer.html' %}
+
+
+
+
+
+
+

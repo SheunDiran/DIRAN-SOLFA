@@ -1,18 +1,23 @@
-import secrets,os
+import secrets,requests
 from sqlalchemy import text
 from functools import wraps
 from flask import render_template,flash,request,redirect,session,url_for
-from packages import app
+from flask_wtf.csrf import CSRFProtect
+from packages import app,config
 from packages.user_forms import UserForm,ArtistForm,User_reg,Artist_Reg,AddSongForm,UploadDpForm,Edit_User
-from packages.models import db,User,Artists,Songs,Song_solfa,SongsRequest,SearchHistory,Admin,User__Instrument,Instruments
+from packages.models import db,User,Artists,Songs,Song_solfa,SongsRequest
+from packages.models import SearchHistory,Admin,User__Instrument,Instruments
 from werkzeug.security import generate_password_hash,check_password_hash
 
-
+csrf=CSRFProtect(app)
 
 
 def login_reguired(f):
     @wraps(f)
     def login_decorator(*args, **kwargs):
+        allowed_routes = ['index', 'user_login', 'artist_login', 'user_register', 'register']
+        if request.endpoint in allowed_routes:
+            return f(*args, **kwargs)
         user_id = session.get('username')
         artist_id = session.get('fullname')
         if user_id or artist_id:
@@ -26,6 +31,7 @@ def login_reguired(f):
             else:
                 return redirect('/user/login/')
     return login_decorator
+
 
 
 @app.errorhandler(404)
@@ -46,59 +52,111 @@ def after_request(response):
     response.headers['Cache-Control']='no-cache','no-store','must-revalidate'
     return response
 
+
+
+api_key = config.YOUR_GENIUS_API_KEY
+
+
 @app.route('/index/')
 def index():
-    email = session.get('email')
-    return render_template('User/index.html',email=email)
+    username = session.get('username')
+    fullname = session.get('fullname')
+    user = None
+    artist = None
+    if username:
+        user = User.query.filter_by(users_firstname=username).first()
+    elif fullname:
+        artist = Artists.query.filter_by(artist_firstname=fullname).first()
+    return render_template('User/index.html', artist=artist, user=user)
+
 
 @app.route('/about/')
 def about():
     return render_template('User/about.html')
 
+
 @app.route('/search/')
+@login_reguired
 def search():
     search_term = request.args.get('search_term')
-    instrument = Instruments.query.all()
-    songs = Songs.query.join(Admin).filter(
-        (Songs.songs_title.like('%' + search_term + '%')) |
-        (Admin.username.like('%' + search_term + '%'))
-    ).all()
-    instrument_songs = Songs.query.join(Song_solfa).join(Instruments).filter(
-        (Instruments.name.like('%' + search_term + '%')) |
-        (Instruments.type.like('%' + search_term + '%'))
-    ).all()
+    if not search_term:
+        flash('Please enter a search term.', 'error')
+        return redirect('/songs/')
     if search_term.lower()=='omemma':
         return redirect('/omemma/')
-    elif 'worthy' in search_term:
+    if search_term.lower()=='worthy':
         return redirect('/worthy/')
-    if songs or instrument_songs:
-        user_id = session.get('username')
-        artist_id = session.get('fullname')
-        search_history = SearchHistory(user_id=user_id,artist_id=artist_id ,search_term=search_term)
+
+    user_id = session.get('user_id')
+    artist_id = session.get('artist_id')
+    search_history = SearchHistory(user_id=user_id, artist_id=artist_id, search_term=search_term)
+    try:
         db.session.add(search_history)
         db.session.commit()
-        return render_template('User/search_results.html', songs=songs + instrument_songs, instrument=instrument)
+        print("Search history saved:", search_history)
+    except Exception as e:
+        print("Error saving search history:", e)
+
+    search_term = search_term.lower()
+    songs = Songs.query.filter(Songs.songs_title.ilike('%' + search_term + '%')).all()
+    if songs:
+        return render_template('User/search_results.html', songs=songs)
     else:
-        flash(f'No songs found for "{search_term}". Please try searching for another song.', 'error')
-        return redirect('/songs/')
+        api_key = config.YOUR_GENIUS_API_KEY
+        url = f"https://api.genius.com/search?q={search_term}&access_token={api_key}"
+        response = requests.get(url)
+        data = response.json()
+
+        search_results = []
+
+        for result in data['response']['hits']:
+            song_url = result['result']['url']
+
+            search_result = {
+                'title': result['result']['title'],
+                'artist': result['result']['primary_artist']['name'],
+                'url': song_url
+            }
+
+            search_results.append(search_result)
+
+        return render_template('User/genius_search_results.html', search_results=search_results)
+
+
 
 @app.route('/search_history/')
+@login_reguired
 def search_history():
-    user_id = session.get('username')
-    artist_id=session.get('fullname')
-    search_history = SearchHistory.query.filter_by(user_id=user_id,artist_id=artist_id).all()
-    return render_template('User/search_history.html', search_history=search_history)
+    user_id = session.get('user_id')
+    artist_id = session.get('artist_id')
+    if user_id:
+        search_history = SearchHistory.query.filter_by(user_id=user_id).all()
+        return render_template('User/search_history.html', search_history=search_history)
+    elif artist_id:
+        search_history = SearchHistory.query.filter_by(artist_id=artist_id).all()
+        return render_template('User/search_history.html', search_history=search_history)
+    else:
+        flash('User not found.', 'error')
+        return redirect('/songs/')
+
+
+
+
 
 @app.route('/delete_search_history/<int:id>')
+@login_reguired
 def delete_search_history(id):
-    user_id = session.get('username')
-    artist_id=session.get('fullname')
     search_history = SearchHistory.query.get(id)
-    if search_history.user_id == user_id or search_history.artist_id == artist_id :
+    if search_history:
         db.session.delete(search_history)
         db.session.commit()
+        flash('Search history deleted successfully.', 'success')
+    else:
+        flash('Search history not found.', 'error')
+    return redirect(url_for('search_history'))
 
-    return redirect('/search_history/')
+
+
 
 @app.route('/user/login/', methods=['GET', 'POST'])
 def user_login():
@@ -114,12 +172,12 @@ def user_login():
                     session['username'] = user.users_id 
                     session['pwd'] = password
                     flash(f'Welcome! {user.users_firstname} ,You are now logged in', category='success')
-                    return redirect('/userdash/')
+                    return render_template('User/user_dash.html',user=user)
                 else:
                     flash('Invalid password', category='failed')
             else:
                 flash('Invalid email', category='failed')
-    return redirect('/songs/')
+    return render_template('User/user_login.html',user=user_login)
 
 
 
@@ -204,10 +262,33 @@ def register():
 
 
 @app.route('/artists/')
+@login_reguired
 def artists():
     artists = db.session.query(Artists).all()
     artist_count = len(artists)
     return render_template('User/artists.html', artists=artists, artist_count=artist_count)
+
+@app.route('/artists/<int:artist_id>/')
+@login_reguired
+def user_artists(artist_id):
+    artists = db.session.query(Artists).get(artist_id)
+    artist_count = len(artists)
+    for artist in artists:
+        if artist.artist_dp:
+            artist.artist_dp = url_for('static', filename='uploads/' + artist.artist_dp)
+        else:
+            artist.artist_dp = url_for('static', filename='uploads/default.jpg')
+    return render_template('Admin/artists.html',artists=artists,artist_count=artist_count)
+
+
+@app.route('/scorers/<int:user_id>')
+@login_reguired
+def user_scorer(user_id):
+    scorers = db.session.query(User).get(user_id)
+    scorers_count = len(scorers)
+    return render_template('User/scorers.html',scorers=scorers,
+                           scorers_count=scorers_count)
+
 
 
 @app.route('/scorers/')
@@ -227,12 +308,17 @@ def userdash():
 
 
 
-@app.route('/artistdash/')
+
+@app.route('/artist/')
 @login_reguired
-def artistdash():
-        artist_id = session['fullname']
-        artist = db.session.query(Artists).filter(Artists.artist_id == artist_id).first()
-        return render_template('User/artist_dash.html', artist=artist)
+def artist_dashboard():
+    print(session)  # Check what's being stored in the session
+    id = session.get('fullname')
+    print(id)  # Check if the ID is correct
+    artist = Artists.query.get(id)
+    songs = Songs.query.filter_by(artist_id=id).all()
+    return render_template('User/artist_dashboard.html', artist=artist, songs=songs)
+
        
 @app.route('/dashboard/')
 @login_reguired
@@ -253,16 +339,19 @@ def dashboard():
 def songs():
     try:
         songs = Songs.query.order_by(Songs.songs_id.desc()).all()
-        return render_template('User/songs.html', songs=songs)
+        solfa=Song_solfa.query.all()
+        return render_template('User/songs.html', songs=songs,solfa=solfa)
     except Exception as e:
         return str(e)
-
 
 @app.route('/user/song_details/<int:id>')
 @login_reguired
 def songdetails(id):
     song = Songs.query.get(id)
-    return render_template('User/song_details.html', song=song) 
+    if song is not None:
+        return render_template('User/song_details.html', song=song)
+    else:
+        return "Song not found", 404
 
 @app.route('/omemma/')
 def omemma():
@@ -274,6 +363,7 @@ def worthy():
 
 
 @app.route('/logout/')
+@login_reguired
 def logout():
     session.pop('username', None)
     session.pop('fullname', None)
@@ -290,12 +380,12 @@ def user_edit_details(user_id):
     user.instrument.choices = instrument_choices
     user.instrument_type.choices = instrument_type_choices
     
-    # Get the user's current information
+   
     user_info = User.query.filter_by(users_id=user_id).first()
     user_instrument = User__Instrument.query.filter_by(user_id=user_id).first()
     
     if request.method == 'GET':
-        # Populate the form with the user's current information
+   
         user.fname.data = user_info.users_firstname
         user.lname.data = user_info.users_lastname
         user.email.data = user_info.users_email
@@ -367,13 +457,15 @@ def artist_edit_details(artist_id):
 @login_reguired
 def scorers_details(users_id):
     scorer = User.query.get_or_404(users_id)
-    return render_template('User/details.html', scorer=scorer)
+    user = User.query.get_or_404(users_id)
+    return render_template('User/details.html', scorer=scorer,user=user)
 
 @app.route('/artist/<int:artist_id>/details/')
 @login_reguired
 def artist_details(artist_id):
     artist = Artists.query.get_or_404(artist_id)
     return render_template('User/artist_details.html', artist=artist)
+
 
 @app.route('/upload_dp/', methods=['GET', 'POST'])
 @login_reguired
@@ -405,54 +497,83 @@ def upload_dp():
 
     return render_template('User/upload_db.html', user=user, artist=artist, dp=dp)
 
-
 @app.route('/add_song/', methods=['GET', 'POST'])
 @login_reguired
 def add_song():
     form = AddSongForm()
     artists = Artists.query.all()
-    scorers = db.session.query(User).filter(User.users_role == 'Scorers').all()
-    form.artist_id.choices = [(artist.artist_id, f"{artist.artist_firstname} {artist.artist_lastname}") for artist in artists]
-    form.scorer_id.choices = [(scorer.users_id, scorer.users_email) for scorer in scorers]
+    scorers = User.query.filter(User.users_role=='Scorers').all()  # Assuming you have a Scorers model
+    form.artist_id.choices = [(artist.artist_id, artist.artist_firstname + ' ' + artist.artist_lastname) for artist in artists]
     if request.method == 'POST':
-        print(request.form)
+        print("Form submitted")
         if form.validate_on_submit():
-            print("Form is valid")
+            print("Form validated")
             try:
-                if request.form.get('selection') == 'artist':
-                    print("Artist selected")
-                    song_request = SongsRequest(
-                        song_title=form.song_title.data,
-                        song_lyrics=form.song_lyrics.data,
-                        artist_id=form.artist_id.data,
-                        scorer_id=None,
-                        solfa_notation=form.solfa_notation.data,
-                        user_id=None,
-                        status='pending'
-                    )
-                else:
-                    print("Scorer selected")
-                    song_request = SongsRequest(
-                        song_title=form.song_title.data,
-                        song_lyrics=form.song_lyrics.data,
-                        artist_id=None,
-                        scorer_id=form.scorer_id.data,
-                        solfa_notation=form.solfa_notation.data,
-                        user_id=None,
-                        status='pending'
-                    )
-                print("Song request created")
-                db.session.add(song_request)
-                print("Song request added to database session")
+                new_song_request = SongsRequest(
+                    song_title=form.song_title.data,
+                    song_lyrics=form.song_lyrics.data,
+                    solfa_notation=form.solfa_notation.data,
+                    artist_id=form.artist_id.data
+                )
+                print("New song request created")
+                db.session.add(new_song_request)
+                print("Song request added to session")
                 db.session.commit()
-                print("Database session committed")
-                flash('Your song upload is been approved.Please wait for approval....','success')
+                print("Changes committed")
+                flash('Your song upload is been approved. Please wait for approval....', 'success')
                 return redirect('/index/')
             except Exception as e:
                 print(f"Error: {e}")
-                db.session.rollback()
-                flash('Error adding song')
+                flash('Error adding song please try again', 'error')
         else:
-            print("Form is not valid")
+            print("Form not validated")
             print(form.errors)
     return render_template('User/add_songs.html', form=form, artists=artists, scorers=scorers)
+
+
+
+@app.route('/edit/<int:songs_id>', methods=['GET', 'POST'])
+@login_reguired
+@csrf.exempt
+def edit(songs_id):
+    form = AddSongForm()
+    song = Songs.query.get(songs_id)
+    artists = Artists.query.all()
+    scorers = db.session.query(User).filter(User.users_role == 'Scorers').all()
+    solfa = db.session.query(Song_solfa).filter(Song_solfa.song_id == songs_id).first()
+
+    form.artist_id.choices = [(artist.artist_id, artist.artist_firstname) for artist in artists]
+    form.scorer_id.choices = [(scorer.users_id, scorer.users_email) for scorer in scorers]
+
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            existing_request = db.session.query(SongsRequest).filter(
+                SongsRequest.id == song.songs_id,
+                SongsRequest.song_title == song.songs_title,
+                SongsRequest.song_lyrics == song.song_lyrics,
+                SongsRequest.artist_id == form.artist_id.data,
+                SongsRequest.user_id == form.scorer_id.data,
+                SongsRequest.solfa_notation == solfa.solfa_notation,
+                SongsRequest.status == 'pending'
+            ).first()
+
+            if existing_request is None:
+                new_request = SongsRequest(
+                    id=song.songs_id,
+                    song_title=song.songs_title,
+                    song_lyrics=song.song_lyrics,
+                    artist_id=form.artist_id.data,
+                    user_id=form.scorer_id.data,
+                    solfa_notation=solfa.solfa_notation,
+                    status='pending'
+                )
+                db.session.add(new_request)
+                db.session.commit()
+                flash('Your song edit request is been processed', 'success')
+                return redirect(url_for('songs'))
+            else:
+                flash('A request for this song already exists', 'error')
+        else:
+            print(form.errors)
+            flash('SONG EDIT FAILED', 'error')
+    return render_template('User/songs.html', artist=artists, form=form, scorers=scorers, song=song, solfa=solfa)

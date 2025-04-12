@@ -19,9 +19,9 @@ csrf_time_limit = 360
 
 
 class SongForm(FlaskForm):
-    artist = StringField('Artist Name', validators=[DataRequired()])
-    song_title = StringField('Song Title', validators=[DataRequired()])
-    song_lyrics = TextAreaField('Song Lyrics', validators=[DataRequired()])
+    artist = StringField('Artist Name')
+    song_title = StringField('Song Title', validators=[DataRequired('Please song title is required')])
+    song_lyrics = TextAreaField('Song Lyrics', validators=[DataRequired("Please song lyrics is required")])
     solfa_notation = TextAreaField('Solfa Notation')
     submit = SubmitField('Save Changes')
 

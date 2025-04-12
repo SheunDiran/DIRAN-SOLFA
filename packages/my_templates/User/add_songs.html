@@ -1,6 +1,13 @@
 
 {%extends 'User/base_layout.html'%}
 {%block content%}
+{%with message=get_flashed_messages(with_categories=True)%}
+{%if messages%}
+{%for category, message in messages%}
+<p style='border:5px solid' class="alert alert-{{ category }}">{{ message }}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -9,7 +16,8 @@
                     <h4 class="mb-0">Add New Song</h4>
                 </div>
                 <div class="card-body">
-                    <form method="POST"> {{ form.hidden_tag() }} 
+                    <form method="POST"> 
+                        {{ form.hidden_tag() }} 
                         <div class="form-group mb-3">
                             <label for="song_title" class="form-label">Song Title:</label>
                             <input type="text" class="form-control" id="song_title" name="song_title" required>
@@ -25,30 +33,39 @@
                                     <input class="form-check-input" type="radio" name="selection" value="artist" id="artist-radio">
                                     <label class="form-check-label" for="artist-radio">Artist</label>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="selection" value="scorer" id="scorer-radio">
-                                    <label class="form-check-label" for="scorer-radio">Scorer</label>
-                                </div>
+                                
+                             
+                                {% if session.get('username') %}
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="selection" value="scorer" id="scorer-radio">
+    <label class="form-check-label" for="scorer-radio">Scorer</label>
+</div>
+{%endif%}
+
                             </div>
                         </div>
+                       
                         <div class="form-group mb-3" id="artist-select-group" style="display: none;">
                             <label for="artist-select" class="form-label">Artist:</label>
                             <select class="form-control" id="artist-select" name="artist_id">
                                 <option value="">Select Artist</option>
-                                {% for artist in artists %} 
-                                    <option value="{{ artist.artist_id }}">{{ artist.artist_firstname }} {{ artist.artist_lastname }}</option> 
-                                {% endfor %} 
+                                {% for artist in artists %}
+                                    <option value="{{ artist.artist_id }}">{{ artist.artist_firstname }} {{ artist.artist_lastname }}</option>
+                                {% endfor %}
                             </select>
                         </div>
+                        {% if session.get('username') %}
                         <div class="form-group mb-3" id="scorer-select-group" style="display: none;">
                             <label for="scorer-select" class="form-label">Scorer:</label>
                             <select class="form-control" id="scorer-select" name="scorer_id">
                                 <option value="">Select Scorer</option>
-                                {% for scorer in scorers %} 
-                                    <option value="{{ scorer.users_id }}">{{ scorer.users_email }}</option> 
-                                {% endfor %} 
+                                {% for scorer in scorers %}
+                                    <option value="{{ scorer.users_id }}">{{ scorer.users_email }}</option>
+                                {% endfor %}
                             </select>
                         </div>
+                    {% endif %}
+
                         <div class="form-group mb-3">
                             <label for="solfa_notation" class="form-label">Solfa Notation:</label>
                             <textarea class="form-control" id="solfa_notation" name="solfa_notation" rows="10"></textarea>
@@ -63,18 +80,4 @@
     </div>
 </div>
 {%endblock content%}
-<script>
 
-$('form').submit(function(event) {
-    event.preventDefault();
-    $.ajax({
-        type: 'POST',
-        url: '/add_song',
-        data: $(this).serialize(),
-        success: function(response) {
-            alert('Song added successfully!');
-            window.location.href = '/songs';
-        }
-    });
-});
-</script>

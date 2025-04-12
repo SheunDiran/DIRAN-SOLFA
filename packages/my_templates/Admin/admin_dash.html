@@ -31,7 +31,7 @@
             padding: 0.75rem 1rem;
         }
         .sidebar a:hover, .sidebar .active {
-            background-color: #495057;
+            background-color:rgba(0, 255, 0, 0.146);
             border-radius: 0.375rem;
         }
         .content {
@@ -43,9 +43,11 @@
             border-radius: 1rem;
         }
         .navbar {
+            
             background-color: white;
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
+       
     </style>
 </head>
 <body>
@@ -56,29 +58,33 @@
                 <div class="position-sticky">
                     <h4 class="text-center">Admin</h4>
                     <a href="#" class="active">Dashboard</a>
-                    <a href="{{url_for('admin_user')}}">Users</a>
-                    <a href="{{url_for('admin_artists')}}">Artists</a>
+                    <a href="">Users</a>
+                    <a href="{{url_for('admin_view_artists')}}">Artists</a>
                     <a href="{{url_for('admin_songs')}}">Songs</a>
-                    <a href="#">Logout</a>
+                    <a href="{{url_for('admin_view_scorers')}}">Scorers</a>
+                    <a href="{{url_for('instruments')}}">Instruments</a>
+                    <a href="{{url_for('admin_requests')}}">Requests</a>
+                    <a href="/admin/logout/">Logout</a>
                 </div>
             </nav>
             <!-- Main Content -->
-            <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
+            <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4 ">
                 <!-- Navbar -->
-                <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top mb-4">
-                    <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light  mb-4">
+                    <div class="container-fluid text-primary">
                         <span class="navbar-brand">Dashboard</span>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
-                        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                            <ul class="navbar-nav">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Notifications</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Profile</a>
-                                </li>
+                        <div class="collapse  navbar-collapse justify-content-end" id="navbarNav">
+                            <ul class="navbar-nav ">
+                                <li class="nav-item ">
+                                    <h4><a class="   text-primary" href="{{url_for('admin_songs')}}">Add Songs</a></h4>
+                                </li> 
+                                
+                                <!-- <li class="nav-item ms-3">
+                                    <h4><a class="   text-success" href="{{url_for('my_songs')}}">My  Songs</a></h4>
+                                </li> -->
                             </ul>
                         </div>
                     </div>
@@ -86,43 +92,60 @@
                 <!-- Dashboard Content -->
                 <div class="content">
                     <h1 class="mt-4">Admin Dashboard - {{admin.username}}</h1>
-                    <div class="row g-4">
-                        <div class="col-md-3">
+                    <div class="row g-4 mt-3">
+
+                        <!-- total Users -->
+                        <div class="col-md-4 mt-4">
+
                             <div class="card p-3 text-white bg-primary">
-                                <h3>{{ users_count }}</h3> <h5>Users</h5>
+                                <h3>{{ users_count }} Users</h3>
                             
                             </div>
                         </div>
-                        <div class="col-md-3">
+
+                        <!-- total artists -->
+                        <div class="col-md-4">
                             <div class="card p-3 text-white bg-success">
-                                <h3>{{ artists_count }}</h3>  <h5>Artists</h5>
+                                <h3>{{ artists_count }} Artists</h3>
                                
                             </div>
                         </div>
-                        <div class="col-md-3">
+
+                        <!-- total songs -->
+                        <div class="col-md-4">
                             <div class="card p-3 text-white bg-warning">
-                                <h5>Songs</h5>
-                                <h3>{{ songs_count }}</h3>
+                                <h3>{{ songs_count }} Songs</h3>
+                               
                             </div>
                         </div>
-                        <div class="col-md-3">
+
+
+                        <!-- total scorers -->
+                        <div class="col-md-4">
                             <div class="card p-3 text-white bg-danger">
-                                <h3>{{ scorers_count }}</h3>  <h5>Scorers</h5>
+                                <h3>{{ scorers_count }} Scorers</h3>
+                                
+                            </div>
+                        </div>
+
+                        <!-- total instruments -->
+                        <div class="col-md-4">
+                            <div class="card p-3 text-white bg-warning">
+                                <h3>{{ instruments }} Instruments</h3>
+                                
+                            </div>
+                        </div>
+
+                        <!-- total requests -->
+                        <div class="col-md-4">
+                            <div class="card p-3 text-white bg-info">
+                                <h3>{{ requests}} Requests</h3>
                                 
                             </div>
                         </div>
                     </div>
                     <br>
-                    <div class="row">
-                        <div class="col-xl-3 col-md-3">
-                            <div class="card bg-danger text-white mb-4">
-                                <div class="card-body">ADMIN Songs</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="{{url_for('add_songs')}}">Add Songs</a>
-                  </div>
-                </div> 
-            </div>
-        </div>
+                    
                   
                                     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
                   <script src="js/scripts.js"></script>

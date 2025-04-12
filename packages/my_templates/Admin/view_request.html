@@ -1,0 +1,18 @@
+{% include 'Admin/nav.html' %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>View Request</h1>
+      <hr>
+      <h3>Song Title: {{ request.song_title }}</h3>
+      <p>Song Lyrics:</p>
+      <p>{{ request.song_lyrics }}</p>
+      <p>Solfa Notation:</p>
+      <p>{{ request.solfa_notation }}</p>
+      <a href="{{ url_for('admin_requests') }}" class="btn btn-primary">Back to Requests</a>
+    </div>
+  </div>
+</div>
+
+{% include 'Admin/footer.html' %}

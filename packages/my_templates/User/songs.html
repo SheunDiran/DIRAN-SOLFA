@@ -3,6 +3,7 @@
 {%block content%}
 <h1 class="text-center">All Songs</h1>
 <div style="padding: 20px;">
+    
     <h1>
         {% with messages = get_flashed_messages(with_categories=True) %}
             {% if messages %}
@@ -16,7 +17,7 @@
     <div class="sticky-top bg-light py-2">
         <h2 class="text-center text-primary ">Want to add your songs? 
             <a href="/add_song/" class="text-light"> 
-                <button class="btn btn-success ms-5 mb-3">Add Songs</button>
+                <button class="btn btn-primary ms-5 mb-3">Add Songs</button>
             </a>
         </h2>
     </div>
@@ -31,13 +32,13 @@
                             <h5 class="card-title">{{ song.songs_title | truncate(50) }}</h5>
                             <p class="card-text">Lyrics: {{ song.song_lyrics | truncate(50) }}</p>
                             <p class="card-text">Solfa: 
-                                {% for solfa in song.song_solfa %}
+                                
                                     {{ solfa.solfa_notation| truncate(50) }}
-                                {% else %}
-                                    None
-                                {% endfor %}
+                              
+                              
                             </p>
                             <a href="{{ url_for('songdetails', id=song.songs_id) }}" class="btn btn-light btn-sm">View</a>
+                        
                         </div>
                     </div>
                 </div>
@@ -51,11 +52,9 @@
                             <h5 class="card-title">{{ song.songs_title | truncate(50) }}</h5>
                             <p class="card-text">Lyrics: {{ song.song_lyrics | truncate(50) }}</p>
                             <p class="card-text">Solfa: 
-                                {% for solfa in song.song_solfa %}
+                              
                                     {{ solfa.solfa_notation| truncate(50) }}
-                                {% else %}
-                                    None
-                                {% endfor %}
+                                
                             </p>
                             <a href="{{ url_for('songdetails', id=song.songs_id) }}" class="btn btn-primary btn-sm">View</a>
                         </div>

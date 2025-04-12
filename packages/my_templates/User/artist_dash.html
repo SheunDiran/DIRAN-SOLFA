@@ -35,10 +35,51 @@
               <div class="card-header text-center">My Songs</div>
               <div class="card-body">
                 <h5 class="card-title text-center">My Songs</h5>
-                <a href="/add_song/" class="text-light">
-                  <a href="{{ url_for('search_history') }}" class="btn btn-primary">View Search History</a>
-                  <button class="btn btn-success ms-5 ">Add Songs</button></a>
-              </div>
+                <a href="/add_song/" class="text-light ">Add Songs</a>  <!-- Button to trigger the modal -->
+                <button type="button"disabled  class="ms-5 btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#mySongsModal">
+                  View My Songs
+              </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="mySongsModal" tabindex="-1" role="dialog" aria-labelledby="mySongsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="mySongsModalLabel">My Songs</h5>
+                                
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                               
+                                {% for song in songs %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ song.songs_title | truncate(50) }}</td>
+                                    <td>{{ song.song_lyrics | truncate(50) }}</td>
+                                    <td>
+                                        {% for solfa in song.song_solfa %}
+                                            {{ solfa.solfa_notation| truncate(50) }}
+                                        {% else %}
+                                            None
+                                        {% endfor %}
+                                        {% endfor %}
+                            </div>
+                            <div class="modal-footer">
+                                                              
+<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+<a href="{{ url_for('search_history') }}" class="ms-5 btn btn-success btn-sm">View Search History</a>
+
+                </div>
+                  
             </div>
           </div>
         </div>
@@ -47,3 +88,4 @@
   </div>
   <!-- End the Dashboard-->
 {% endblock content %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>

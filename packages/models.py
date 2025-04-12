@@ -21,14 +21,17 @@ class User__Instrument(db.Model):
         return f"{self.user_id}  {self.instrument_id}"
 
 
-    
+
 class Songs(db.Model):
     songs_id = db.Column(db.Integer, primary_key=True)
     songs_title = db.Column(db.String(100), nullable=False)
     song_lyrics = db.Column(db.Text, nullable=False)
-    approved = db.Column(db.Boolean, default=False)
     admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'), nullable=True)
-    admin = db.relationship('Admin', backref=db.backref('songs', lazy=True))
+    admin = db.relationship('Admin', backref=db.backref('admin_songs', lazy=True))
+    artist_id = db.Column(db.Integer, db.ForeignKey('artists.artist_id'), nullable=True)
+    artist = db.relationship('Artists', backref=db.backref('artist_songs', lazy=True))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.users_id'), nullable=True)
+    user = db.relationship('User', backref=db.backref('user_songs', lazy=True), foreign_keys=[user_id])
 
     def __repr__(self):
         return f"{self.songs_title}"
@@ -94,11 +97,13 @@ class Admin(db.Model):
         return f"{self.id}"
     
 class SearchHistory(db.Model):
-    __tablename__='search_history'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.users_id'))
     artist_id = db.Column(db.Integer, db.ForeignKey('artists.artist_id'))
-    search_term = db.Column(db.String(100), nullable=False)
+    search_term = db.Column(db.String(128), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
-    song_id = db.Column(db.Integer, db.ForeignKey('songs.songs_id'))  # Update this line
-    song = db.relationship('Songs', backref=db.backref('search_history', lazy=True), foreign_keys=[song_id])
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.songs_id'))
+
+
+
+  

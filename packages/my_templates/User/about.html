@@ -1,71 +1,58 @@
-{%extends 'User/base_layout.html'%}
+{% extends 'User/base_layout.html' %}
 
-{%block content%}
-      <!-- About us! -->
-      <div class="row mt-2">
-        <div class="col text-center  mt-1">
-            <h1 class="text-primary animate__animated animate__fadeIn">ABOUT US!</h1>
-            <h3>DIRAN SOLFA,is a digital platform dedicated <br> to sharing SOLFA notations  and 
-                promoting music. <br>We believe that accurate SOLFA <br> notations  should be  easily accesible to all, <br>
-                and we are dedicated to making that a reality.
-        </h3>
-        </div>
+{% block content %}
+  <!-- About us! -->
+  <div class="container-fluid">
+    <div class="row mt-2">
+      <div class="col-12 text-center mt-1">
+        <h1 class="text-primary animate__animated animate__fadeIn">ABOUT US!</h1>
+        <h3 class="px-md-5">DIRAN SOLFA,is a digital platform dedicated <br> to sharing SOLFA notations and promoting music. <br>We believe that accurate SOLFA <br> notations should be easily accesible to all, <br> and we are dedicated to making that a reality. </h3>
       </div>
+    </div>
 
-      <!-- Our mission -->
-      <div class="row animate__animated animate__backInLeft">
-        <div class="col text-center bg-light mt-3">
-            <h1 class="text-primary">OUR MISSION!</h1>
-            <h3>AT DIRAN SOLFA,Our mission is to provide a platform <br> for music
-            enthusiasts expecially instrumentalists to access and share <br> SOLFA notations,
-       promoting a musical community.
-        </h3>
-        </div>
+    <!-- Our mission -->
+    <div class="row animate__animated animate__backInLeft">
+      <div class="col-12 text-center bg-light mt-3">
+        <h1 class="text-primary">OUR MISSION!</h1>
+        <h3 class="px-md-5">AT DIRAN SOLFA,Our mission is to provide a platform <br> for music enthusiasts expecially instrumentalists to access and share <br> SOLFA notations, promoting a musical community. </h3>
       </div>
+    </div>
 
-       <!--Our Vision -->
-      <div class="row mb-5">
-        <div class="col text-center  mt-3">
-            <h1 class="text-primary">OUR VISION!</h1>
-            <h3>Our vision is to become the leading digital platform for Solfa notations. <br>
- Providing unparalleled access to SOLFA notations to music enthusiasts, <br>
- and access to music educators.
-        </h3>
-        </div>
+    <!--Our Vision -->
+    <div class="row mb-5">
+      <div class="col-12 text-center mt-3">
+        <h1 class="text-primary">OUR VISION!</h1>
+        <h3 class="px-md-5">Our vision is to become the leading digital platform for Solfa notations. <br> Providing unparalleled access to SOLFA notations to music enthusiasts, <br> and access to music educators. </h3>
       </div>
+    </div>
 
-      <!-- Brief Introduction of DIRAN SOLFA -->
-      <div class="row m-5">
-        <h1 class="text-center bg-primary text-light">DIRAN SOLFA</h1>
-        <div class="col-md-8 text-center mt-3">
-     <h3>I am the CEO of <span class="text-primary">DIRAN SOLFA.</span>
-    As i delved deeper into musical instruments,i discovered the beauty of solfa notations.
-<h3 class="mt-3">However,I soon realised that accessing these notations was a challenge. </h3>
-<h3 class="mt-3"> This inspired me to
-create <span class="text-primary">DIRAN SOLFA </span>, 
-<br>a platform that would make Solfa notations accessible to everyone
-    </h3>
-    <a href="{{url_for('index')}}"><button class="btn btn-primary pacifico-regular">DIRAN SOLFA</button></a>
-        </div>
-        <div class="col-md-4 animate__animated animate__backInRight">
-         <img src="/static/images/myface.png" height="400px" >
-        </div>
-        
+    <!-- Brief Introduction of DIRAN SOLFA -->
+    <div class="row m-md-5">
+      <h1 class="text-center bg-primary text-light">DIRAN SOLFA</h1>
+      <div class="col-lg-8 col-md-12 text-center mt-3">
+        <h3>I am the CEO of <span class="text-primary">DIRAN SOLFA.</span> As i delved deeper into musical instruments,i discovered the beauty of solfa notations. <h3 class="mt-3">However,I soon realised that accessing these notations was a challenge. </h3>
+        <h3 class="mt-3"> This inspired me to create <span class="text-primary">DIRAN SOLFA </span>, <br>a platform that would make Solfa notations accessible to everyone </h3>
+        <a href="{{url_for('index')}}"><button class="btn btn-primary pacifico-regular">DIRAN SOLFA</button></a>
       </div>
-
-
-      <!-- Introduction of prof. music scorers -->
-      <div class="row bg-light  ms-2 " style="min-height:200px">
-        <div class="col-md-6 mt-5">
-          <h1>Can't find the <span class="text-primary">SOLFA </span><br>
-          notation you're looking for?</h1>
-          <h4>Contact any professional scorer</h4>
-          <form action="{{url_for('scorers')}}">
-            <button class="btn btn-primary mb-md-3">Contact Any!</button>
-          </form>
-                  </div>
-        <div class="col-md-6 mt-5">
-<img src="/static/images/prof.jpg" alt="">
-        </div>
+      <div class="col-lg-4 col-md-12 animate__animated animate__backInRight">
+        <img src="/static/images/myface.png" class="img-fluid w-100 h-auto" alt="">
       </div>
-      {%endblock content%}
+    </div>
+
+    <!-- Introduction of prof. music scorers -->
+    <div class="row bg-light ms-md-2 " style="min-height:200px">
+      <div class="col-lg-6 col-md-12 mt-5">
+        <h1>Can't find the <span class="text-primary">SOLFA </span><br> notation you're looking for?</h1>
+        <h4>Contact any professional scorer</h4>
+        <form action="{{url_for('scorers')}}">
+          <button class="btn btn-primary mb-md-3">Contact Any!</button>
+        </form>
+      </div>
+      <div class="col-lg-6 col-md-12 mt-5">
+        <img src="/static/images/prof.jpg" class="img-fluid w-100 h-auto" alt="">
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+

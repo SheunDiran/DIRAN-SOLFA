@@ -1,106 +1,97 @@
- {%extends 'User/base_layout.html'%}
+{% extends 'User/base_layout.html' %}
 
- {%block content%}
-      <h1>{%with message=get_flashed_messages(with_categories=True)%}
-        {%if message%}
-         {%for cart,a in message%}
-         {%if cart =='error'%}
-        <p style='border:5px solid red;'class="alert alert-primary">{{a}} </p>
-         {%else%}
-          <p style='border:5px solid green;'class="alert alert-success">{{a}}</p>
-        {%endif%}
-        {%endfor%}    
-        {%endif%}
-        {%endwith%}
-      </h1> 
+{% block content %}
+  <h1>
+    {% with message=get_flashed_messages(with_categories=True) %}
+      {% if message %}
+        {% for cart, a in message %}
+          {% if cart == 'error' %}
+            <p style='border:5px solid red;' class="alert alert-primary">{{ a }} </p>
+          {% else %}
+            <p style='border:5px solid green;' class="alert alert-success">{{ a }}</p>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </h1>
 
-      <!-- background image -->
-       
-       <div class="row over">
-        <div class="overlay">
+  <!-- background image -->
+  <div class="container-fluid">
+    <div class="row over">
+      <div class="overlay">
         <div class="col-md-12 ">
-            <h1 class="text pt-md-5 px-md-5 text-center text-info ">Search and discover <br>
-            SOLFA notation <br>  for your favorite songs </h1>
-            
-            </div>
+          <h1 class="text pt-md-5 px-md-5 text-center text-info ">Search and discover <br> SOLFA notation <br> for your favorite songs </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- a user/an instrumentalists? get solfa notations -->
+  {% if session.get('fullname') == None %}
+    {% if session.get('username') == None %}
+      <div class="container">
+        <div class="row artist mt-5 ">
+          <div class="col-md-6 bg-primary text-light p-5 ms-auto">
+            <h1>Are you an instrumentalist <br> or a music scorer <br> and you need the <br> tonic solfa of songs?</h1>
+            <br>
+            <h2 >LOGIN OR REGISTER TO GET ACCESS </h2>
+            <form action="{{ url_for('user_register') }}">
+              <button class="btn btn-danger">JOIN OUR COMMUNITY</button>
+            </form>
+          </div>
+          <div class="col-md-6 ">
+            <img src="/static/images/instru.jpg" alt="instrumentalists" width="100%" height="400px">
           </div>
         </div>
-            
-             
-        
-     
-      
 
- <!-- a user/an instrumentalists? get solfa notations -->
- {%if session.get('fullname')==None  %}
- {%if session.get('username')==None  %}
- <div class="row artist mt-5 ">
-
-  <div class="col-md-6 bg-primary text-light p-5 ms-auto">
-    <h1>Are you an instrumentalist <br> or a music scorer <br> and you need the <br>
-       tonic solfa of songs?</h1> <br>
-    <h2 >LOGIN OR REGISTER TO GET ACCESS </h2>
-    <form action="{{url_for('user_register')}}">
-    <button class="btn btn-danger">JOIN OUR COMMUNITY</button>
-      </form>
-      
-  </div>
-  <div class="col-md-6 ">
-    <img src="/static/images/instru.jpg" alt="instrumentalists" width="100%" height="400px">
-  </div>
-
-    
-   </div>
- 
- 
-  
-
-  <!-- are you an artist(add music) -->
-  <div class="row artist mt-5 m-2">
-    <div class="col-md-6">
-      <img src="/static/images/artists.jpeg" alt="artists" width="80%">
-    </div>
-    <div class="col-md-6 bg-primary text-light p-5">
-        <h1>Are you a music artist <br> and you want to upload your songs?</h1>
-        <form action="{{url_for('register')}}">
-          <button class="btn btn-success">JOIN OUR COMMUNITY</button>
-        </form>
-        
-    </div>
-   
-   </div>
-   {%endif%}
-        {%endif%}
-<!--Songs sections -->
-      <div class="row bg-tertiary m-md-3 mt-5">
-        <img src="/static/images/image.png" alt="music icon" height="200px">
-        <h1 style="text-align:center;" class="text-danger ">SONGS SECTION</h1>
-      </div>
-      <div class="row">
-        
-        <div class="col md-3 card bg-primary m-4 trend text-light" style="height:300px;">
-          <h1>TRENDING</h1>
-         <h2><a href="{{url_for('songs')}}">Songs</a></h2> <br>
-           <h2><a href="{{url_for('artists')}}">Top Artists</a></h2> <br>
-           <h2><a href="{{url_for('scorers')}}">Top Scorers</a></h2>
+        <!-- are you an artist(add music) -->
+        <div class="row artist mt-5 m-2">
+          <div class="col-md-6">
+            <img src="/static/images/artists.jpeg" alt="artists" width="80%">
+          </div>
+          <div class="col-md-6 bg-primary text-light p-5">
+            <h1>Are you a music artist <br> and you want to upload your songs?</h1>
+            <form action="{{ url_for('register') }}">
+              <button class="btn btn-success">JOIN OUR COMMUNITY</button>
+            </form>
+          </div>
         </div>
-        <div class="col-md-5 animate__animated animate__backInLeft ">
-          <form action="/omemma/">
-           <h2 class="pacifico-regular ps-2">Omemma</h2>
-          <img src="/static/images/omemma.jpeg" height="350px" alt=""> <br>
+      </div>
+    {% endif %}
+  {% endif %}
+
+  <!--Songs sections -->
+  <div class="container">
+    <div class="row bg-tertiary m-md-3 mt-5">
+      <img src="/static/images/image.png" alt="music icon" height="200px">
+      <h1 style="text-align:center;" class="text-danger ">SONGS SECTION</h1>
+    </div>
+    <div class="row">
+      <div class="col-md-3 card bg-primary m-4 trend text-light" style="height:300px;">
+        <h1>TRENDING</h1>
+        <h2><a href="{{ url_for('songs') }}">Songs</a></h2>
+        <br>
+        <h2><a href="{{ url_for('artists') }}">Top Artists</a></h2>
+        <br>
+        <h2><a href="{{ url_for('scorers') }}">Top Scorers</a></h2>
+      </div>
+      <div class="col-md-5 animate__animated animate__backInLeft ">
+        <form action="/omemma/">
+          <h2 class="pacifico-regular ps-2">Omemma</h2>
+          <img src="/static/images/omemma.jpeg" height="350px" alt="">
+          <br>
           <button class="btn btn-primary m-3">GET SOLFA</button>
         </form>
-        </div>
-
-        <div class="col-md-4 animate__animated animate__backInRight ">
-          <form action="/worthy/">
+      </div>
+      <div class="col-md-4 animate__animated animate__backInRight ">
+        <form action="/worthy/">
           <h2 class="pacifico-regular ps-2">Worthy of my praise</h2>
-          <img src="/static/images/worthy.jpeg" height="350px" alt=""> <br>
+          <img src="/static/images/worthy.jpeg" height="350px" alt="">
+          <br>
           <button class="btn btn-primary m-3">GET SOLFA</button>
         </form>
-          </div>
       </div>
-
+    </div>
       <!-- various instruments and tonic solfa(carousel) -->
        
       <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">

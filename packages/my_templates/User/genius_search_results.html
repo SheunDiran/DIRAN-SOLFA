@@ -4,23 +4,27 @@
     <h1 class="text-center">Search Results</h1>
     <div class="container">
         <div class="row">
-            {% if songs %}
-                {% for song in songs %}
+           
+            {% for result in search_results %}
                     <div class="col-md-6">
                         <div class="card mb-3">
                             <div class="card-body">
-                                <h5 class="card-title">{{ song.songs_title }}</h5>
+                                <h5 class="card-title">{{ result.title }}</h5>
                                 <p class="card-text">
-                                    {% for instrument in instruments %}
-                                        Instrument: {{ instrument.name }} ({{ instrument.type }})
-                                    {% endfor %}
+                                    {{ result.artist }}
                                 </p>
-                                <a href="{{ url_for('songdetails', id=song.songs_id) }}" class="btn btn-primary">View Details</a>
+                                
+                                <p class="card-text">
+                                   
+                                   Solfa Notation :None
+                                </p>
+                                
+                                <a href="{{ result.url }}" class="btn btn-primary">View Lyrics</a>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
-            {% endif %}
+           
         </div>
     </div>
 {%endblock content%}

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIRAN SOLFA</title>
@@ -13,152 +13,184 @@
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
-<body class="bg-color:red " style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" >
+<style>
+  .path{
+    min-height:50%;
+    background-color:blue ;
+  }
+  body {
+  overflow-x: hidden;
+}
+
+.container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.col-lg-4, .col-lg-6, .col-lg-8 {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+</style>
+<body class="bg-color:red" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+  <!-- navbar content here -->
+  <nav class="navbar navbar-expand-lg bg-primary nav ">
+    <div class="container-fluid"> 
+      
+      <a class="navbar-brand pacifico-regular " href="{{url_for('index')}}" id="logo">
+        <i class="fa fa-music" aria-hidden="true"></i> DIRAN SOLFA</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0  menu">
+          {%if session.get('username')!=None or session.get('fullname')!=None %}
+          <div>
+           
+            <form class="d-flex search-form" role="search"  method="get"  action="{{ url_for('search') }}">
+              <input class="form-control me-2" name="search_term" type="search" 
+              placeholder="Search for songs...." aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form> 
+          </div>
+          {%endif%} 
+
+          <li class="nav-item ms-3">
+            <a class="nav-link active" aria-current="page" href="{{url_for('index')}}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url_for('about')}}">About</a>
+          </li>
+
+          {%if session.get('username')!=None or session.get('fullname')!=None %}
+         
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('songs')}}">Songs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url_for('artists')}}">Artists</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url_for('scorers')}}">Scorers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url_for('dashboard')}}">Dashboard</a>
+          </li>
+          {%endif%}
+        
+          
+          
+          {%if session.get('fullname')==None  %}
+          {%if session.get('username')==None  %}
+     <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="{{url_for('user_register')}}">Create Account</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="{{url_for('user_login')}}">
+        Login</a>
+    </li>
+    {%endif%}
+    {%endif%}
+
+    {%if session.get('username')!=None or session.get('fullname')!=None %}
+    
+    <div class="dropdown user-menu">
+      <a class="btn dropdown-toggle btn-outline-success text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {% if user %}
+        {% if "scorer" in user.users_role|lower %}
+        <img src="/static/images/logo.png" alt="scorer" width="30" style="border-radius: 50%;">
+          <img src="/static/uploads/{{ user.users_profilepicture }}" width="30" style="border-radius: 50%;">
+          Hi {{ user.users_firstname }} (Scorer)
+        {% else %}
+          <img src="/static/uploads/{{ user.users_profilepicture }}" width="30" style="border-radius: 50%;">
+          Hi {{ user.users_firstname }}
+        {% endif %}
+      {% elif artist %}
+      <img src="/static/images/artist.jpg" alt="scorer" width="30" style="border-radius: 50%;">
+        <img src="/static/uploads/{{ artist.artist_dp }}" width="30" style="border-radius: 50%;">
+        Hi {{ artist.artist_firstname }}
+      {% else %}
+        Hi
+      {% endif %}
+      </a>
+      <!-- dropdown menu items here -->
+      <ul class="dropdown-menu user-profile" style="border-radius: 0px;background-color: rgb(39, 59, 9);">
+       
+        <li><a class="dropdown-item" href="{{url_for('upload_dp')}}">Upload Photo</a> </li>
+       
+    <li><a class="dropdown-item" href="{{url_for('logout')}}">Logout</a> </li>
+   
+      
+      </ul>
+      {%endif%}
+    </div>
+  </div>
+
+
+
+      
+      
+      
+  </nav>  
+  {% block content %}{% endblock content %}
+  <!-- footer -->
+  <div class="row pt-5 ps-3 py-3">
+    <div class="col-md-6">
+      <h1>CONTACT US</h1>
+      <p>oluwaseunoyediran@gmail.com | +234 737 544 96</p>
+    </div>
+    <div class="col-md-6">
+      <h1>DIRAN SOLFA</h1>
+      <h3>No2,Forthright Gardens<br> Ogun state,Nigeria</h3>
+    </div>
+    <h4 class="text-center mt-2 pacifico-regular">DIRAN SOLFA &copy 2025</h4>
+  </div>
+  <div class="bg-primary path"></div>
+  <!-- scripts here -->
+  <script src="/static/jquery-3.7.1.min.js"></script>
+  <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+  <script>
+  
+      console.log("JavaScript code is being executed");
+      $(document).ready(function() {
+          console.log("Document ready");
+          $('input[name="selection"]').on('change', function() {
+              console.log("Radio button changed");
+              var value = $(this).val();
+              if (value == 'artist') {
+                  console.log("Artist selected");
+                  $('#artist-select-group').show();
+                  $('#scorer-select-group').hide();
+              } else if (value == 'scorer') {
+                  console.log("Scorer selected");
+                  $('#scorer-select-group').show();
+                  $('#artist-select-group').hide();
+              }
+          });
+      });
+      
+  </script>
+  
+  
+</body>
+</html>
+
+
+
  
       
-  <nav class="navbar navbar-expand-lg bg-primary nav ">
-        <div class="container-fluid"> 
+ 
+
           
-          <a class="navbar-brand pacifico-regular " href="{{url_for('index')}}" id="logo">
-            <i class="fa fa-music" aria-hidden="true"></i> DIRAN SOLFA</a>
-         
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0  menu">
-              {%if session.get('username')!=None or session.get('fullname')!=None %}
-              <div>
-               
-                <form class="d-flex search-form" role="search"  method="get"  action="{{ url_for('search') }}">
-                  <input class="form-control me-2" name="search_term" type="search" 
-                  placeholder="Search...." aria-label="Search">
-                  <button class="btn btn-outline-success" type="submit">Search</button>
-                </form> 
-              </div>
-              {%endif%} 
-
-              <li class="nav-item ms-3">
-                <a class="nav-link active" aria-current="page" href="{{url_for('index')}}">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{url_for('about')}}">About</a>
-              </li>
-
-              {%if session.get('username')!=None or session.get('fullname')!=None %}
-             
-              <li class="nav-item">
-                <a class="nav-link" href="{{url_for('songs')}}">Songs</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{url_for('artists')}}">Artists</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{url_for('scorers')}}">Scorers</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{url_for('dashboard')}}">Dashboard</a>
-              </li>
-              {%endif%}
-            
-              
-              
-              {%if session.get('fullname')==None  %}
-              {%if session.get('username')==None  %}
-         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{{url_for('user_register')}}">Create Account</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{{url_for('user_login')}}">
-            Login</a>
-        </li>
-        {%endif%}
-        {%endif%}
-
-        {%if session.get('username')!=None or session.get('fullname')!=None %}
-        
-        <div class="dropdown user-menu">
-          <a class="btn dropdown-toggle btn-outline-success text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {% if user %}
-            {% if "scorer" in user.users_role|lower %}
-            <img src="/static/images/logo.png" alt="scorer" width="30" style="border-radius: 50%;">
-              <img src="/static/uploads/{{ user.users_profilepicture }}" width="30" style="border-radius: 50%;">
-              Hi {{ user.users_firstname }} (Scorer)
-            {% else %}
-              <img src="/static/uploads/{{ user.users_profilepicture }}" width="30" style="border-radius: 50%;">
-              Hi {{ user.users_firstname }}
-            {% endif %}
-          {% elif artist %}
-          <img src="/static/images/artist.jpg" alt="scorer" width="30" style="border-radius: 50%;">
-            <img src="/static/uploads/{{ artist.artist_dp }}" width="30" style="border-radius: 50%;">
-            Hi {{ artist.artist_firstname }}
-          {% else %}
-            Hi
-          {% endif %}
-          </a>
-          <!-- dropdown menu items here -->
-          <ul class="dropdown-menu user-profile" style="border-radius: 0px;background-color: rgb(39, 59, 9);">
-           
-            <li><a class="dropdown-item" href="{{url_for('upload_dp')}}">Upload Photo</a> </li>
-           
-        <li><a class="dropdown-item" href="{{url_for('logout')}}">Logout</a> </li>
-       
-          
-          </ul>
-          {%endif%}
-        </div>
-      </div>
-  
-  
-   
-          
-          
-          
-      </nav>  
-{%block content%}
-
-{%endblock content%}
-          
-      <!-- footer -->
-      <div class=" row  pt-5 ps-3 py-3">
-        <div class="col-md-6 ">
-          <h1>CONTACT US</h1>
-          <p>oluwaseunoyediran@gmail.com | +234 737 544 96</p></div>
-          <div class="col-md-6">
-            <h1>DIRAN SOLFA</h1>
-         <h3>No2,Forthright Gardens<br> Ogun state,Nigeria</h3>
-        </div>
-        <h4 class="text-center mt-2 pacifico-regular">DIRAN  SOLFA &copy 2025</h4>
-      </div>
-      </div>
+      
 
 
-</body>
-<!-- footer -->
-</div>
-</body>
-<script src="/static/jquery-3.7.1.min.js"></script>
-<script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
-<script>
 
-    console.log("JavaScript code is being executed");
-    $(document).ready(function() {
-        console.log("Document ready");
-        $('input[name="selection"]').on('change', function() {
-            console.log("Radio button changed");
-            var value = $(this).val();
-            if (value == 'artist') {
-                console.log("Artist selected");
-                $('#artist-select-group').show();
-                $('#scorer-select-group').hide();
-            } else if (value == 'scorer') {
-                console.log("Scorer selected");
-                $('#scorer-select-group').show();
-                $('#artist-select-group').hide();
-            }
-        });
-    });
-    
-</script>
-
-</html>
 

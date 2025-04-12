@@ -3,6 +3,13 @@
 
 <h1 class="ms-2">{{ scorer.users_firstname }}'s Details</h1>
 <div class="ms-2 ps-2">
+    <p class="alert alert-danger">Profile Picture: 
+        {% if user.users_profilepicture %}
+            <img src="/static/uploads/{{user.users_profilepicture}}" alt="Profile Picture" height="50px"> 
+        {% else %}
+            Profile Picture not found
+        {% endif %}
+    </p> 
     <p class="alert alert-primary">Name:{{ scorer.users_firstname }} {{ scorer.users_lastname }}</p>
     <p class="alert alert-primary">Email:{{ scorer.users_email }}</p>
     <p class="alert alert-primary">Phone Number:{{ scorer.users_phonenumber }}</p>

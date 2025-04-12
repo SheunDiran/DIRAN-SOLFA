@@ -170,21 +170,25 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addInstrumentForm" method="post" action="{{ url_for('add_instrument') }}">
+                <form id="addInstrumentForm" method="post" action="{{ url_for('add_instrument') }}" novalidate>
                     <label for="instrumentName">Instrument Name:</label>
-                    <select id="instrumentName" name="instrumentName" required>
-                        {% for name in instrument_names %}
-                            <option value="{{ name[0] }}">{{ name[0] }}</option>
-                        {% endfor %}
-                    </select>
-                    <label for="customInstrumentName">Or enter custom instrument name:</label>
-                    <input type="text" id="customInstrumentName" name="customInstrumentName" placeholder="Eg:Saxophone..">
-                    <label for="instrumentType">Instrument Type:</label>
-                    <select id="instrumentType" name="instrumentType" required>
-                        {% for type in instrument_types %}
-                            <option value="{{ type[0] }}">{{ type[0] }}</option>
-                        {% endfor %}
-                    </select>
+<select id="instrumentName" name="instrumentName" required>
+    <option value="">Select an instrument name</option>
+    {% for name in instrument_names %}
+        <option value="{{ name[0] }}">{{ name[0] }}</option>
+    {% endfor %}
+</select>
+<label for="customInstrumentName">Or enter custom instrument name:</label>
+<input type="text" id="customInstrumentName" name="customInstrumentName" placeholder="Eg:Saxophone..">
+<label for="instrumentType">Instrument Type:</label>
+<select id="instrumentType" name="instrumentType" required>
+    <option value="">Select an instrument type</option>
+    {% for type in instrument_types %}
+        <option value="{{ type[0] }}">{{ type[0] }}</option>
+    {% endfor %}
+</select>
+                   
+                    
                     <label for="customInstrumentType">Or enter custom instrument type:</label>
                     <input type="text" id="customInstrumentType" name="customInstrumentType" placeholder="Eg:Alto/Soprano..">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">

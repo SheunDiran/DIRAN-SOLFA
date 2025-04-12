@@ -1,0 +1,21 @@
+{% include 'Admin/nav.html' %}
+
+
+<form action="" method="post">
+  <div class="form-group">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" >
+      <label for="title">Song Title</label>
+      <input type="text" class="form-control" id="title" name="title" value="{{ request.song_title }}">
+  </div>
+  <div class="form-group">
+      <label for="lyrics">Song Lyrics</label>
+      <textarea class="form-control" id="lyrics" name="lyrics">{{ request.song_lyrics }}</textarea>
+  </div>
+  <div class="form-group">
+      <label for="notation">Solfa Notation</label>
+      <textarea class="form-control" id="notation" name="notation">{{ request.solfa_notation }}</textarea>
+  </div>
+  <button type="submit" class="btn btn-sm btn-primary">Update Request</button>
+</form>
+
+{% include 'Admin/footer.html' %}

@@ -18,15 +18,26 @@
               <td>{{ song.song_lyrics | truncate(50) }}</td>
               <td>
                   {% for solfa in song.song_solfa %}
-                      {{ solfa.solfa_notation| truncate(50) }}
-                  {% else %}
-                      None
+                  {% if solfa.solfa_notation is not none %}
+                  {{ solfa.solfa_notation | truncate(50) }}
+              {% else %}
+                  <!-- Handle the case where solfa.solfa_notation is None -->
+                  No notation available
+              {% endif %}
                   {% endfor %}
+
+                 
               </td>
               <td>
-                  <a href="{{ url_for('edit_song', id=song.songs_id) }}">Edit</a>
-                  <a href="{{ url_for('delete_song', id=song.songs_id) }}"
-                   class="btn btn-danger btn-sm">Delete</a>
+                <form action="{{ url_for('edit_song', id=song.songs_id) }}" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">Edit</button>
+                </form>
+                
+                <form action="{{ url_for('delete_song', id=song.songs_id) }}" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">Delete</button>
+                </form>
                   <a href="{{ url_for('song_details', id=song.songs_id) }}" 
                   class="btn btn-success btn-sm">View</a>
                   

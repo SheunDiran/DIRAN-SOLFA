@@ -57,9 +57,8 @@ class Artist_Reg(FlaskForm):
 class AddSongForm(FlaskForm):
     song_title = StringField('Song Title', validators=[DataRequired()])
     song_lyrics = TextAreaField('Song Lyrics', validators=[DataRequired()])
-    selection = RadioField('Select', choices=[('artist', 'Artist'), ('scorer', 'Scorer')])
-    artist_id = SelectField('Artist', coerce=int, validators=[Optional()])
-    scorer_id = SelectField('Scorer', coerce=int, validators=[Optional()])
+    selection = RadioField('Select', choices=[('artist', 'Artist')])
+    artist_id = SelectField('Artist', coerce=int)
     solfa_notation = TextAreaField('Solfa Notation', validators=[DataRequired()])
     
 
