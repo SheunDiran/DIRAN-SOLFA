@@ -263,13 +263,7 @@ def view_song(id):
     else:
         return "Song not found", 404
 
-@app.route('/my_songs/')
-@admin_required
-def my_songs():
-    adminid = session.get('username')
-    admin = db.session.query(Admin).get(adminid)
-    songs = Songs.query.filter_by(admin_id=adminid).all()
-    return render_template('Admin/mysongs.html', admin=admin, songs=songs)
+
 
 
 @app.route('/song_details/<int:id>/')
@@ -285,49 +279,50 @@ def song_details(id):
 @app.route('/edit_song/<id>', methods=['GET', 'POST'])
 @admin_required
 def edit_song(id):
-    adminid = session.get('username')
-    song = Songs.query.filter_by(songs_id=id, admin_id=adminid).first()
+    song = Songs.query.get(id)
     if song is None:
-        flash('You do not have permission to edit this song', 'error')
-        return redirect(url_for('my_songs'))
-    sof = Song_solfa.query.filter_by(song_id=id).first()
-    original_title = song.songs_title
-    original_lyrics = song.song_lyrics
-    if sof is not None:
-        original_notation = sof.solfa_notation
-    else:
-        original_notation = None
+        flash('Song not found', 'error')
+        return redirect(url_for('admin_songs'))
+
     if request.method == 'POST':
-        song.songs_title = request.form.get('title', song.songs_title)
-        song.song_lyrics = request.form.get('lyrics', song.song_lyrics)
-        if sof is not None:
-            sof.solfa_notation = request.form.get('notation', sof.solfa_notation)
-        if (original_title != song.songs_title or original_lyrics != song.song_lyrics or (original_notation is not None and original_notation != request.form.get('notation'))):
-            db.session.commit()
-            flash('Edit saved', 'success')
-        else:
-            flash('No edit was made', 'info')
-    return render_template('Admin/edit_song.html', song=song, sof=sof)
+        # Update song details here
+        song.songs_title = request.form.get('title')
+        song.song_lyrics = request.form.get('lyrics')
+        # Update solfa notation if it exists
+        sof = Song_solfa.query.filter_by(song_id=id).first()
+        if sof:
+            sof.solfa_notation = request.form.get('notation')
+            db.session.add(sof)
+        db.session.add(song)
+        db.session.commit()
+        flash('Song updated successfully', 'success')
+        return redirect(url_for('admin_songs'))
+
+    return render_template('edit_song.html', song=song)
+
+
 
 @app.route('/delete_song/<int:id>/', methods=['POST'])
 @admin_required
 def delete_song(id):
-    adminid = session.get('username')
-    song = Songs.query.filter_by(songs_id=id, admin_id=adminid).first()
+    song = Songs.query.get(id)
     if song is None:
-        flash('You do not have permission to delete this song', 'error')
-        return redirect(url_for('my_songs'))
+        flash('Song not found', 'error')
+        return redirect(url_for('admin_songs'))
+
     try:
-        search_history_rows = Songs.query.filter_by(song_id=id).all()
-        for row in search_history_rows:
-            db.session.delete(row)
+        sof = Song_solfa.query.filter_by(song_id=id).first()
+        if sof is not None:
+            db.session.delete(sof)
         db.session.delete(song)
         db.session.commit()
         flash(f'{song.songs_title} deleted')
     except Exception as e:
         db.session.rollback()
         flash(f"Error deleting song: {e}", 'error')
-    return redirect(url_for('my_songs'))
+
+    return redirect(url_for('admin_songs'))
+
 
 
 @app.route('/admin/approve_request/<int:id>/', methods=['POST'])

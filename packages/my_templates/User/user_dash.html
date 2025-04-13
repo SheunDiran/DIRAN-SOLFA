@@ -28,8 +28,9 @@
                       <h3>Email: {{user.users_email}}</h3>
                       <h3>Phone Number: {{user.users_phonenumber}}</h3>
                       <h3>Date Registered: {{user.date_registered}}</h3>
-                      <a href="/user/{{user.user_id}}/update" class="text-light">
-                        <button class="btn btn-success mx-auto ">Edit Details</button></a>
+                      <a href="{{ url_for('user_edit_details', user_id=user.users_id) }}" class="text-light">
+                        <button class="btn btn-success mx-auto ">Edit Details</button>
+                    </a>
                         {% if "scorer" in user.users_role|lower %}
                         <a href="/add_song/"class="text-light">
                           <button class="btn btn-success mx-auto ">Add Songs</button></a>

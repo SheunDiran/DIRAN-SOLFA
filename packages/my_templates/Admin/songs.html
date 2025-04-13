@@ -7,7 +7,7 @@
     }
 
     .container {
-        width: 80%;
+        width: 90%;
         margin: 40px auto;
         background-color: #fff;
         padding: 20px;
@@ -61,152 +61,151 @@
     }
 </style>
 
-<div class="container">
-    <h1>
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <p style='border:5px solid' class="alert alert-{{ category }}">{{ message }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </h1>
 
-    
-      <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-      Add Song
-      </button>
-      
-      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
+
+<div class="container-fluid">
+  <h1 class="text-center mb-4">
+      {% with messages = get_flashed_messages(with_categories=True) %}
+      {% if messages %}
+      {% for category, message in messages %}
+      <p style='border:5px solid' class="alert alert-{{ category }}">{{ message }}</p>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+  </h1>
+  <button class="btn btn-primary mb-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"> Add Song </button>
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+      <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="offcanvasExampleLabel">DIRAN SOLFA</h5>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <div>
-            <form id="addInstrumentForm" method="post" action="{{ url_for('admin_songs') }}" novalidate >
-                {{ form.hidden_tag() }}
-                <p>
-                    {{ form.artist.label(class='text-warning') }}<br>
-                    {{ form.artist() }}
-           
-   
-                  </p>
-                  <p>
-                    {{ form.song_title.label(class='text-danger') }}<br>
-                    {{ form.song_title(size=64) }}
-
-                    {% for error in form.song_title.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            
-                  </p>
-                  <div >
-                    <div >
-                      <p>
-                        {{ form.song_lyrics.label(class='text-danger') }}<br>
-                        {{ form.song_lyrics(rows=5, cols=44) }}
-                        {% for error in form.song_lyrics.errors %}
-                        <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
-               
-                      </p>
-                    </div> 
-                    <div >
-                        
-                      <p>
-                       <h3>{{ form.solfa_notation.label(class='text-dark') }}</h3> <br>
-                        {{ form.solfa_notation(rows=5, cols=44) }}
-                      </p>
-                    </div>
-                  </div>
-                 
-                  
-                  
-            
-                <label for="instrumentName">Instrument Name:</label>
-                <select id="instrumentName" name="instrumentName" required>
-                    {% for name in instrument_names %}
-                        <option value="{{ name[0] }}">{{ name[0] }}</option>
-                    {% endfor %}
-                </select>
-               
-                <label for="instrumentType">Instrument Type:</label>
-                <select id="instrumentType" name="instrumentType" required>
-                    {% for type in instrument_types %}
-                        <option value="{{ type[0] }}">{{ type[0] }}</option>
-                    {% endfor %}
-                </select>
-               <br> <br> 
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <button type="submit" class="btn btn-primary col-md-12">Add song</button>
-               
-              </form>
-          </div>
-           
-        </div>
       </div>
+      <div class="offcanvas-body">
+          <form id="addInstrumentForm" method="post" action="{{ url_for('admin_songs') }}" novalidate>
+              {{ form.hidden_tag() }}
+              <div class="row mb-3">
+                  <div class="col-md-6">
+                      {{ form.artist.label(class='form-label') }}
+                      {{ form.artist(class='form-control') }}
+                  </div>
+                  <div class="col-md-6">
+                      {{ form.song_title.label(class='form-label') }}
+                      {{ form.song_title(size=64, class='form-control') }}
+                      {% for error in form.song_title.errors %}
+                      <span style="color: red;">[{{ error }}]</span>
+                      {% endfor %}
+                  </div>
+              </div>
+              <div class="row mb-3">
+                  <div class="col-md-6">
+                      {{ form.song_lyrics.label(class='form-label') }}
+                      {{ form.song_lyrics(rows=5, cols=44, class='form-control') }}
+                      {% for error in form.song_lyrics.errors %}
+                      <span style="color: red;">[{{ error }}]</span>
+                      {% endfor %}
+                  </div>
+                  <div class="col-md-6">
+                      {{ form.solfa_notation.label(class='form-label') }}
+                      {{ form.solfa_notation(rows=5, cols=44, class='form-control') }}
+                  </div>
+              </div>
+              <div class="row mb-3">
+                  <div class="col-md-6">
+                      <label for="instrumentName" class="form-label">Instrument Name:</label>
+                      <select id="instrumentName" name="instrumentName" required class="form-select">
+                          {% for name in instrument_names %}
+                          <option value="{{ name[0] }}">{{ name[0] }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  <div class="col-md-6">
+                      <label for="instrumentType" class="form-label">Instrument Type:</label>
+                      <select id="instrumentType" name="instrumentType" required class="form-select">
+                          {% for type in instrument_types %}
+                          <option value="{{ type[0] }}">{{ type[0] }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+              </div>
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="btn btn-primary w-100">Add song</button>
+          </form>
+      </div>
+  </div>
+</div>
 
    
 
-<div class="row"> 
-    <div class="col-md-12"> 
-        <table class="table table-striped"> 
-            <thead> 
-                <tr> 
-                  <th>S/N</th>
-                    <th>Song Title</th> 
-                    <th>Song Lyrics</th> 
-                    <th>Solfa Notation</th> 
-                    <th>Edit</th> 
-                    <th>Delete</th> 
-                    <th>View</th>
-                </tr> 
-            </thead> 
-            <tbody> 
-                {% for song in songs %} 
-                    <tr> 
-                      <td>{{loop.index}}</td>
-                        <td>{{ song.songs_title }}</td> 
-                        <td>{{ song.song_lyrics|truncate(50) }}</td> 
-                        
-                        <td> 
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editSongModal{{ song.songs_id }}"> Edit </button>
 
-                            <!-- Modal -->
-                            <!-- Edit song form -->
-                            <div class="modal fade" id="editSongModal{{ song.songs_id }}" tabindex="-1" aria-labelledby="editSongModalLabel{{ song.songs_id }}" aria-hidden="true">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
+<div class="row">
+  <div class="col-12 table-responsive">
+      <table class="table table-striped">
+          <thead>
+              <tr>
+                  <th>S/N</th>
+                  <th>Song Title</th>
+                  <th>Song Lyrics</th>
+                  <th>Solfa Notation</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
+                  <th>View</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for song in songs %}
+              <tr>
+                  <td>{{loop.index}}</td>
+                  <td>{{ song.songs_title }}</td>
+                  <td>{{ song.song_lyrics|truncate(50) }}</td>
+
+                  <td>
+                    {% set song_solfa = solfa | selectattr('song_id', 'equalto', song.songs_id) | list %}
+                    {% if song_solfa %}
+                        {{ song_solfa[0].solfa_notation }}
+                    {% else %}
+                        No notation available
+                    {% endif %}
+                </td>
+                  <td>
+                      <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editSongModal{{ song.songs_id }}"> Edit </button>
+                      <!-- Modal -->
+                      <div class="modal fade" id="editSongModal{{ song.songs_id }}" tabindex="-1" aria-labelledby="editSongModalLabel{{ song.songs_id }}" aria-hidden="true">
+                          <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                              <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="editSongModalLabel{{ song.songs_id }}">Edit Song</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                      <h5 class="modal-title" id="editSongModalLabel{{ song.songs_id }}">Edit Song</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                   </div>
                                   <div class="modal-body">
-                                    <form method="post" action="{{ url_for('edit_song', id=song.songs_id) }}">
-                                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                      <label for="title">Song Title:</label>
-                                      <input type="text" id="title" name="title" value="{{ song.songs_title }}" required>
-                                      <label for="lyrics">Song Lyrics:</label>
-                                      <textarea id="lyrics" name="lyrics" required>{{ song.song_lyrics }}</textarea>
-                                      {% for sof in solfa %}
-                                        {% if sof.song_id == song.songs_id %}
-                                          <label for="notation">Solfa Notation:</label>
-                                          <input type="text" id="notation" name="notation" value="{{ sof.solfa_notation }}" required>
-                                        {% endif %}
-                                      {% endfor %}
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <input type="submit" class="btn btn-primary" value="Save Changes">
-                                      </div>
-                                    </form>
+                                      <form method="post" action="{{ url_for('edit_song', id=song.songs_id) }}">
+                                          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                          <div class="mb-3">
+                                              <label for="title" class="form-label">Song Title:</label>
+                                              <input type="text" id="title" name="title" value="{{ song.songs_title }}" required class="form-control">
+                                          </div>
+                                          <div class="mb-3">
+                                              <label for="lyrics" class="form-label">Song Lyrics:</label>
+                                              <textarea id="lyrics" name="lyrics" required class="form-control">{{ song.song_lyrics }}</textarea>
+                                          </div>
+                                          {% for sof in solfa %}
+                                          {% if sof.song_id == song.songs_id %}
+                                          <div class="mb-3">
+                                              <label for="notation" class="form-label">Solfa Notation:</label>
+                                              <input type="text" id="notation" name="notation" value="{{ sof.solfa_notation }}" required class="form-control">
+                                          </div>
+                                          {% endif %}
+                                          {% endfor %}
+                                          <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                              <input type="submit" class="btn btn-primary" value="Save Changes">
+                                          </div>
+                                      </form>
                                   </div>
-                                </div>
                               </div>
-                            </div>
-                            
-                                    </div> 
-                                </div> 
+                          </div>
+                      </div>
+                      
+                        </div>
+                      </div>
                             </div> 
                         </td> 
                         <td> 

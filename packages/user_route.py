@@ -87,8 +87,8 @@ def search():
     if search_term.lower()=='worthy':
         return redirect('/worthy/')
 
-    user_id = session.get('user_id')
-    artist_id = session.get('artist_id')
+    user_id = session.get('username')
+    artist_id = session.get('fullname')
     search_history = SearchHistory(user_id=user_id, artist_id=artist_id, search_term=search_term)
     try:
         db.session.add(search_history)
@@ -127,8 +127,8 @@ def search():
 @app.route('/search_history/')
 @login_reguired
 def search_history():
-    user_id = session.get('user_id')
-    artist_id = session.get('artist_id')
+    user_id = session.get('username')
+    artist_id = session.get('fullname')
     if user_id:
         search_history = SearchHistory.query.filter_by(user_id=user_id).all()
         return render_template('User/search_history.html', search_history=search_history)
@@ -190,7 +190,7 @@ def artist_login():
         artist_db = db.session.query(Artists).filter(Artists.artist_firstname == fname, Artists.artist_lastname == lname).first()
         if artist_db:
             session['fullname'] = artist_db.artist_firstname
-            session['artist_id'] = artist_db.artist_id
+            session['fullname'] = artist_db.artist_id
             flash(f'Welcome {artist_db.artist_firstname},You are now logged in ','success')
             return render_template('User/artist_dash.html', artist=artist_db)
         else:
@@ -254,19 +254,22 @@ def register():
             db.session.commit()
             print("Artist added to database:", artists.artist_firstname, artists.artist_lastname)
             session['fullname'] = f"{artist.fname.data} {artist.lname.data}"
-            session['artist_id'] = artists.artist_id  # Set the artist_id session variable
+            session['fullname'] = artists.artist_id  # Set the artist_id session variable
             return redirect('/artist/login/')
         else:
             flash('Please register ', category='error')
     return render_template('User/artist_reg.html', artist=artist)
 
-
-@app.route('/artists/')
+@app.route('/artist/')
 @login_reguired
 def artists():
-    artists = db.session.query(Artists).all()
+    artists = Artists.query.all()
     artist_count = len(artists)
     return render_template('User/artists.html', artists=artists, artist_count=artist_count)
+     
+
+
+
 
 @app.route('/artists/<int:artist_id>/')
 @login_reguired
@@ -278,10 +281,10 @@ def user_artists(artist_id):
             artist.artist_dp = url_for('static', filename='uploads/' + artist.artist_dp)
         else:
             artist.artist_dp = url_for('static', filename='uploads/default.jpg')
-    return render_template('Admin/artists.html',artists=artists,artist_count=artist_count)
+    return render_template('User/artist_dash.html',artists=artists,artist_count=artist_count)
 
 
-@app.route('/scorers/<int:user_id>')
+@app.route('/scorers/<int:user_id>/')
 @login_reguired
 def user_scorer(user_id):
     scorers = db.session.query(User).get(user_id)
@@ -308,16 +311,17 @@ def userdash():
 
 
 
-
-@app.route('/artist/')
+@app.route('/artist/dashboard/')
 @login_reguired
-def artistdash():
-    print(session)  # Check what's being stored in the session
-    id = session.get('fullname')
-    print(id)  # Check if the ID is correct
-    artist = Artists.query.get(id)
-    songs = Songs.query.filter_by(artist_id=id).all()
-    return render_template('User/artist_dash.html', artist=artist, songs=songs)
+def artist_dashboard():
+    artist_id = session.get('fullname')
+    artist = Artists.query.get(artist_id)
+    if artist:
+        songs = Songs.query.filter_by(artist_id=artist_id).all()
+        return render_template('User/artist_dash.html', artist=artist, songs=songs)
+    else:
+        flash('Artist not found', 'error')
+        return redirect(url_for('index'))
 
        
 @app.route('/dashboard/')
@@ -328,10 +332,20 @@ def dashboard():
         user = db.session.query(User).filter(User.users_id == user_id).first()
         return render_template('User/user_dash.html', user=user)
     elif session.get('fullname'):
-         artist_id = session['fullname']
-         artist = db.session.query(Artists).filter(Artists.artist_firstname == artist_id).first()
-         return render_template('User/artist_dash.html',artist=artist)
+        artist_id = session['fullname']
+        artist = db.session.query(Artists).filter(Artists.artist_id == artist_id).first()
+        return render_template('User/artist_dash.html', artist=artist)
     return redirect('/user/register')
+
+@app.route('/artist/<int:artist_id>/details/')
+@login_reguired
+def artist_details(artist_id):
+    artist = Artists.query.get(artist_id)
+    if artist:
+        return render_template('User/artist_details.html', artist=artist)
+    else:
+        flash('Artist not found', 'error')
+        return redirect(url_for('index'))
 
 
 @app.route('/songs/')
@@ -379,20 +393,15 @@ def user_edit_details(user_id):
     instrument_type_choices = [('0', 'Select an instrument type')] + [(i.instru_id, i.type) for i in instruments]
     user.instrument.choices = instrument_choices
     user.instrument_type.choices = instrument_type_choices
-    
-   
     user_info = User.query.filter_by(users_id=user_id).first()
     user_instrument = User__Instrument.query.filter_by(user_id=user_id).first()
-    
     if request.method == 'GET':
-   
         user.fname.data = user_info.users_firstname
         user.lname.data = user_info.users_lastname
         user.email.data = user_info.users_email
         user.phone.data = user_info.users_phonenumber
         if user_instrument:
             user.instrument.data = user_instrument.instrument_id
-    
     if request.method == 'POST':
         user.instrument.choices = instrument_choices
         user.instrument_type.choices = instrument_type_choices
@@ -403,14 +412,12 @@ def user_edit_details(user_id):
             phonenumber = user.phone.data
             instrument = user.instrument.data
             instrument_type = user.instrument_type.data
-            
             existing_email = User.query.filter_by(users_email=email).first()
             existing_phone = User.query.filter_by(users_phonenumber=phonenumber).first()
-            
             if existing_email and existing_email.users_id != user_id:
                 flash('Email address already exists. Please try another one.', 'error')
                 return render_template('User/user_edit_details.html', user=user)
-            elif existing_phone== phonenumber:
+            elif existing_phone and existing_phone.users_phonenumber == phonenumber and existing_phone.users_id != user_id:
                 flash('Phone number already exists. Please try another one.', 'error')
                 return render_template('User/user_edit_details.html', user=user)
             else:
@@ -419,10 +426,8 @@ def user_edit_details(user_id):
                 user_to_update.users_lastname = lname
                 user_to_update.users_email = email
                 user_to_update.users_phonenumber = phonenumber
-                
                 db.session.commit()
-                
-                if instrument != '0':
+                if instrument != 0:
                     user_instrument = User__Instrument.query.filter_by(user_id=user_id).first()
                     if user_instrument:
                         user_instrument.instrument_id = instrument
@@ -430,7 +435,6 @@ def user_edit_details(user_id):
                         user_instrument = User__Instrument(user_id=user_id, instrument_id=instrument)
                         db.session.add(user_instrument)
                     db.session.commit()
-                
                 flash('User details updated successfully!', 'success')
                 return redirect('/userdash/')
     return render_template('User/user_edit_details.html', user=user)
@@ -439,19 +443,20 @@ def user_edit_details(user_id):
 @login_reguired
 def artist_edit_details(artist_id):
     artist = Artist_Reg()
+    artist_db = db.session.query(Artists).filter(Artists.artist_id == artist_id).first()
+    if request.method == 'GET':
+        artist.fname.data = artist_db.artist_firstname
+        artist.lname.data = artist_db.artist_lastname
     if artist.validate_on_submit():
         fname = artist.fname.data
         lname = artist.lname.data
-        artist_db = db.session.query(Artists).filter(Artists.artist_id == artist_id).first()
         artist_db.artist_firstname = fname
         artist_db.artist_lastname = lname
         db.session.commit()
+        session['fullname'] = artist_id
         flash('Artist details updated successfully')
-        return redirect(url_for('artistdash'))
-    if artist.errors:
-        flash('Sorry that name is taken, TRY AGAIN')
+        return redirect(url_for('artist_dashboard'))
     return render_template('User/artist_edit_details.html', artist=artist)
-
 
 @app.route('/scorers/<int:users_id>/details/')
 @login_reguired
@@ -460,42 +465,57 @@ def scorers_details(users_id):
     user = User.query.get_or_404(users_id)
     return render_template('User/details.html', scorer=scorer,user=user)
 
-@app.route('/artist/<int:artist_id>/details/')
-@login_reguired
-def artist_details(artist_id):
-    artist = Artists.query.get_or_404(artist_id)
-    return render_template('User/artist_details.html', artist=artist)
+
 
 
 @app.route('/upload_dp/', methods=['GET', 'POST'])
 @login_reguired
 def upload_dp():
     dp = UploadDpForm()
-    user = User.query.filter_by(users_id=session.get('username')).first()
-    artist = Artists.query.filter_by(artist_firstname=session.get('fullname')).first()
-
-    if not user and not artist: return redirect('/login')
-
-    if dp.validate_on_submit():
-        file = dp.picture.data
-        ext = file.filename.split('.')[-1].lower()
-
-        if ext not in ['jpg', 'jpeg', 'png', 'gif']:
-            flash('Invalid file type.', 'error')
-            return render_template('User/upload_db.html', user=user, artist=artist, dp=dp), 400
-
-        filename = secrets.token_urlsafe() + '.' + ext
-        try: file.save('packages/static/uploads/' + filename)
-        except Exception as e: 
-            flash(f"Error uploading file: {str(e)}", 'error')
-            return render_template('User/upload_db.html', user=user, artist=artist, dp=dp), 500
-
-        if user: user.users_profilepicture = filename
-        elif artist: artist.artist_dp = filename
-        db.session.commit()
-        return redirect('/dashboard/')
-
-    return render_template('User/upload_db.html', user=user, artist=artist, dp=dp)
+    user_id = session.get('username')
+    artist_id = session.get('fullname')
+    
+    if user_id:
+        user = User.query.filter_by(users_id=user_id).first()
+        if dp.validate_on_submit():
+            file = dp.picture.data
+            ext = file.filename.split('.')[-1].lower()
+            if ext not in ['jpg', 'jpeg', 'png', 'gif']:
+                flash('Invalid file type.', 'error')
+                return render_template('User/upload_db.html', user=user, dp=dp), 400
+            filename = secrets.token_urlsafe() + '.' + ext
+            try:
+                file.save('packages/static/uploads/' + filename)
+            except Exception as e:
+                flash(f"Error uploading file: {str(e)}", 'error')
+                return render_template('User/upload_db.html', user=user, dp=dp), 500
+            user.users_profilepicture = filename
+            db.session.commit()
+            return redirect('/dashboard/')
+        return render_template('User/upload_db.html', user=user, dp=dp)
+    
+    elif artist_id:
+        artist = Artists.query.filter_by(artist_id=artist_id).first()
+        if dp.validate_on_submit():
+            file = dp.picture.data
+            ext = file.filename.split('.')[-1].lower()
+            if ext not in ['jpg', 'jpeg', 'png', 'gif']:
+                flash('Invalid file type.', 'error')
+                return render_template('User/upload_db.html', artist=artist, dp=dp), 400
+            filename = secrets.token_urlsafe() + '.' + ext
+            try:
+                file.save('packages/static/uploads/' + filename)
+            except Exception as e:
+                flash(f"Error uploading file: {str(e)}", 'error')
+                return render_template('User/upload_db.html', artist=artist, dp=dp), 500
+            artist.artist_dp = filename
+            db.session.commit()
+            return redirect('/dashboard/')
+        return render_template('User/upload_db.html', artist=artist, dp=dp)
+    
+    else:
+        flash('User or Artist not found', 'error')
+        return redirect('/index/')
 
 @app.route('/add_song/', methods=['GET', 'POST'])
 @login_reguired
