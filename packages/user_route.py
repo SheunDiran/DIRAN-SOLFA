@@ -311,13 +311,13 @@ def userdash():
 
 @app.route('/artist/')
 @login_reguired
-def artist_dashboard():
+def artistdash():
     print(session)  # Check what's being stored in the session
     id = session.get('fullname')
     print(id)  # Check if the ID is correct
     artist = Artists.query.get(id)
     songs = Songs.query.filter_by(artist_id=id).all()
-    return render_template('User/artist_dashboard.html', artist=artist, songs=songs)
+    return render_template('User/artist_dash.html', artist=artist, songs=songs)
 
        
 @app.route('/dashboard/')
@@ -356,7 +356,7 @@ def songdetails(id):
 @app.route('/omemma/')
 def omemma():
     return render_template('User/omemma.html')
-1
+
 @app.route('/worthy/')
 def worthy():
     return render_template('User/worthy.html')
